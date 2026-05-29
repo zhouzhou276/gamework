@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>炼金店铺</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4efe6;
+      font-family: "Microsoft YaHei", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .game-box {
+      width: 420px;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 0;
+      color: #7a3e00;
+    }
+
+    .gold {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #d48806;
+      font-weight: bold;
+    }
+
+    .adventurer {
+      background: #f8f8f8;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .emoji {
+      font-size: 60px;
+    }
+
+    .name {
+      margin-top: 8px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .inventory {
+      margin: 20px 0;
+      padding: 12px;
+      background: #fff7e6;
+      border-radius: 10px;
+    }
+
+    button {
+      padding: 12px 18px;
+      margin: 8px;
+      border: none;
+      border-radius: 10px;
+      background: #ff9f43;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #ff7f00;
+    }
+
+    .message {
+      margin-top: 18px;
+      min-height: 24px;
+      color: #2f855a;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="game-box">
+    <h1>🧪 炼金店铺</h1>
+
+    <div class="gold">
+      当前金币：<span id="gold">100</span>
+    </div>
+
+    <div class="adventurer">
+      <div class="emoji">🧙</div>
+      <div class="name">老鼠战士</div>
+    </div>
+
+    <button onclick="makePotion()">
+      炼制小红药水（10金币）
+    </button>
+
+    <button onclick="deliverPotion()">
+      交付药水（获得15金币）
+    </button>
+
+    <div class="inventory">
+      <h3>🎒 库存</h3>
+      小红药水：<span id="potion">0</span> 瓶
+    </div>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    let gold = 100;
+    let potion = 0;
+
+    const goldText = document.getElementById("gold");
+    const potionText = document.getElementById("potion");
+    const messageText = document.getElementById("message");
+
+    function updateUI() {
+      goldText.innerText = gold;
+      potionText.innerText = potion;
+    }
+
+    function makePotion() {
+      if (gold >= 10) {
+        gold -= 10;
+        potion += 1;
+
+        messageText.innerText = "成功炼制了一瓶小红药水！";
+      } else {
+        messageText.innerText = "金币不足，无法炼制！";
+      }
+
+      updateUI();
+    }
+
+    function deliverPotion() {
+      if (potion >= 1) {
+        potion -= 1;
+        gold += 15;
+
+        messageText.innerText = "老鼠战士很满意！获得了15金币！";
+      } else {
+        messageText.innerText = "没有药水可以交付！";
+      }
+
+      updateUI();
+    }
+
+    updateUI();
+  </script>
+
+</body>
+</html>
