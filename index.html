@@ -6,17 +6,17 @@
   <title>炼金店铺 - 订单系统版</title>
   <style>
     * { box-sizing: border-box; user-select: none; }
-    html, body { margin: 0; padding: 0; min-width: 1200px; min-height: 100vh; overflow-x: auto; background: #2c2a24; font-family: "Microsoft YaHei", "Segoe UI", sans-serif; }
-    .page { position: absolute; top: 0; left: 0; width: 100%; min-width: 1200px; height: 100vh; background: #2c2a24; overflow-y: auto; padding: 20px 40px; }
+    html, body { margin: 0; padding: 0; width: 100%; min-height: 100vh; overflow-x: hidden; background: #2c2a24; font-family: "Microsoft YaHei", "Segoe UI", sans-serif; }
+    .page { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; background: #2c2a24; overflow-y: auto; padding: 20px 40px; }
     .hidden-page { display: none; }
     #startScreen { display: flex; flex-direction: column; justify-content: center; align-items: center; }
-    .start-card { width: 600px; text-align: center; background: linear-gradient(145deg, #fdf8ed, #f5e6c4); border-radius: 64px; padding: 50px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .start-card { width: 600px; max-width: 90%; text-align: center; background: linear-gradient(145deg, #fdf8ed, #f5e6c4); border-radius: 64px; padding: 50px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
     .start-card h1 { font-size: 64px; color: #7a3e00; margin: 0; }
     .start-card p { font-size: 24px; color: #b97f3a; }
     #gameMainPage { display: none; }
-    .game-container { display: flex; gap: 30px; justify-content: center; align-items: flex-start; width: 100%; max-width: 1400px; margin: 0 auto; }
-    .game-box { flex: 1 1 65%; min-width: 600px; background: white; border-radius: 48px; padding: 30px; text-align: center; }
-    .queue-box { flex: 0 0 30%; min-width: 320px; max-width: 420px; background: #fffaf0; border-radius: 48px; padding: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 20px; }
+    .game-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; align-items: flex-start; width: 100%; max-width: 1400px; margin: 0 auto; }
+    .game-box { flex: 1 1 600px; min-width: 0; background: white; border-radius: 48px; padding: 30px; text-align: center; }
+    .queue-box { flex: 1 1 320px; min-width: 0; max-width: 420px; background: #fffaf0; border-radius: 48px; padding: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 20px; }
     .queue-title { font-size: 28px; font-weight: bold; margin-bottom: 5px; color: #7a3e00; }
     .queue-list { display: flex; flex-direction: column; gap: 12px; max-height: 300px; overflow-y: auto; }
     .queue-item { background: #fef2e0; border-radius: 32px; padding: 12px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.1s; border: 1px solid #ffcd94; }
@@ -73,7 +73,7 @@
     .batch-controls { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; margin: 15px 0; }
     .batch-controls select, .batch-controls input[type="range"] { padding: 8px; font-size: 16px; border-radius: 30px; border: 1px solid #b0a088; width: 180px; }
     .batch-controls span { font-weight: bold; min-width: 50px; }
-    .achievement-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+    .achievement-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
     .achievement-card { background: #fef2e0; border-radius: 28px; padding: 15px; text-align: center; border: 1px solid #ffcd94; }
     .achievement-card.locked { opacity: 0.6; filter: grayscale(0.3); background: #ddd6c5; }
     .achievement-name { font-weight: bold; font-size: 18px; }
@@ -81,6 +81,57 @@
     .achievement-reward { font-size: 12px; color: #d48806; }
     .quest-progress { margin: 15px 0; background: #efe2c9; border-radius: 20px; padding: 10px; text-align: left; }
     .quest-item { margin: 8px 0; font-size: 16px; }
+
+    /* ===== 平板适配（≤1024px）===== */
+    @media (max-width: 1024px) {
+      .page { padding: 16px 20px; }
+      .game-container { gap: 20px; }
+      /* 窄屏堆叠时让“店铺主视图”排在“队列订单”上方 */
+      .game-box { order: 1; flex-basis: 100%; max-width: 600px; }
+      .queue-box { order: 2; flex-basis: 100%; max-width: 600px; }
+      .queue-list { max-height: none; }
+      .orders-panel { max-height: none; }
+    }
+
+    /* ===== 手机适配（≤640px）===== */
+    @media (max-width: 640px) {
+      .page { padding: 12px 12px; -webkit-overflow-scrolling: touch; }
+      .game-box { padding: 18px; border-radius: 28px; }
+      .queue-box { padding: 14px; border-radius: 28px; }
+      .start-card { padding: 30px 20px; border-radius: 36px; }
+      .start-card h1 { font-size: 40px; }
+      .start-card p { font-size: 18px; }
+      .start-card #startBtn { font-size: 22px !important; padding: 14px 28px !important; }
+
+      /* 顶部状态栏：横向滚动避免挤压 */
+      .top-bar { border-radius: 28px; padding: 8px 12px; gap: 6px; justify-content: space-around; }
+      .gold, .day, .shop-level, .morality { font-size: 14px; }
+
+      /* 按钮：缩小并铺满，方便手指点击 */
+      button { font-size: 15px; padding: 10px 14px; border-radius: 40px; margin: 3px; }
+      .adventurer-emoji { font-size: 54px; }
+      .adventurer-name, .recipe-name { font-size: 22px; }
+      #visitorName { font-size: 22px !important; }
+
+      /* 各页面标题缩小 */
+      .page h1 { font-size: 32px !important; }
+
+      /* 网格单列/双列自适应 */
+      .grid-container, .recipe-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 20px; }
+      .achievement-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+
+      /* 弹窗在手机上占满更多宽度 */
+      .modal-content { width: 94%; max-width: 94%; padding: 20px; border-radius: 28px; max-height: 88vh; }
+      .settlement-stats { font-size: 18px; }
+      .upgrade-info { font-size: 16px; }
+      .recipe-buttons { grid-template-columns: 1fr; }
+      .batch-controls select, .batch-controls input[type="range"] { width: 100%; }
+      .materials-row { flex-wrap: wrap; gap: 8px; font-size: 16px; }
+
+      /* 报告页内边距收紧 */
+      .report-container { padding: 24px; border-radius: 36px; margin: 20px auto; }
+      .detail-row { font-size: 18px; margin: 14px 0; }
+    }
   </style>
 </head>
 <body>
