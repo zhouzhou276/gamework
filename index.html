@@ -1,4 +1,4 @@
-、<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -109,6 +109,72 @@
       .materials-row { flex-wrap: wrap; gap: 8px; font-size: 16px; }
       .report-container { padding: 24px; border-radius: 36px; }
       .detail-row { font-size: 18px; }
+      .grid-container { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    }
+    /* Toast 消息系统 */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.85);
+      color: #ffefc0;
+      padding: 16px 28px;
+      border-radius: 48px;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 3000;
+      white-space: pre-line;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      max-width: 80%;
+      text-align: left;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+    .toast.success {
+      background: rgba(46, 125, 50, 0.95);
+      color: white;
+    }
+    .toast.error {
+      background: rgba(192, 57, 43, 0.95);
+      color: white;
+    }
+    /* 背包网格布局 */
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .inventory-item {
+      background: #f0e6d2;
+      border-radius: 16px;
+      padding: 10px;
+      text-align: center;
+      border: 2px solid #d4a574;
+    }
+    .inventory-item-icon {
+      font-size: 32px;
+      margin-bottom: 5px;
+    }
+    .inventory-item-name {
+      font-weight: bold;
+      font-size: 14px;
+      margin: 5px 0;
+    }
+    .inventory-item-count {
+      font-size: 18px;
+      color: #d48806;
+      font-weight: bold;
+    }
+    .inventory-item-desc {
+      font-size: 11px;
+      color: #666;
+      margin-top: 3px;
     }
   </style>
 </head>
@@ -162,14 +228,16 @@
         <button id="achievementBtn" style="background:#9b59b6;">🏆 成就画廊</button>
       </div>
       <div class="inventory">
-        <h3>🎒 库存</h3>
-        <p>💊 小红药水：<span id="potion">0</span> 瓶</p>
-        <p>❤️ 大生命药水：<span id="bigPotion">0</span> 瓶</p>
+        <h3>🎒 药水背包</h3>
+        <div id="inventoryGrid" class="inventory-grid"></div>
       </div>
       <div class="message" id="message"></div>
     </div>
   </div>
 </div>
+
+<!-- Toast 消息提示 -->
+<div id="toastMsg" class="toast"></div>
 
 <!-- 其他页面 -->
 <div id="bestiaryPage" class="page hidden-page"><div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;"><h1 style="color: #ffebc2; font-size: 48px;">📖 冒险者图鉴</h1><button id="backToGameFromBestiary" class="secondary">🏠 返回店铺</button></div><div id="adventurerGrid" class="grid-container"></div></div>
@@ -186,8 +254,8 @@
 <div id="reputationModal" class="modal"><div class="modal-content"><h2>⚖️ 声望抉择</h2><div id="reputationDescription" style="font-size: 18px; margin: 20px 0;"></div><div id="reputationOptions" class="event-buttons"></div></div></div>
 <div id="shortageModal" class="modal"><div class="modal-content"><h2>⚠️ 库存不足</h2><div id="shortageMessage" style="font-size: 20px; margin: 20px 0;"></div><div class="event-buttons"><button id="shortageInformBtn" style="background:#b45f1b;">告知顾客（订单失败）</button><button id="shortageGetBtn" style="background:#2c6e9e;">去获得药水</button></div></div></div>
 <div id="settingsModal" class="modal"><div class="modal-content"><h2>⚙️ 游戏设置</h2><div class="settings-section"><h3>🏪 店铺</h3><div class="settings-row"><label>店铺名称：</label><input type="text" id="shopNameInput" maxlength="20" placeholder="炼金店铺"></div></div><div class="settings-section"><h3>💾 存档/读档</h3><div class="settings-row"><button id="saveGameBtn" style="background:#2e7d32;">保存游戏</button><button id="loadGameBtn" style="background:#1565c0;">读取存档</button></div></div><div class="settings-section"><h3>🔊 声音</h3><div class="settings-row"><label>静音模式：</label><input type="checkbox" id="muteCheckbox"></div><div class="settings-row" style="font-size:14px; color:gray;">（当前为UI演示）</div></div><div class="settings-section"><h3>🎮 控制</h3><div class="settings-row">🔹 快捷键（暂未实现）</div><div class="settings-row">- 1: 炼制小红药水</div><div class="settings-row">- 2: 交付药水（暂未）</div><div class="settings-row">- S: 打开设置</div></div><div class="settings-section"><h3>🖥️ 界面</h3><div class="settings-row"><label>消息显示时长(秒)：</label><input type="range" id="msgDuration" min="1" max="5" step="0.5" value="2"><span id="msgDurationValue">2</span> 秒</div></div><div class="settings-section"><h3>📁 文件</h3><div class="settings-row"><button id="exportSaveBtn">导出存档</button><label class="file-input-label">导入存档<input type="file" id="importFile" accept=".json"></label></div></div><button id="closeSettingsBtn" class="secondary" style="margin-top:20px;">关闭</button></div></div>
-<div id="alchemyModal" class="modal"><div class="modal-content"><h2>🔬 炼金台研制</h2><div style="max-height: 200px; overflow-y: auto; background: #efe2c9; border-radius: 20px; padding: 15px; margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 10px; text-align: center;">📦 材料库存</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px;"><div>🌿 野薄荷叶：<span id="mintLeafCount">0</span></div><div>🌼 微光洋甘菊：<span id="chamomileCount">0</span></div><div>🌿 尖刺迷迭香：<span id="rosemaryCount">0</span></div><div>💜 绒絮薰衣草：<span id="lavenderCount">0</span></div><div>🌾 甜根草：<span id="sweetRootCount">0</span></div><div style="color: #9b59b6;">✨ 圣露花：<span id="holyFlowerCount">0</span></div><div style="color: #8b4513;">🍄 毒腺菇：<span id="poisonMushroomCount">0</span></div><div style="color: #e74c3c;">⛏️ 赤铁髓：<span id="redOreCount">0</span></div><div style="color: #3498db;">💎 蓝萤石：<span id="blueOreCount">0</span></div><div style="color: #2c3e50;">⚫ 黑银矿：<span id="blackOreCount">0</span></div><div style="color: #9b59b6; grid-column: span 2; text-align: center;">🔮 魔力结晶：<span id="crystalCount">0</span></div></div></div><div id="dynamicRecipeList" class="recipe-buttons"></div><div id="batchCraftArea" class="batch-area" style="display: none;"><h3>⚙️ 批量炼制</h3><div class="batch-controls"><select id="batchRecipeSelect"><option value="0">小红药水</option><option value="1">大生命药水</option></select><label>数量：</label><input type="range" id="batchQuantity" min="1" max="10" value="1" step="1"><span id="batchQuantityValue">1</span><button id="craftBatchBtn" style="background:#6c5b7b;">⚡ 批量炼制</button></div></div><button id="closeModalBtn" class="secondary" style="margin-top:20px;">关闭</button></div></div>
-<div id="materialModal" class="modal"><div class="modal-content"><h2>📦 材料管理</h2><div style="max-height: 250px; overflow-y: auto; background: #efe2c9; border-radius: 20px; padding: 15px; margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 10px;">🌿 普通草药（5种）</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; margin-bottom: 15px;"><div>🌿 野薄荷叶：<span id="matMintLeaf">0</span></div><div>🌼 微光洋甘菊：<span id="matChamomile">0</span></div><div>🌿 尖刺迷迭香：<span id="matRosemary">0</span></div><div>💜 绒絮薰衣草：<span id="matLavender">0</span></div><div style="grid-column: span 2;">🌾 甜根草：<span id="matSweetRoot">0</span></div></div><div style="font-weight: bold; margin-bottom: 10px; color: #9b59b6;">✨ 稀有草药（2种）</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; margin-bottom: 15px;"><div>✨ 圣露花：<span id="matHolyFlower">0</span></div><div>🍄 毒腺菇：<span id="matPoisonMushroom">0</span></div></div><div style="font-weight: bold; margin-bottom: 10px; color: #e74c3c;">⛏️ 魔法矿石（3种）</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; margin-bottom: 15px;"><div>⛏️ 赤铁髓：<span id="matRedOre">0</span></div><div>💎 蓝萤石：<span id="matBlueOre">0</span></div><div style="grid-column: span 2;">⚫ 黑银矿：<span id="matBlackOre">0</span></div></div><div style="font-weight: bold; margin-bottom: 10px; color: #9b59b6;">🔮 特殊材料</div><div style="font-size: 14px;">🔮 魔力结晶：<span id="matCrystal">0</span></div></div><div class="settings-section"><h3>🏪 交易所</h3><div id="exchangePrices" style="margin: 10px 0; font-size: 14px;"></div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;"><button class="buy-material-btn" data-material="mintLeaf" data-amount="1" style="background:#4a6e8c; font-size: 12px;">野薄荷叶</button><button class="buy-material-btn" data-material="chamomile" data-amount="1" style="background:#4a6e8c; font-size: 12px;">微光洋甘菊</button><button class="buy-material-btn" data-material="rosemary" data-amount="1" style="background:#4a6e8c; font-size: 12px;">尖刺迷迭香</button><button class="buy-material-btn" data-material="lavender" data-amount="1" style="background:#4a6e8c; font-size: 12px;">绒絮薰衣草</button><button class="buy-material-btn" data-material="sweetRoot" data-amount="1" style="background:#4a6e8c; font-size: 12px;">甜根草</button><button class="buy-material-btn" data-material="holyFlower" data-amount="1" style="background:#9b59b6; font-size: 12px;">圣露花</button><button class="buy-material-btn" data-material="poisonMushroom" data-amount="1" style="background:#8b4513; font-size: 12px;">毒腺菇</button><button class="buy-material-btn" data-material="redOre" data-amount="1" style="background:#e74c3c; font-size: 12px;">赤铁髓</button><button class="buy-material-btn" data-material="blueOre" data-amount="1" style="background:#3498db; font-size: 12px;">蓝萤石</button><button class="buy-material-btn" data-material="blackOre" data-amount="1" style="background:#2c3e50; font-size: 12px;">黑银矿</button></div></div><button id="closeMaterialBtn" class="secondary">关闭</button></div></div>
+<div id="alchemyModal" class="modal"><div class="modal-content"><h2>🔬 炼金台研制</h2><div style="max-height: 200px; overflow-y: auto; background: #efe2c9; border-radius: 20px; padding: 15px; margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 10px; text-align: center;">📦 材料库存</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px;"><div>🌿 野薄荷叶：<span id="mintLeafCount">0</span></div><div>🌼 微光洋甘菊：<span id="chamomileCount">0</span></div><div>🌿 尖刺迷迭香：<span id="rosemaryCount">0</span></div><div>💜 绒絮薰衣草：<span id="lavenderCount">0</span></div><div>🌾 甜根草：<span id="sweetRootCount">0</span></div><div style="color: #9b59b6;">✨ 圣露花：<span id="holyFlowerCount">0</span></div><div style="color: #8b4513;">🍄 毒腺菇：<span id="poisonMushroomCount">0</span></div><div style="color: #e74c3c;">⛏️ 赤铁髓：<span id="redOreCount">0</span></div><div style="color: #3498db;">💎 蓝萤石：<span id="blueOreCount">0</span></div><div style="color: #2c3e50;">⚫ 黑银矿：<span id="blackOreCount">0</span></div><div style="color: #9b59b6; grid-column: span 2; text-align: center;">🔮 魔力结晶：<span id="crystalCount">0</span></div></div></div><h3 style="margin-top:20px;">✨ 单次炼制</h3><div id="dynamicRecipeList" class="recipe-buttons"></div><div id="batchCraftArea" class="batch-area" style="display: none;"><h3>⚙️ 批量炼制</h3><div class="batch-controls"><label>选择配方：</label><select id="batchRecipeSelect"></select></div><div class="batch-controls"><label>数量：</label><input type="range" id="batchQuantity" min="1" max="10" value="1" step="1"><span id="batchQuantityValue">1</span><span id="batchMaxInfo" style="font-size:12px; color:#999;"> / 最多: <span id="batchMaxValue">10</span></span></div><button id="craftBatchBtn" style="background:#6c5b7b;">⚡ 批量炼制</button></div><button id="closeModalBtn" class="secondary" style="margin-top:20px;">关闭</button></div></div>
+<div id="materialModal" class="modal"><div class="modal-content"><h2>📦 材料管理</h2><div style="max-height: 250px; overflow-y: auto; background: #efe2c9; border-radius: 20px; padding: 15px; margin-bottom: 15px;"><div style="font-weight: bold; margin-bottom: 10px;">🌿 普通草药（5种）</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; margin-bottom: 15px;"><div>🌿 野薄荷叶：<span id="matMintLeaf">0</span></div><div>🌼 微光洋甘菊：<span id="matChamomile">0</span></div><div>🌿 尖刺迷迭香：<span id="matRosemary">0</span></div><div>💜 绒絮薰衣草：<span id="matLavender">0</span></div><div style="grid-column: span 2;">🌾 甜根草：<span id="matSweetRoot">0</span></div></div><div style="font-weight: bold; margin-bottom: 10px; color: #9b59b6;">✨ 稀有草药（2种）</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; margin-bottom: 15px;"><div>✨ 圣露花：<span id="matHolyFlower">0</span></div><div>🍄 毒腺菇：<span id="matPoisonMushroom">0</span></div></div><div style="font-weight: bold; margin-bottom: 10px; color: #e74c3c;">⛏️ 魔法矿石（3种）</div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: 14px; margin-bottom: 15px;"><div>⛏️ 赤铁髓：<span id="matRedOre">0</span></div><div>💎 蓝萤石：<span id="matBlueOre">0</span></div><div style="grid-column: span 2;">⚫ 黑银矿：<span id="matBlackOre">0</span></div></div><div style="font-weight: bold; margin-bottom: 10px; color: #9b59b6;">🔮 特殊材料</div><div style="font-size: 14px;">🔮 魔力结晶：<span id="matCrystal">0</span></div></div><div class="settings-section"><h3>🏪 交易所</h3><div id="exchangePrices" style="margin: 10px 0; font-size: 14px;"></div><div style="margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 12px;"><label style="font-weight: bold;">批量购买数量：</label><input type="number" id="batchBuyQty" min="1" max="20" value="1" style="width: 80px; margin-left: 10px;"></div><div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;"><button class="buy-material-btn" data-material="mintLeaf" style="background:#4a6e8c; font-size: 12px;">野薄荷叶</button><button class="buy-material-btn" data-material="chamomile" style="background:#4a6e8c; font-size: 12px;">微光洋甘菊</button><button class="buy-material-btn" data-material="rosemary" style="background:#4a6e8c; font-size: 12px;">尖刺迷迭香</button><button class="buy-material-btn" data-material="lavender" style="background:#4a6e8c; font-size: 12px;">绒絮薰衣草</button><button class="buy-material-btn" data-material="sweetRoot" style="background:#4a6e8c; font-size: 12px;">甜根草</button><button class="buy-material-btn" data-material="holyFlower" style="background:#9b59b6; font-size: 12px;">圣露花</button><button class="buy-material-btn" data-material="poisonMushroom" style="background:#8b4513; font-size: 12px;">毒腺菇</button><button class="buy-material-btn" data-material="redOre" style="background:#e74c3c; font-size: 12px;">赤铁髓</button><button class="buy-material-btn" data-material="blueOre" style="background:#3498db; font-size: 12px;">蓝萤石</button><button class="buy-material-btn" data-material="blackOre" style="background:#2c3e50; font-size: 12px;">黑银矿</button></div></div><button id="closeMaterialBtn" class="secondary">关闭</button></div></div>
 <div id="gardenModal" class="modal"><div class="modal-content"><h2>🌿 后花园</h2><div id="gardenInfo" style="font-size: 18px; margin: 15px 0;"></div><div id="gardenDaily" style="margin: 15px 0;"><button id="collectBtn" style="background:#3c8c40;">🌱 今日采集（免费）</button></div><div id="gardenUpgrade" style="margin: 15px 0;"><button id="upgradeGardenBtn" style="background:#2c6e9e;">🏆 升级花园</button></div><button id="closeGardenBtn" class="secondary">关闭</button></div></div>
 
 <script>
@@ -232,14 +300,24 @@ let dailyIncome = 0;
 let dailyExpense = 0;
 let shopLevel = 1;
 let craftCount = { smallPotion: 0, bigPotion: 0, blessPotion: 0, cursePotion: 0 };
+let totalCrafts = 0; // 总炼制次数，用于解锁条件
 let reputation = 20;
 let deliveryBonus = 1.0;
 let isEventActive = false;
 let consecutiveNoDebtDays = 0;
 let lastDayHadDebt = false;
+let debtDays = 0; // 连续负债天数
 let firstDeliveryBonusMap = {};
 let reputationBonusPrice = 1.0;
 let reputationBonusRent = 0;
+let reputationEventUsedToday = false; // 抉择时刻每日限制
+
+// 临时事件修改器（每日重置）
+let gardenYieldModifier = 1.0; // 花园产出修改器
+let extraQueueSize = 0; // 额外队列人数
+let adventurerInjuryModifier = 1.0; // 冒险者受伤率修改器
+let potionQualityModifier = 1.0; // 药水品质修改器
+let residentOrderModifier = 0; // 居民订单修改器
 
 const SEASONS = {
   CRYSTAL: { id: 0, name: "结晶季", emoji: "❄️", days: [1, 15] },
@@ -303,7 +381,7 @@ let achievements = {
   "gold_1000": { unlocked: false, name: "富甲一方", desc: "累积金币达到1000", reward: { gold: 100, crystal: 1 } },
   "craft_10": { unlocked: false, name: "量产大师", desc: "累计炼制10瓶药水", reward: { herb: 3 } },
   "delivery_10": { unlocked: false, name: "热心店主", desc: "累计交付10次药水", reward: { gold: 50 } },
-  "all_recipes": { unlocked: false, name: "博闻强识", desc: "解锁所有6种配方", reward: { gold: 200, rare: 2 } },
+  "all_recipes": { unlocked: false, name: "博闻强识", desc: "解锁所有配方", reward: { gold: 200, rare: 2 } },
   "all_favor": { unlocked: false, name: "万人迷", desc: "所有冒险者好感度满值", reward: { gold: 300, crystal: 2 } },
   "lv5_shop": { unlocked: false, name: "商业帝国", desc: "店铺升到Lv.5", reward: { gold: 500 } },
   "endless_mode": { unlocked: false, name: "无尽征途", desc: "通关后解锁无尽模式", reward: { gold: 100 } },
@@ -323,7 +401,10 @@ function updateReputationBonus() {
   reputationBonusPrice = (reputation >= 100) ? 1.05 : 1.0;
   reputationBonusRent = (reputation >= 200) ? 2 : 0;
 }
-function getGardenUpgradeCost() { return [100, 300, 600][gardenLevel-1] || 800; }
+function getGardenUpgradeCost() {
+  const costs = [100, 300, 600, 1000, 1500];
+  return costs[gardenLevel-1] || 2000;
+}
 function getGardenOutput() {
   let commonHerbs = Math.floor(Math.random() * 4) + 2;
   let rareHerbs = 0;
@@ -378,7 +459,25 @@ let recipes = [
 ];
 
 function unlockAchievement(achId) { /* 省略实现，保持原有逻辑 */ if (achievements[achId] && !achievements[achId].unlocked) { achievements[achId].unlocked = true; let reward = achievements[achId].reward; let msg = `🏆 成就解锁：${achievements[achId].name}！奖励：`; if (reward.gold) { gold += reward.gold; addIncome(reward.gold); msg += `${reward.gold}金币 `; } if (reward.herb) { let herbTypes = ['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<reward.herb;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } msg += `${reward.herb}草药 `; } if (reward.rare) { holyFlower += reward.rare; msg += `${reward.rare}圣露花 `; } if (reward.crystal) { magicCrystal += reward.crystal; msg += `${reward.crystal}魔力结晶 `; } showMessage(msg, false); updateUI(); refreshAchievementUI(); } }
-function checkAchievements() { /* 省略完整逻辑，但保持功能 */ if (craftCount.smallPotion + craftCount.bigPotion >= 1) unlockAchievement("first_potion"); if (totalDeliverySuccess >= 1) unlockAchievement("first_delivery"); if (shopLevel >= 2) unlockAchievement("first_upgrade"); if (reputation >= 500) unlockAchievement("reputation_500"); if (gold >= 1000) unlockAchievement("gold_1000"); if (craftCount.smallPotion + craftCount.bigPotion >= 10) unlockAchievement("craft_10"); if (totalDeliverySuccess >= 10) unlockAchievement("delivery_10"); let unlockedCount = recipes.filter(r => r.unlocked).length; if (unlockedCount >= 6) unlockAchievement("all_recipes"); let allFavor = adventurers.every(a => a.favor >= 100); if (allFavor) unlockAchievement("all_favor"); if (shopLevel >= 5) unlockAchievement("lv5_shop"); if (unlockedEndless) unlockAchievement("endless_mode"); if (gold >= 5000) unlockAchievement("rich_5000"); }
+function checkAchievements() {
+  if (totalCrafts >= 1) unlockAchievement("first_potion");
+  if (totalDeliverySuccess >= 1) unlockAchievement("first_delivery");
+  if (shopLevel >= 2) unlockAchievement("first_upgrade");
+  if (reputation >= 500) unlockAchievement("reputation_500");
+  if (gold >= 1000) unlockAchievement("gold_1000");
+  if (totalCrafts >= 10) unlockAchievement("craft_10");
+  if (totalDeliverySuccess >= 10) unlockAchievement("delivery_10");
+
+  let unlockedCount = recipes.filter(r => r.unlocked).length;
+  if (unlockedCount >= recipes.length) unlockAchievement("all_recipes"); // 解锁所有配方
+
+  let allFavor = adventurers.every(a => a.favor >= 100);
+  if (allFavor) unlockAchievement("all_favor");
+
+  if (shopLevel >= 5) unlockAchievement("lv5_shop");
+  if (unlockedEndless) unlockAchievement("endless_mode");
+  if (gold >= 5000) unlockAchievement("rich_5000");
+}
 function refreshAchievementUI() { /* 保持原样 */ let container = document.getElementById("achievementsList"); if(!container) return; container.innerHTML = ""; for(let [id,ach] of Object.entries(achievements)){ let card = document.createElement("div"); card.className = `achievement-card ${ach.unlocked?"":"locked"}`; card.innerHTML = `<div class="achievement-name">${ach.name}</div><div class="achievement-desc">${ach.desc}</div><div class="achievement-reward">奖励: ${Object.entries(ach.reward).map(([k,v])=>`${v}${k==='gold'?'金币':k==='herb'?'草药':k==='rare'?'稀有花':'魔力结晶'}`).join(', ')}</div>`; container.appendChild(card); } let unlockedRecipes = recipes.filter(r=>r.unlocked).length; document.getElementById("questRecipeStatus").innerText = `${unlockedRecipes}/6`; let fullFavorCount = adventurers.filter(a=>a.favor>=100).length; document.getElementById("questFavorStatus").innerText = `${fullFavorCount}/6`; let endingContainer = document.getElementById("endingGalleryList"); if(endingContainer){ endingContainer.innerHTML=""; let endings = ["黑暗结局","邪恶结局","普通结局","善良结局","神圣结局"]; endings.forEach(e=>{ if(unlockedEndings.includes(e)){ let badge=document.createElement("div"); badge.style.background="#d48806"; badge.style.padding="8px 16px"; badge.style.borderRadius="30px"; badge.style.color="white"; badge.innerText=e; endingContainer.appendChild(badge); } }); } }
 function updateMainQuestProgress() { let progress = 0; if(shopLevel>=5 && reputation>=100) progress=100; else if(shopLevel>=5) progress=80; else if(reputation>=100) progress=70; else progress = Math.min(70, Math.floor((shopLevel-1)/4*70) + Math.floor(reputation/100*30)); document.getElementById("mainQuestProgress").style.width=`${progress}%`; let statusSpan = document.getElementById("questMainStatus"); if(statusSpan) statusSpan.innerText = (shopLevel>=5 && reputation>=100)?"已完成":"未完成"; }
 function triggerEnding() { if(gameCompleted) return; let endingType = ""; if(shopLevel>=5 && reputation>=100){ endingType="神圣结局"; gameCompleted=true; unlockedEndless=true; showMessage("🎉 恭喜通关！解锁无尽模式，可以继续游玩！",false); } else if(shopLevel>=5) endingType="善良结局"; else if(reputation>=200) endingType="善良结局"; else if(reputation>=100) endingType="普通结局"; else if(reputation>=0) endingType="邪恶结局"; else endingType="黑暗结局"; if(!unlockedEndings.includes(endingType)) unlockedEndings.push(endingType); let endingText = ""; if(endingType==="神圣结局") endingText="神圣结局：您被加冕为圣者，永远受人敬仰。店铺成为传说，您的事迹载入史册。"; else if(endingType==="善良结局") endingText="善良结局：您的名字被铭记，小镇永远感激您的善行。"; else if(endingType==="普通结局") endingText="普通结局：您度过了平凡但充实的一生，店铺传给了下一代。"; else if(endingType==="邪恶结局") endingText="邪恶结局：您的贪婪最终导致众叛亲离，店铺倒闭，孤独终老。"; else endingText="黑暗结局：您被诅咒困在炼金炉中，永远无法解脱。"; document.getElementById("endingText").innerHTML = `<strong>${endingType}</strong><br>${endingText}<br><br>${gameCompleted?"无尽模式已解锁，可以继续经营！":"游戏结束，您可以从头再来。"}`; document.getElementById("endingModal").style.display="flex"; refreshAchievementUI(); updateMainQuestProgress(); }
@@ -386,9 +485,135 @@ function triggerEnding() { if(gameCompleted) return; let endingType = ""; if(sho
 function getMaterialPrice(material) { let basePrices={ mintLeaf:8, chamomile:8, rosemary:9, lavender:9, sweetRoot:7, holyFlower:25, poisonMushroom:25, redOre:35, blueOre:35, blackOre:40, crystal:50 }; let base=basePrices[material]||10; let reputationFactor=1.2-(Math.max(-500,Math.min(500,reputation))+500)/1000*0.6; return Math.floor(base*reputationFactor); }
 function buyMaterial(material, amount) { let price=getMaterialPrice(material)*amount; if(gold>=price){ gold-=price; addExpense(price); if(material==='mintLeaf') mintLeaf+=amount; else if(material==='chamomile') chamomile+=amount; else if(material==='rosemary') rosemary+=amount; else if(material==='lavender') lavender+=amount; else if(material==='sweetRoot') sweetRoot+=amount; else if(material==='holyFlower') holyFlower+=amount; else if(material==='poisonMushroom') poisonMushroom+=amount; else if(material==='redOre') redOre+=amount; else if(material==='blueOre') blueOre+=amount; else if(material==='blackOre') blackOre+=amount; else if(material==='crystal') magicCrystal+=amount; updateUI(); showMessage(`购买了 ${amount} 个材料`,false); refreshMaterialUI(); } else showMessage("金币不足！",true); }
 function refreshMaterialUI() { /* 更新材料管理界面 */ if(document.getElementById("matMintLeaf")){ document.getElementById("matMintLeaf").innerText=mintLeaf; document.getElementById("matChamomile").innerText=chamomile; document.getElementById("matRosemary").innerText=rosemary; document.getElementById("matLavender").innerText=lavender; document.getElementById("matSweetRoot").innerText=sweetRoot; document.getElementById("matHolyFlower").innerText=holyFlower; document.getElementById("matPoisonMushroom").innerText=poisonMushroom; document.getElementById("matRedOre").innerText=redOre; document.getElementById("matBlueOre").innerText=blueOre; document.getElementById("matBlackOre").innerText=blackOre; document.getElementById("matCrystal").innerText=magicCrystal; } let priceHtml=`声望值: ${reputation}<br><small>野薄荷叶:${getMaterialPrice('mintLeaf')}金 微光洋甘菊:${getMaterialPrice('chamomile')}金<br>尖刺迷迭香:${getMaterialPrice('rosemary')}金 绒絮薰衣草:${getMaterialPrice('lavender')}金<br>甜根草:${getMaterialPrice('sweetRoot')}金 圣露花:${getMaterialPrice('holyFlower')}金<br>毒腺菇:${getMaterialPrice('poisonMushroom')}金 赤铁髓:${getMaterialPrice('redOre')}金<br>蓝萤石:${getMaterialPrice('blueOre')}金 黑银矿:${getMaterialPrice('blackOre')}金</small>`; document.getElementById("exchangePrices").innerHTML=priceHtml; }
-function renderDynamicRecipes() { let container=document.getElementById("dynamicRecipeList"); if(!container) return; container.innerHTML=""; recipes.forEach(recipe=>{ if(recipe.unlocked){ const btn=document.createElement("button"); btn.className="recipe-btn"; let enough=true; let costText=""; const matNames={ mintLeaf:'🌿野薄荷', chamomile:'🌼洋甘菊', rosemary:'🌿迷迭香', lavender:'💜薰衣草', sweetRoot:'🌾甜根', holyFlower:'✨圣露花', poisonMushroom:'🍄毒菇', redOre:'⛏️赤铁髓', blueOre:'💎蓝萤石', blackOre:'⚫黑银', magicCrystal:'🔮结晶' }; const matVars={ mintLeaf, chamomile, rosemary, lavender, sweetRoot, holyFlower, poisonMushroom, redOre, blueOre, blackOre, magicCrystal }; for(let [mat,count] of Object.entries(recipe.cost)){ if(count>0){ costText+=`${matNames[mat]}×${count} `; if(matVars[mat]<count) enough=false; } } const stars='⭐'.repeat(recipe.stars||1); btn.textContent=`${recipe.name} ${stars} (${costText.trim()})`; if(!enough){ btn.classList.add("disabled"); btn.disabled=true; } btn.onclick=()=>{ if(!enough) return; for(let [mat,count] of Object.entries(recipe.cost)){ if(count>0){ if(mat==='mintLeaf') mintLeaf-=count; else if(mat==='chamomile') chamomile-=count; else if(mat==='rosemary') rosemary-=count; else if(mat==='lavender') lavender-=count; else if(mat==='sweetRoot') sweetRoot-=count; else if(mat==='holyFlower') holyFlower-=count; else if(mat==='poisonMushroom') poisonMushroom-=count; else if(mat==='redOre') redOre-=count; else if(mat==='blueOre') blueOre-=count; else if(mat==='blackOre') blackOre-=count; else if(mat==='magicCrystal') magicCrystal-=count; } } syncLegacyMaterials(); recipe.produce(1); if(recipe.name==="小红药水") craftCount.smallPotion++; else if(recipe.name==="大生命药水") craftCount.bigPotion++; else if(recipe.name==="祝福药水") craftCount.blessPotion++; else if(recipe.name==="诅咒毒药") craftCount.cursePotion++; updateUI(); renderDynamicRecipes(); showMessage(`✅ 成功炼制 ${recipe.name} ${stars}！`,false); checkAchievements(); }; container.appendChild(btn); } }); if(container.children.length===0) container.innerHTML="<div style='color:#999;'>暂无可用配方</div>"; }
-function updateBatchSelect() { let select=document.getElementById("batchRecipeSelect"); if(!select) return; select.innerHTML=""; if(recipes[0].unlocked) select.add(new Option("小红药水","0")); if(recipes[1].unlocked) select.add(new Option("大生命药水","1")); }
-function craftBatch() { if(shopLevel<2){ showMessage("店铺等级不足，无法批量炼制！",true); return; } let recipeId=parseInt(document.getElementById("batchRecipeSelect").value); let recipe=recipes.find(r=>r.id===recipeId); if(!recipe) return; let qty=parseInt(document.getElementById("batchQuantity").value); if(isNaN(qty)||qty<1) qty=1; if(qty>10) qty=10; let enough=true; let need=recipe.cost; for(let [mat,count] of Object.entries(need)){ let totalNeed=count*qty; if(mat==='mintLeaf' && mintLeaf<totalNeed) enough=false; else if(mat==='chamomile' && chamomile<totalNeed) enough=false; else if(mat==='rosemary' && rosemary<totalNeed) enough=false; else if(mat==='lavender' && lavender<totalNeed) enough=false; else if(mat==='sweetRoot' && sweetRoot<totalNeed) enough=false; else if(mat==='holyFlower' && holyFlower<totalNeed) enough=false; else if(mat==='poisonMushroom' && poisonMushroom<totalNeed) enough=false; else if(mat==='redOre' && redOre<totalNeed) enough=false; else if(mat==='blueOre' && blueOre<totalNeed) enough=false; else if(mat==='blackOre' && blackOre<totalNeed) enough=false; else if(mat==='magicCrystal' && magicCrystal<totalNeed) enough=false; } if(!enough){ showMessage("材料不足！",true); return; } for(let [mat,count] of Object.entries(need)){ let totalNeed=count*qty; if(mat==='mintLeaf') mintLeaf-=totalNeed; else if(mat==='chamomile') chamomile-=totalNeed; else if(mat==='rosemary') rosemary-=totalNeed; else if(mat==='lavender') lavender-=totalNeed; else if(mat==='sweetRoot') sweetRoot-=totalNeed; else if(mat==='holyFlower') holyFlower-=totalNeed; else if(mat==='poisonMushroom') poisonMushroom-=totalNeed; else if(mat==='redOre') redOre-=totalNeed; else if(mat==='blueOre') blueOre-=totalNeed; else if(mat==='blackOre') blackOre-=totalNeed; else if(mat==='magicCrystal') magicCrystal-=totalNeed; } syncLegacyMaterials(); recipe.produce(qty); if(recipe.name==="小红药水") craftCount.smallPotion+=qty; else if(recipe.name==="大生命药水") craftCount.bigPotion+=qty; updateUI(); showMessage(`⚡ 批量炼制 ${qty} 瓶 ${recipe.name} 成功！`,false); checkAchievements(); }
+function renderDynamicRecipes() { let container=document.getElementById("dynamicRecipeList"); if(!container) return; container.innerHTML=""; recipes.forEach(recipe=>{ if(recipe.unlocked){ const btn=document.createElement("button"); btn.className="recipe-btn"; let enough=true; let costText=""; const matNames={ mintLeaf:'🌿野薄荷', chamomile:'🌼洋甘菊', rosemary:'🌿迷迭香', lavender:'💜薰衣草', sweetRoot:'🌾甜根', holyFlower:'✨圣露花', poisonMushroom:'🍄毒菇', redOre:'⛏️赤铁髓', blueOre:'💎蓝萤石', blackOre:'⚫黑银', magicCrystal:'🔮结晶' }; const matVars={ mintLeaf, chamomile, rosemary, lavender, sweetRoot, holyFlower, poisonMushroom, redOre, blueOre, blackOre, magicCrystal }; for(let [mat,count] of Object.entries(recipe.cost)){ if(count>0){ costText+=`${matNames[mat]}×${count} `; if(matVars[mat]<count) enough=false; } } const stars='⭐'.repeat(recipe.stars||1); btn.textContent=`${recipe.name} ${stars} (${costText.trim()})`; if(!enough){ btn.classList.add("disabled"); btn.disabled=true; } btn.onclick=()=>{ if(!enough) return; for(let [mat,count] of Object.entries(recipe.cost)){ if(count>0){ if(mat==='mintLeaf') mintLeaf-=count; else if(mat==='chamomile') chamomile-=count; else if(mat==='rosemary') rosemary-=count; else if(mat==='lavender') lavender-=count; else if(mat==='sweetRoot') sweetRoot-=count; else if(mat==='holyFlower') holyFlower-=count; else if(mat==='poisonMushroom') poisonMushroom-=count; else if(mat==='redOre') redOre-=count; else if(mat==='blueOre') blueOre-=count; else if(mat==='blackOre') blackOre-=count; else if(mat==='magicCrystal') magicCrystal-=count; } } syncLegacyMaterials(); recipe.produce(1); if(recipe.name==="小红药水") craftCount.smallPotion++; else if(recipe.name==="大生命药水") craftCount.bigPotion++; else if(recipe.name==="祝福药水") craftCount.blessPotion++; else if(recipe.name==="诅咒毒药") craftCount.cursePotion++; totalCrafts++; updateUI(); renderDynamicRecipes(); showMessage(`✅ 成功炼制 ${recipe.name} ${stars}！`,false); checkAchievements(); }; container.appendChild(btn); } }); if(container.children.length===0) container.innerHTML="<div style='color:#999;'>暂无可用配方</div>"; }
+function updateBatchSelect() {
+  let select = document.getElementById("batchRecipeSelect");
+  if(!select) return;
+  select.innerHTML = "";
+
+  // 动态填充所有已解锁的配方
+  recipes.forEach(recipe => {
+    if(recipe.unlocked) {
+      select.add(new Option(recipe.name, recipe.id));
+    }
+  });
+
+  // 选择变化时更新最大数量
+  if(select.options.length > 0) {
+    updateBatchMaxByRecipe();
+  }
+}
+
+// 新增：根据选中配方计算最大可制作数量
+function updateBatchMaxByRecipe() {
+  let select = document.getElementById("batchRecipeSelect");
+  let slider = document.getElementById("batchQuantity");
+  let valueSpan = document.getElementById("batchQuantityValue");
+  let maxSpan = document.getElementById("batchMaxValue");
+
+  if(!select || !slider) return;
+
+  let recipeId = parseInt(select.value);
+  let recipe = recipes.find(r => r.id === recipeId);
+  if(!recipe) return;
+
+  // 计算最大可制作数量
+  let maxQty = 999;
+  for(let [mat, need] of Object.entries(recipe.cost)) {
+    if(need > 0) {
+      let have = 0;
+      if(mat === 'mintLeaf') have = mintLeaf;
+      else if(mat === 'chamomile') have = chamomile;
+      else if(mat === 'rosemary') have = rosemary;
+      else if(mat === 'lavender') have = lavender;
+      else if(mat === 'sweetRoot') have = sweetRoot;
+      else if(mat === 'holyFlower') have = holyFlower;
+      else if(mat === 'poisonMushroom') have = poisonMushroom;
+      else if(mat === 'redOre') have = redOre;
+      else if(mat === 'blueOre') have = blueOre;
+      else if(mat === 'blackOre') have = blackOre;
+      else if(mat === 'magicCrystal') have = magicCrystal;
+
+      maxQty = Math.min(maxQty, Math.floor(have / need));
+    }
+  }
+
+  maxQty = Math.min(maxQty, 99); // 上限99
+  maxQty = Math.max(maxQty, 1); // 下限1
+
+  slider.max = maxQty;
+  slider.value = Math.min(slider.value, maxQty);
+  valueSpan.innerText = slider.value;
+  if(maxSpan) maxSpan.innerText = maxQty;
+}
+
+function craftBatch() {
+  if(shopLevel < 2) {
+    showMessage("店铺等级不足，无法批量炼制！", true);
+    return;
+  }
+
+  let recipeId = parseInt(document.getElementById("batchRecipeSelect").value);
+  let recipe = recipes.find(r => r.id === recipeId);
+  if(!recipe) return;
+
+  let qty = parseInt(document.getElementById("batchQuantity").value);
+  if(isNaN(qty) || qty < 1) qty = 1;
+
+  // 检查材料
+  let enough = true;
+  for(let [mat, count] of Object.entries(recipe.cost)) {
+    let totalNeed = count * qty;
+    if(mat === 'mintLeaf' && mintLeaf < totalNeed) enough = false;
+    else if(mat === 'chamomile' && chamomile < totalNeed) enough = false;
+    else if(mat === 'rosemary' && rosemary < totalNeed) enough = false;
+    else if(mat === 'lavender' && lavender < totalNeed) enough = false;
+    else if(mat === 'sweetRoot' && sweetRoot < totalNeed) enough = false;
+    else if(mat === 'holyFlower' && holyFlower < totalNeed) enough = false;
+    else if(mat === 'poisonMushroom' && poisonMushroom < totalNeed) enough = false;
+    else if(mat === 'redOre' && redOre < totalNeed) enough = false;
+    else if(mat === 'blueOre' && blueOre < totalNeed) enough = false;
+    else if(mat === 'blackOre' && blackOre < totalNeed) enough = false;
+    else if(mat === 'magicCrystal' && magicCrystal < totalNeed) enough = false;
+  }
+
+  if(!enough) {
+    showMessage("材料不足！", true);
+    return;
+  }
+
+  // 扣除材料
+  for(let [mat, count] of Object.entries(recipe.cost)) {
+    let totalNeed = count * qty;
+    if(mat === 'mintLeaf') mintLeaf -= totalNeed;
+    else if(mat === 'chamomile') chamomile -= totalNeed;
+    else if(mat === 'rosemary') rosemary -= totalNeed;
+    else if(mat === 'lavender') lavender -= totalNeed;
+    else if(mat === 'sweetRoot') sweetRoot -= totalNeed;
+    else if(mat === 'holyFlower') holyFlower -= totalNeed;
+    else if(mat === 'poisonMushroom') poisonMushroom -= totalNeed;
+    else if(mat === 'redOre') redOre -= totalNeed;
+    else if(mat === 'blueOre') blueOre -= totalNeed;
+    else if(mat === 'blackOre') blackOre -= totalNeed;
+    else if(mat === 'magicCrystal') magicCrystal -= totalNeed;
+  }
+
+  syncLegacyMaterials();
+  recipe.produce(qty);
+
+  // 更新炼制计数
+  if(recipe.name === "小红药水") craftCount.smallPotion += qty;
+  else if(recipe.name === "大生命药水") craftCount.bigPotion += qty;
+  else if(recipe.name === "祝福药水") craftCount.blessPotion += qty;
+  else if(recipe.name === "诅咒毒药") craftCount.cursePotion += qty;
+
+  totalCrafts += qty; // 更新总炼制次数
+
+  updateUI();
+  updateBatchMaxByRecipe(); // 重新计算最大值
+  showMessage(`⚡ 批量炼制 ${qty} 瓶 ${recipe.name} 成功！`, false);
+  checkAchievements();
+}
 
 // 队列与订单函数 (简化但完整)
 function generateDailyQueue() { let queueSize=3+Math.floor(Math.random()*4); let available=adventurers.filter(a=>a.status!=="死亡"); if(available.length===0) return; let weighted=available.map(adv=>{ let weight=1.0; if(adv.alignment==='good'){ if(reputation>=200) weight*=3; else if(reputation>=100) weight*=2; else if(reputation>=0) weight*=1.5; else if(reputation<-100) weight*=0.3; } else if(adv.alignment==='evil'){ if(reputation<=-200) weight*=3; else if(reputation<=-100) weight*=2; else if(reputation<=0) weight*=1.5; else if(reputation>100) weight*=0.3; } else if(adv.alignment==='neutral'){ let absRep=Math.abs(reputation); if(absRep>=200) weight*=2; else if(absRep>=100) weight*=1.5; } if(adv.level>=3 && shopLevel<3) weight*=0.5; if(adv.level>=3 && shopLevel>=3) weight*=1.5; if(adv.id===8 && (reputation<150 || shopLevel<4)) weight*=0.2; if(adv.id===10 && (reputation>-150 || shopLevel<4)) weight*=0.2; if(adv.id===15 && shopLevel<3) weight*=0.3; return {adv,weight}; }); let newQueue=[]; for(let i=0;i<queueSize;i++){ let totalWeight=weighted.reduce((s,item)=>s+item.weight,0); let rand=Math.random()*totalWeight; let cum=0; for(let item of weighted){ cum+=item.weight; if(rand<=cum){ newQueue.push({adventurerId:item.adv.id}); break; } } } queue=newQueue; renderQueue(); }
@@ -406,36 +631,423 @@ function tryGiftFromAdventurer(adv) { if(Math.random()>0.3) return; let msg=""; 
 function handleShortageInform() { if(pendingOrderId){ let order=orders.find(o=>o.id===pendingOrderId); if(order){ let adv=adventurers.find(a=>a.id===order.adventurerId); if(adv){ adv.favor=Math.max(0,adv.favor-10); showMessage(`😢 您告知 ${adv.name} 缺货，他失望地离开了，好感度-10。`,true); } order.status="failed"; } renderOrdersList(); } document.getElementById("shortageModal").style.display="none"; pendingOrderId=null; }
 function handleShortageGet() { document.getElementById("shortageModal").style.display="none"; pendingOrderId=null; showMessage("快去炼制药水吧！",false); }
 
-function updateUI() { document.getElementById("gold").innerText=gold; document.getElementById("potion").innerText=potion; document.getElementById("bigPotion").innerText=bigPotion; document.getElementById("dayCount").innerText=day; document.getElementById("maxDay").innerText=maxDay; document.getElementById("shopLevel").innerText=shopLevel; document.getElementById("reputationValue").innerText=reputation; let season=getCurrentSeason(); let seasonDisplay=document.getElementById("seasonDisplay"); if(seasonDisplay) seasonDisplay.innerText=`${season.emoji} ${season.name}`; if(document.getElementById("mintLeafCount")){ document.getElementById("mintLeafCount").innerText=mintLeaf; document.getElementById("chamomileCount").innerText=chamomile; document.getElementById("rosemaryCount").innerText=rosemary; document.getElementById("lavenderCount").innerText=lavender; document.getElementById("sweetRootCount").innerText=sweetRoot; document.getElementById("holyFlowerCount").innerText=holyFlower; document.getElementById("poisonMushroomCount").innerText=poisonMushroom; document.getElementById("redOreCount").innerText=redOre; document.getElementById("blueOreCount").innerText=blueOre; document.getElementById("blackOreCount").innerText=blackOre; document.getElementById("crystalCount").innerText=magicCrystal; } if(document.getElementById("materialModal") && document.getElementById("materialModal").style.display==="flex") refreshMaterialUI(); updateMainQuestProgress(); syncLegacyMaterials(); }
+function updateUI() {
+  document.getElementById("gold").innerText=gold;
+  document.getElementById("dayCount").innerText=day;
+  document.getElementById("maxDay").innerText=maxDay;
+  document.getElementById("shopLevel").innerText=shopLevel;
+  document.getElementById("reputationValue").innerText=reputation;
+
+  let season=getCurrentSeason();
+  let seasonDisplay=document.getElementById("seasonDisplay");
+  if(seasonDisplay) seasonDisplay.innerText=`${season.emoji} ${season.name}`;
+
+  // 更新炼金台材料显示
+  if(document.getElementById("mintLeafCount")){
+    document.getElementById("mintLeafCount").innerText=mintLeaf;
+    document.getElementById("chamomileCount").innerText=chamomile;
+    document.getElementById("rosemaryCount").innerText=rosemary;
+    document.getElementById("lavenderCount").innerText=lavender;
+    document.getElementById("sweetRootCount").innerText=sweetRoot;
+    document.getElementById("holyFlowerCount").innerText=holyFlower;
+    document.getElementById("poisonMushroomCount").innerText=poisonMushroom;
+    document.getElementById("redOreCount").innerText=redOre;
+    document.getElementById("blueOreCount").innerText=blueOre;
+    document.getElementById("blackOreCount").innerText=blackOre;
+    document.getElementById("crystalCount").innerText=magicCrystal;
+  }
+
+  if(document.getElementById("materialModal") && document.getElementById("materialModal").style.display==="flex") refreshMaterialUI();
+
+  updateMainQuestProgress();
+  updateInventoryDisplay(); // 新增：刷新背包显示
+  syncLegacyMaterials();
+}
+
+// 新增：背包显示函数
+function updateInventoryDisplay() {
+  const inventoryGrid = document.getElementById("inventoryGrid");
+  if(!inventoryGrid) return;
+
+  const potions = [
+    { name: "小红药水", icon: "💊", count: potion, desc: "恢复20HP" },
+    { name: "大生命药水", icon: "❤️", count: bigPotion, desc: "恢复50HP" },
+    { name: "魔力药水", icon: "💙", count: magicPotion, desc: "恢复30MP" },
+    { name: "清醒露", icon: "☕", count: awakePotion, desc: "保持清醒" },
+    { name: "安眠茶", icon: "🌙", count: sleepPotion, desc: "引入睡眠" },
+    { name: "强力安眠茶", icon: "😴", count: strongSleepPotion, desc: "强效安眠" },
+    { name: "勇气药水", icon: "🦁", count: couragePotion, desc: "解除诅咒" },
+    { name: "祝福药水", icon: "✨", count: blessPotion, desc: "恢复全体状态" },
+    { name: "诅咒毒药", icon: "💀", count: cursePotion, desc: "邪恶之力" },
+    { name: "轻微麻痹剂", icon: "😵", count: lightParalysis, desc: "麻痹幻觉" },
+    { name: "强力麻痹剂", icon: "💫", count: strongParalysis, desc: "强效麻痹" }
+  ];
+
+  inventoryGrid.innerHTML = "";
+  potions.forEach(p => {
+    if(p.count > 0 || true) { // 显示所有药水，包括0的
+      const item = document.createElement("div");
+      item.className = "inventory-item";
+      if(p.count === 0) item.style.opacity = "0.5";
+      item.innerHTML = `
+        <div class="inventory-item-icon">${p.icon}</div>
+        <div class="inventory-item-name">${p.name}</div>
+        <div class="inventory-item-count">×${p.count}</div>
+        <div class="inventory-item-desc">${p.desc}</div>
+      `;
+      inventoryGrid.appendChild(item);
+    }
+  });
+}
 function addIncome(amount){ dailyIncome+=amount; }
 function addExpense(amount){ dailyExpense+=amount; }
 function resetDailyStats(){ dailyIncome=0; dailyExpense=0; dailyDeliverySuccess=0; }
 function resetDailyBuff(){ deliveryBonus=1.0; }
 function getReputationModifiers() { if(reputation<=-200) return {priceMul:1.3,visitBonus:-0.4,eventEvilBonus:0.3}; if(reputation<=0) return {priceMul:1.1,visitBonus:-0.1,eventEvilBonus:0.1}; if(reputation<=100) return {priceMul:1.0,visitBonus:0,eventEvilBonus:0}; if(reputation<=200) return {priceMul:0.9,visitBonus:0.2,eventEvilBonus:-0.2}; return {priceMul:0.8,visitBonus:0.4,eventEvilBonus:-0.4}; }
-function updateRecipeUnlockStatus() { if(shopLevel>=2) recipes[2].unlocked=true; if(shopLevel>=3) recipes[3].unlocked=true; if(shopLevel>=3) recipes[6].unlocked=true; let totalCrafts=craftCount.smallPotion+craftCount.bigPotion+craftCount.blessPotion+craftCount.cursePotion; if(totalCrafts>=5) recipes[7].unlocked=true; if(reputation>=150) recipes[8].unlocked=true; if(reputation<=-50) recipes[9].unlocked=true; if(reputation<=0) recipes[10].unlocked=true; if(reputation<=-100) recipes[11].unlocked=true; if(!document.getElementById("recipeBookPage").classList.contains("hidden-page")) renderRecipeBook(); if(document.getElementById("alchemyModal").style.display==="flex"){ renderDynamicRecipes(); updateBatchSelect(); updateBatchAreaVisibility(); } checkAchievements(); }
+function updateRecipeUnlockStatus() {
+  if(shopLevel>=2) recipes[2].unlocked=true;
+  if(shopLevel>=3) recipes[3].unlocked=true;
+  if(shopLevel>=3) recipes[6].unlocked=true;
+
+  // 使用全局 totalCrafts 变量
+  if(totalCrafts>=5) recipes[7].unlocked=true;
+
+  if(reputation>=150) recipes[8].unlocked=true;
+  if(reputation<=-50) recipes[9].unlocked=true;
+  if(reputation<=0) recipes[10].unlocked=true;
+  if(reputation<=-100) recipes[11].unlocked=true;
+
+  if(!document.getElementById("recipeBookPage").classList.contains("hidden-page")) renderRecipeBook();
+  if(document.getElementById("alchemyModal").style.display==="flex"){
+    renderDynamicRecipes();
+    updateBatchSelect();
+    updateBatchAreaVisibility();
+  }
+  checkAchievements();
+}
 function updateBatchAreaVisibility(){ let area=document.getElementById("batchCraftArea"); if(area) area.style.display=(shopLevel>=2)?"block":"none"; }
 
 // 突发事件 (简化)
+// =================== 事件系统 ===================
+const EVENT_POOL_POSITIVE = [
+  { id:"weather_good", name:"阳光明媚", type:"positive", weight:8, effect:()=>{ gardenYieldModifier=1.5; showMessage("☀️ 天气影响：今日后花园产出+50%",false); } },
+  { id:"magic_crystal_field", name:"田地里的魔力结晶", type:"positive", weight:4, effect:()=>{ let add=1+Math.floor(Math.random()*2); magicCrystal+=add; showMessage(`✨ 发现了${add}个魔力结晶！`,false); } },
+  { id:"adventurer_team", name:"强力冒险者队伍", type:"positive", weight:8, effect:()=>{ extraQueueSize=1+Math.floor(Math.random()*3); showMessage(`🎖️ 强力队伍路过，今日额外增加${extraQueueSize}位顾客！`,false); } },
+  { id:"herb_gift", name:"祖母旧友来访", type:"positive", weight:8, effect:()=>{ let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<4;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } showMessage("👵 老友赠送4个普通草药",false); } },
+  { id:"magic_wind", name:"魔法风过境", type:"positive", weight:7, effect:()=>{ potionQualityModifier=1.1; showMessage("🌬️ 魔法风过境，今日炼药品质提升！",false); } },
+  { id:"goblin_return", name:"小魔怪报恩", type:"positive", weight:7, effect:()=>{ let add=1+Math.floor(Math.random()*2); let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<add;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } showMessage(`👹 小魔怪留下了${add}个草药`,false); } },
+  { id:"price_up", name:"药剂品鉴会", type:"positive", weight:7, effect:()=>{ showMessage("🎪 品鉴会提升了店铺知名度，今日价格上浮！",false); } },
+  { id:"mine_collapse", name:"矿洞塌方余波", type:"positive", weight:4, effect:()=>{ if(Math.random()<0.8){ let add=1+Math.floor(Math.random()*2); if(Math.random()<0.5) redOre+=add; else blueOre+=add; showMessage(`⛏️ 获得${add}个魔法矿石`,false); } else{ magicCrystal+=1; showMessage("✨ 幸运地获得1个魔力结晶！",false); } } }
+];
+
+const EVENT_POOL_NEGATIVE = [
+  { id:"weather_bad", name:"阴云密布", type:"negative", weight:8, effect:()=>{ gardenYieldModifier=0.5; showMessage("☁️ 恶劣天气：今日后花园产出-50%",true); } },
+  { id:"potion_evaporate", name:"药剂挥发", type:"negative", weight:7, effect:()=>{ potionQualityModifier=0.9; showMessage("💨 气温异常，今日部分药剂品质下降",true); } },
+  { id:"forest_miasma", name:"森林瘴气扩散", type:"negative", weight:7, effect:()=>{ residentOrderModifier=-1; showMessage("😷 瘴气扩散，今日居民订单减少",true); } },
+  { id:"forest_danger", name:"迷雾森林异动", type:"negative", weight:8, effect:()=>{ adventurerInjuryModifier=1.1; showMessage("⚠️ 森林异动，冒险者受伤率提升10%",true); } },
+  { id:"tool_damage", name:"工具损坏", type:"negative", weight:7, effect:()=>{ potionQualityModifier=0.9; showMessage("🔧 炼金工具损坏，今日品质下降",true); } },
+  { id:"rumor", name:"谣言四起", type:"negative", weight:7, effect:()=>{ residentOrderModifier=-1; showMessage("💬 有人散布谣言，今日居民订单减少",true); } },
+  { id:"material_damp", name:"材料受潮", type:"negative", weight:6, effect:()=>{ let loss=2+Math.floor(Math.random()*3); let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<loss;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf' && mintLeaf>0) mintLeaf--; else if(type==='chamomile' && chamomile>0) chamomile--; else if(type==='rosemary' && rosemary>0) rosemary--; else if(type==='lavender' && lavender>0) lavender--; else if(type==='sweetRoot' && sweetRoot>0) sweetRoot--; } showMessage(`💧 材料受潮，损失${loss}个草药`,true); } }
+];
+
+const EVENT_POOL_CHOICE = [
+  { id:"forest_clear", name:"森林雾气变淡", type:"choice", weight:8, description:"今日迷雾森林的雾气淡了不少，外围区域变得安全，可以趁机去采集材料。", options:[ { text:"只在外围捡拾", effect:()=>{ let add=3+Math.floor(Math.random()*3); let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<add;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } showMessage(`获得${add}个普通草药`,false); updateUI(); } }, { text:"深入一些冒险", effect:()=>{ if(Math.random()<0.7){ let rareAdd=(Math.random()<0.5)?1:0; if(rareAdd){ holyFlower+=1; showMessage("冒险成功！获得1个圣露花",false); } else{ let oreAdd=1+Math.floor(Math.random()*2); if(Math.random()<0.5) redOre+=oreAdd; else blueOre+=oreAdd; showMessage(`冒险成功！获得${oreAdd}个魔法矿石`,false); } } else{ let loss=10+Math.floor(Math.random()*41); gold=Math.max(0,gold-loss); showMessage(`受伤了！损失${loss}金币`,true); } updateUI(); } }, { text:"不去", effect:()=>{ showMessage("选择不去采集",false); } } ] },
+  { id:"festival", name:"节日祭典", type:"choice", weight:8, description:"今天是小镇的传统祭日，附近居民都在筹备庆典，不少动物邀请你一同参加。", options:[ { text:"去参加（无法营业）", effect:()=>{ if(Math.random()<0.7){ let matAdd=1+Math.floor(Math.random()*5); let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<matAdd;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } showMessage(`参加庆典，在集市获得${matAdd}个材料`,false); } else{ let goldAdd=50+Math.floor(Math.random()*251); let repAdd=5+Math.floor(Math.random()*6); gold+=goldAdd; reputation=Math.min(500,reputation+repAdd); showMessage(`推销成功！获得${goldAdd}金币，声望+${repAdd}`,false); } updateUI(); } }, { text:"不去，坚守店铺", effect:()=>{ let repAdd=5+Math.floor(Math.random()*6); reputation=Math.min(500,reputation+repAdd); adventurerInjuryModifier=0.9; showMessage(`坚守岗位，声望+${repAdd}，今日冒险者更安心`,false); updateUI(); } } ] },
+  { id:"herb_merchant", name:"流浪草药商求助", type:"choice", weight:7, description:"一位流浪草药商被迷雾森林的魔怪袭击，希望能在你店门口暂避并低价出售剩余草药。", options:[ { text:"帮助他（低价购入）", effect:()=>{ if(gold>=20){ gold-=20; let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<4;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } showMessage("花费20金币，获得4个草药",false); } else showMessage("金币不足",true); updateUI(); } }, { text:"拒绝", effect:()=>{ showMessage("拒绝了草药商",false); } } ] },
+  { id:"spirit_whisper", name:"森林精灵低语", type:"choice", weight:6, description:"耳边传来精灵的低语，它们愿意用魔力帮你滋养材料，但要求你今日不得制作任何负面药剂。", options:[ { text:"接受", effect:()=>{ gardenYieldModifier=1.4; showMessage("接受精灵祝福，今日花园产出+40%",false); } }, { text:"拒绝", effect:()=>{ showMessage("拒绝了精灵",false); } } ] },
+  { id:"old_box", name:"旧木箱浮现", type:"choice", weight:6, description:"河边冲上来一个刻有炼金纹路的旧木箱，好像是你祖母当年留下的？", options:[ { text:"打开", effect:()=>{ if(Math.random()<0.8){ let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<3;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; } showMessage("获得3个草药",false); } else{ let loss=1+Math.floor(Math.random()*50); gold=Math.max(0,gold-loss); showMessage(`触发陷阱，损失${loss}金币`,true); } updateUI(); } }, { text:"不打开", effect:()=>{ showMessage("选择不打开木箱",false); } } ] }
+];
+
+// 事件触发函数
+function triggerDailyEvent() {
+  if(Math.random() > 0.6) return; // 60%概率触发
+
+  // 构建权重池
+  let pool = [];
+  EVENT_POOL_POSITIVE.forEach(e => { for(let i=0; i<Math.ceil(e.weight*35/100); i++) pool.push({...e, poolType:'positive'}); });
+  EVENT_POOL_NEGATIVE.forEach(e => { for(let i=0; i<Math.ceil(e.weight*30/100); i++) pool.push({...e, poolType:'negative'}); });
+  EVENT_POOL_CHOICE.forEach(e => { for(let i=0; i<Math.ceil(e.weight*35/100); i++) pool.push({...e, poolType:'choice'}); });
+
+  if(pool.length === 0) return;
+
+  let event = pool[Math.floor(Math.random() * pool.length)];
+
+  if(event.type === 'choice') {
+    showEventChoiceModal(event);
+  } else {
+    event.effect();
+    updateUI();
+  }
+}
+
+function showEventChoiceModal(event) {
+  document.getElementById("eventDescription").innerHTML = `<strong>${event.name}</strong><br><br>${event.description}`;
+  let optDiv = document.getElementById("eventOptions");
+  optDiv.innerHTML = "";
+
+  event.options.forEach(opt => {
+    let btn = document.createElement("button");
+    btn.textContent = opt.text;
+    btn.className = "event-option-btn";
+    btn.onclick = () => {
+      opt.effect();
+      document.getElementById("eventModal").style.display = "none";
+      updateUI();
+    };
+    optDiv.appendChild(btn);
+  });
+
+  document.getElementById("eventModal").style.display = "flex";
+}
+
 const eventPool=[{ id:"wandering_merchant", name:"流浪商人", description:"一位流浪商人来到你的店铺，他带来了一批稀有材料，但也想高价收购你的库存药水。", type:"neutral", options:[ { text:"购买稀有材料（花费30金币，获得3草药+1稀有花）", effect:()=>{ if(gold>=30){gold-=30;mintLeaf+=1;chamomile+=1;rosemary+=1;holyFlower+=1;addExpense(30);showMessage("你购买了材料");}else showMessage("金币不足",true);} }, { text:"出售药水（每瓶小红药水8金，大生命18金）", effect:()=>{ let inc=0; if(potion>0){inc+=potion*8;gold+=potion*8;addIncome(potion*8);potion=0;} if(bigPotion>0){inc+=bigPotion*18;gold+=bigPotion*18;addIncome(bigPotion*18);bigPotion=0;} showMessage(`获得${inc}金币`); } }, { text:"不理会", effect:()=>showMessage("商人离开了") } ] } ];
 function getRandomEvent(){ return eventPool[0]; }
 function showEventModal(event){ document.getElementById("eventDescription").innerHTML=event.description; let optDiv=document.getElementById("eventOptions"); optDiv.innerHTML=""; event.options.forEach(opt=>{ let btn=document.createElement("button"); btn.textContent=opt.text; btn.className="event-option-btn"; btn.onclick=()=>{ opt.effect(); document.getElementById("eventModal").style.display="none"; isEventActive=false; updateUI(); renderBestiary(); renderRecipeBook(); if(document.getElementById("alchemyModal").style.display==="flex"){ renderDynamicRecipes(); updateBatchSelect(); } }; optDiv.appendChild(btn); }); document.getElementById("eventModal").style.display="flex"; isEventActive=true; }
 function tryTriggerEvent(triggerSource){ if(isEventActive) return; let base=(triggerSource==="daily")?0.3:0.2; let mod=getReputationModifiers(); let final=base+(mod.eventEvilBonus*0.1); if(Math.random()<final) showEventModal(getRandomEvent()); }
 
-const reputationEvents=[{ id:1, title:"受伤的冒险者", description:"一位受伤的冒险者倒在你店门口，急需一瓶小红药水。他只有5金币，而你的药水成本是8金币。你会怎么做？", good:{ text:"免费救治（声望+10，失去1瓶小红药水）", effect:()=>{ if(potion>=1){potion--; reputation=Math.min(500,reputation+10); showMessage("你救治了冒险者，声望+10。"); } else showMessage("你没有药水，无法救治。", true); } }, evil:{ text:"高价卖给他（15金币，声望-10）", effect:()=>{ if(potion>=1){potion--; gold+=15; addIncome(15); reputation=Math.max(-500,reputation-10); showMessage("你高价卖给他药水，赚了15金币，但声望-10。"); } else showMessage("你没有药水可卖。", true); } } } ];
-function showRandomReputationEvent(){ let ev=reputationEvents[0]; document.getElementById("reputationDescription").innerHTML=`<strong>${ev.title}</strong><br><br>${ev.description}`; let optDiv=document.getElementById("reputationOptions"); optDiv.innerHTML=""; let goodBtn=document.createElement("button"); goodBtn.textContent=ev.good.text; goodBtn.style.background="#2e7d32"; goodBtn.onclick=()=>{ ev.good.effect(); document.getElementById("reputationModal").style.display="none"; updateUI(); renderBestiary(); renderRecipeBook(); if(document.getElementById("alchemyModal").style.display==="flex"){ renderDynamicRecipes(); updateBatchSelect(); } updateReputationBonus(); checkAchievements(); }; let evilBtn=document.createElement("button"); evilBtn.textContent=ev.evil.text; evilBtn.style.background="#8b0000"; evilBtn.onclick=()=>{ ev.evil.effect(); document.getElementById("reputationModal").style.display="none"; updateUI(); renderBestiary(); renderRecipeBook(); if(document.getElementById("alchemyModal").style.display==="flex"){ renderDynamicRecipes(); updateBatchSelect(); } updateReputationBonus(); checkAchievements(); }; optDiv.appendChild(goodBtn); optDiv.appendChild(evilBtn); document.getElementById("reputationModal").style.display="flex"; }
+const reputationEvents=[
+  { id:1, title:"受伤的冒险者", description:"一位重伤的冒险者倒在店门口，急需一瓶小红药水救命。他颤抖着掏出仅有的 5 枚金币，而你的药水成本是 8 金。", good:{ text:"免费救治", effect:()=>{ if(potion>=1){potion--; reputation=Math.min(500,reputation+10); showMessage("你救治了冒险者，声望+10。"); } else showMessage("你没有药水，无法救治。", true); } }, evil:{ text:"高价卖给他（15金币）", effect:()=>{ if(potion>=1){potion--; gold+=15; addIncome(15); reputation=Math.max(-500,reputation-10); showMessage("你高价卖给他药水，赚了15金币，但声望-10。"); } else showMessage("你没有药水可卖。", true); } } },
+  { id:2, title:"迷路的学徒", description:"一个自称是远方炼金公会学徒的年轻人走进店里，他想借阅你的配方笔记。你看出他其实是想偷学你的独门配方。", good:{ text:"慷慨分享", effect:()=>{ reputation=Math.min(500,reputation+15); let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf') mintLeaf++; else if(type==='chamomile') chamomile++; else if(type==='rosemary') rosemary++; else if(type==='lavender') lavender++; else if(type==='sweetRoot') sweetRoot++; showMessage("声望+15，学徒回赠了1个草药。",false); } }, evil:{ text:"赶走他并警告其他店铺", effect:()=>{ reputation=Math.max(-500,reputation-10); gold+=20; addIncome(20); showMessage("声望-10，获得20金币赔礼。",false); } } },
+  { id:3, title:"黑市商人的诱惑", description:"一个戴兜帽的神秘商人悄声问你是否愿意出售劣质药水，他可以高价收购，然后转卖给不知情的冒险者。", good:{ text:"严词拒绝", effect:()=>{ reputation=Math.min(500,reputation+20); showMessage("声望+20。",false); } }, evil:{ text:"同意合作", effect:()=>{ gold+=80; addIncome(80); reputation=Math.max(-500,reputation-25); showMessage("获得80金币，声望-25。",true); } } },
+  { id:4, title:"富商的订单", description:"一位傲慢的富商急需 5 瓶大生命药水，但他只愿意支付市场价的一半，并暗示如果不卖，他会让其他商人都不来你这进货。", good:{ text:"按正常价卖给他", effect:()=>{ if(bigPotion>=5){bigPotion-=5; gold+=200; addIncome(200); reputation=Math.min(500,reputation+5); showMessage("声望+5，获得200金币。",false); } else showMessage("大生命药水不足5瓶。",true); } }, evil:{ text:"以次充好（混入稀释药水）", effect:()=>{ if(bigPotion>=1){bigPotion--; gold+=600; addIncome(600); reputation=Math.max(-500,reputation-30); showMessage("获得600金币，声望-30。",true); } else showMessage("大生命药水不足。",true); } } },
+  { id:5, title:"被诅咒的遗物", description:"一位老妇人来店里，想卖掉一枚祖传戒指。你能感觉到戒指上附着微弱的诅咒魔力，但她只想要 10 金币。", good:{ text:"高价买下并净化戒指（花费50金）", effect:()=>{ if(gold>=50){gold-=50; addExpense(50); reputation=Math.min(500,reputation+25); showMessage("花费50金币，声望+25，获得祝福戒指效果。",false); } else showMessage("金币不足。",true); } }, evil:{ text:"低价收购并转卖", effect:()=>{ if(gold>=10){gold-=10; addExpense(10); gold+=100; addIncome(100); reputation=Math.max(-500,reputation-20); showMessage("净赚90金币，声望-20。",false); } else showMessage("金币不足。",true); } } },
+  { id:6, title:"偷药水的小孩", description:"你亲眼看见一个瘦弱的小孩偷偷拿走了一瓶小红药水。你抓住他时，他说是为了救生病的母亲。", good:{ text:"原谅他并多送一瓶", effect:()=>{ if(potion>=2){potion-=2; reputation=Math.min(500,reputation+30); showMessage("声望+30，小孩成为你的秘密帮手。",false); } else showMessage("小红药水不足2瓶。",true); } }, evil:{ text:"扭送治安官", effect:()=>{ reputation=Math.max(-500,reputation-15); gold+=5; addIncome(5); showMessage("声望-15，获得5金币赔偿。",true); } } },
+  { id:7, title:"竞争对手的阴谋", description:"对面新开了一家药剂店，店主派人来请你'喝茶'，暗示如果你愿意合并店铺，他可以分你一成股份，否则他会用低价战逼你关门。", good:{ text:"坚持独立经营，公平竞争", effect:()=>{ reputation=Math.min(500,reputation+20); showMessage("声望+20，未来5天订单+1。",false); } }, evil:{ text:"答应合并，暗中使坏", effect:()=>{ gold+=200; addIncome(200); reputation=Math.max(-500,reputation-40); if(shopLevel>1) shopLevel--; showMessage("获得200金币，声望-40，店铺等级降低1级。",true); } } },
+  { id:8, title:"德鲁伊的警告", description:"一位森林德鲁伊冲进店里，严厉指责你过度采集稀有草药，破坏了生态平衡。他要求你立刻停止使用圣露花和毒腺菇。", good:{ text:"承诺减少采集", effect:()=>{ reputation=Math.min(500,reputation+25); showMessage("声望+25，未来花园产量调整。",false); } }, evil:{ text:"无视警告", effect:()=>{ reputation=Math.max(-500,reputation-30); holyFlower+=Math.floor(Math.random()*3)+3; poisonMushroom+=Math.floor(Math.random()*2)+1; showMessage("声望-30，立即获得稀有草药。",true); } } },
+  { id:9, title:"赎罪的恶徒", description:"一个曾经抢劫过商队的强盗跪在店门口，说他已经悔改，希望能用他仅剩的 50 金币买一瓶祝福药水，去拯救被他伤害过的人。", good:{ text:"免费给他祝福药水", effect:()=>{ if(blessPotion>=1){blessPotion--; reputation=Math.min(500,reputation+35); showMessage("声望+35，强盗成为你的守护者。",false); } else showMessage("没有祝福药水。",true); } }, evil:{ text:"收下金币，给他假药水", effect:()=>{ gold+=50; addIncome(50); reputation=Math.max(-500,reputation-50); showMessage("获得50金币，声望-50。",true); } } },
+  { id:10, title:"时光沙漏", description:"一位时光法师路过，他对你的炼金术很感兴趣，提出可以用一个'时光沙漏'换取你店铺一周的经营权。沙漏可以让你回到过去，但会失去一周的记忆。", good:{ text:"拒绝交易", effect:()=>{ reputation=Math.min(500,reputation+10); let unlockedRecipes = recipes.filter(r=>!r.unlocked); if(unlockedRecipes.length>0){ let randomRecipe=unlockedRecipes[Math.floor(Math.random()*unlockedRecipes.length)]; randomRecipe.unlocked=true; showMessage("声望+10，随机解锁一个配方。",false); } else showMessage("声望+10。",false); } }, evil:{ text:"接受交易", effect:()=>{ gold=Math.floor(gold*0.7); reputation=Math.floor(reputation*0.7); if(shopLevel>1) shopLevel--; showMessage("获得时光沙漏，但损失30%金币和声望，店铺等级-1。",true); } } }
+];
+function showRandomReputationEvent(){
+  // 检查每日限制
+  if(reputationEventUsedToday) {
+    showMessage("今日已抉择过，明天再来吧！",true);
+    return;
+  }
+
+  let ev=reputationEvents[Math.floor(Math.random()*reputationEvents.length)];
+  document.getElementById("reputationDescription").innerHTML=`<strong>${ev.title}</strong><br><br>${ev.description}`;
+  let optDiv=document.getElementById("reputationOptions");
+  optDiv.innerHTML="";
+
+  let goodBtn=document.createElement("button");
+  goodBtn.textContent=ev.good.text;
+  goodBtn.style.background="#2e7d32";
+  goodBtn.onclick=()=>{
+    ev.good.effect();
+    reputationEventUsedToday = true; // 标记已使用
+    document.getElementById("reputationModal").style.display="none";
+    updateUI();
+    renderBestiary();
+    renderRecipeBook();
+    if(document.getElementById("alchemyModal").style.display==="flex"){
+      renderDynamicRecipes();
+      updateBatchSelect();
+    }
+    updateReputationBonus();
+    checkAchievements();
+  };
+
+  let evilBtn=document.createElement("button");
+  evilBtn.textContent=ev.evil.text;
+  evilBtn.style.background="#8b0000";
+  evilBtn.onclick=()=>{
+    ev.evil.effect();
+    reputationEventUsedToday = true; // 标记已使用
+    document.getElementById("reputationModal").style.display="none";
+    updateUI();
+    renderBestiary();
+    renderRecipeBook();
+    if(document.getElementById("alchemyModal").style.display==="flex"){
+      renderDynamicRecipes();
+      updateBatchSelect();
+    }
+    updateReputationBonus();
+    checkAchievements();
+  };
+
+  optDiv.appendChild(goodBtn);
+  optDiv.appendChild(evilBtn);
+  document.getElementById("reputationModal").style.display="flex";
+}
 
 let messageTimeout=null; let msgDuration=2;
-function showMessage(msg,isError=false){ let div=document.getElementById("message"); if(div){ if(messageTimeout) clearTimeout(messageTimeout); div.innerText=msg; div.style.color=isError?"#c0392b":"#2f855a"; messageTimeout=setTimeout(()=>{ div.innerText=""; },msgDuration*1000); } }
+function showMessage(msg, isError=false) {
+  // 保留原有底部消息
+  let div = document.getElementById("message");
+  if(div) {
+    if(messageTimeout) clearTimeout(messageTimeout);
+    div.innerText = msg;
+    div.style.color = isError ? "#c0392b" : "#2f855a";
+    messageTimeout = setTimeout(() => { div.innerText = ""; }, msgDuration*1000);
+  }
+
+  // 新增Toast提示
+  showToast(msg, isError);
+}
+
+function showToast(msg, isError=false) {
+  let toast = document.getElementById("toastMsg");
+  if(!toast) return;
+
+  toast.innerText = msg;
+  toast.className = "toast show " + (isError ? "error" : "success");
+
+  // 根据消息长度调整显示时间
+  let duration = 2000; // 默认2秒
+  if(msg.length > 50) duration = 3000; // 较长消息3秒
+  if(msg.length > 100) duration = 4000; // 很长消息4秒
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, duration);
+}
 
 let dayEndedFlag=false;
 function requestEndDay(){ if(dayEndedFlag){ showMessage("今日已结束",true); return; } let msg=`<strong>今日概况</strong><br>交付成功: ${dailyDeliverySuccess} 次<br>当前未完成订单: ${orders.filter(o=>o.status==="pending").length}<br>预估利润: ${dailyIncome-dailyExpense} 金币<br>确认结束？`; document.getElementById("confirmEndMessage").innerHTML=msg; document.getElementById("confirmEndModal").style.display="flex"; }
-function performEndDay(){ if(dayEndedFlag) return; dayEndedFlag=true; let rent=getDailyRent()-reputationBonusRent; if(rent<0) rent=0; if(gold>=rent){ gold-=rent; addExpense(rent); showMessage(`🏠 扣除租金 ${rent} 金币`,false); } else{ gold-=rent; addExpense(rent); showMessage(`⚠️ 租金不足，负债 ${-gold}`,true); } let pendingOrders=orders.filter(o=>o.status==="pending"); for(let order of pendingOrders){ order.daysLeft--; if(order.daysLeft<=0){ let adv=adventurers.find(a=>a.id===order.adventurerId); if(adv){ showMessage(`💀 订单逾期！${adv.name} 因为没有得到 ${order.requiredPotion} 而受伤严重。`,true); adv.status="重伤"; reputation=Math.max(-500,reputation-15); if(Math.random()<0.3){ adv.status="死亡"; showMessage(`⚰️ ${adv.name} 不幸死亡... 声望值 -25`,true); reputation=Math.max(-500,reputation-25); } } order.status="failed"; } } orders=orders.filter(o=>o.status!=="failed"); let profit=dailyIncome-dailyExpense; if(gold>=0 && !lastDayHadDebt) consecutiveNoDebtDays++; else if(gold<0){ consecutiveNoDebtDays=0; lastDayHadDebt=true; } else lastDayHadDebt=false; if(consecutiveNoDebtDays>=5){ gold+=50; addIncome(50); showMessage("🏆 经营能手奖50金币！",false); consecutiveNoDebtDays=0; } document.getElementById("settlementDetails").innerHTML=`今日收入+${dailyIncome}，支出-${dailyExpense}，租金-${rent}<br><strong>利润：${profit>=0?'+':''}${profit}金币</strong><br>当前金币：${gold}`; document.getElementById("settlementModal").style.display="flex"; }
-function confirmSettlement(){ document.getElementById("settlementModal").style.display="none"; if(day===15||day===30||day===45||day===60){ showSeasonEnding(); return; } if(day>=60){ showFinalEnding(); return; } day++; resetDailyStats(); resetDailyBuff(); dayEndedFlag=false; gardenTodayCollected=false; updateReputationBonus(); updateUI(); let herbG=0,rareG=0; if(shopLevel===1) herbG=1; else if(shopLevel===2) herbG=2; else if(shopLevel===3){ herbG=2; rareG=1; } else if(shopLevel>=4){ herbG=3; rareG=1; } let msg="🌿 自动采集："; if(herbG>0){ let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot']; for(let i=0;i<herbG;i++){ let type=herbTypes[Math.floor(Math.random()*herbTypes.length)]; if(type==='mintLeaf'){ mintLeaf++; msg+="野薄荷叶 "; } else if(type==='chamomile'){ chamomile++; msg+="微光洋甘菊 "; } else if(type==='rosemary'){ rosemary++; msg+="尖刺迷迭香 "; } else if(type==='lavender'){ lavender++; msg+="绒絮薰衣草 "; } else if(type==='sweetRoot'){ sweetRoot++; msg+="甜根草 "; } } } if(rareG>0){ if(Math.random()<0.5){ holyFlower+=rareG; msg+=`圣露花×${rareG}`; } else{ poisonMushroom+=rareG; msg+=`毒腺菇×${rareG}`; } } showMessage(msg,false); adventurers.forEach(a=>{ a.exp=Math.min(a.exp+5,a.expToNext*2); if(Math.random()<0.2){ let states=["健康","轻伤","中毒","诅咒"]; a.status=states[Math.floor(Math.random()*states.length)]; showMessage(`📅 ${a.name}状态变为${a.status}`,false); } }); updateRecipeUnlockStatus(); generateDailyQueue(); generateDailyResidents(); document.getElementById("visitorEmoji").innerHTML="❓"; document.getElementById("visitorName").innerHTML="未接待"; document.getElementById("visitorStatus").innerHTML="点击右侧队列中的顾客发布订单"; showMessage(`🌞 第 ${day} 天开始了！有 ${queue.length} 位顾客来访，现有 ${orders.filter(o=>o.status==="pending").length} 个未完成订单。`,false); tryTriggerEvent("daily"); renderBestiary(); renderRecipeBook(); checkAndTriggerEnding(); renderOrdersList(); }
+function performEndDay(){
+  if(dayEndedFlag) return;
+  dayEndedFlag=true;
+
+  let rent=getDailyRent()-reputationBonusRent;
+  if(rent<0) rent=0;
+
+  if(gold>=rent){
+    gold-=rent;
+    addExpense(rent);
+    showMessage(`🏠 扣除租金 ${rent} 金币`,false);
+    debtDays = 0; // 重置负债天数
+  } else{
+    gold-=rent;
+    addExpense(rent);
+    debtDays++;
+    showMessage(`⚠️ 租金不足，负债 ${-gold} 金币！已连续负债 ${debtDays} 天`,true);
+
+    // 负债系统：连续负债3天触发破产结局
+    if(debtDays >= 3) {
+      showMessage("💀 连续负债3天，店铺破产！",true);
+      setTimeout(() => {
+        document.getElementById("endingText").innerHTML = `<strong>破产结局</strong><br>由于连续负债，你的店铺被迫关门。债主们收走了所有财产，你只能黯然离开小镇...<br><br>游戏结束`;
+        document.getElementById("endingModal").style.display="flex";
+      }, 1000);
+      return;
+    }
+  }
+
+  let pendingOrders=orders.filter(o=>o.status==="pending");
+  for(let order of pendingOrders){
+    order.daysLeft--;
+    if(order.daysLeft<=0){
+      let adv=adventurers.find(a=>a.id===order.adventurerId);
+      if(adv){
+        showMessage(`💀 订单逾期！${adv.name} 因为没有得到 ${order.requiredPotion} 而受伤严重。`,true);
+        adv.status="重伤";
+        reputation=Math.max(-500,reputation-15);
+        if(Math.random()<0.3){
+          adv.status="死亡";
+          showMessage(`⚰️ ${adv.name} 不幸死亡... 声望值 -25`,true);
+          reputation=Math.max(-500,reputation-25);
+        }
+      }
+      order.status="failed";
+    }
+  }
+  orders=orders.filter(o=>o.status!=="failed");
+
+  let profit=dailyIncome-dailyExpense;
+  if(gold>=0 && !lastDayHadDebt) consecutiveNoDebtDays++;
+  else if(gold<0){
+    consecutiveNoDebtDays=0;
+    lastDayHadDebt=true;
+  } else lastDayHadDebt=false;
+
+  if(consecutiveNoDebtDays>=5){
+    gold+=50;
+    addIncome(50);
+    showMessage("🏆 经营能手奖50金币！",false);
+    consecutiveNoDebtDays=0;
+  }
+
+  let debtWarning = gold < 0 ? `<br><span style="color:red;">⚠️ 当前负债：${-gold} 金币（${debtDays}/3天）</span>` : '';
+  document.getElementById("settlementDetails").innerHTML=`今日收入+${dailyIncome}，支出-${dailyExpense}，租金-${rent}<br><strong>利润：${profit>=0?'+':''}${profit}金币</strong><br>当前金币：${gold}${debtWarning}`;
+  document.getElementById("settlementModal").style.display="flex";
+}
+function confirmSettlement(){
+  document.getElementById("settlementModal").style.display="none";
+  if(day===15||day===30||day===45||day===60){ showSeasonEnding(); return; }
+  if(day>=60){ showFinalEnding(); return; }
+
+  day++;
+  resetDailyStats();
+  resetDailyBuff();
+  dayEndedFlag=false;
+  gardenTodayCollected=false;
+  reputationEventUsedToday = false; // 重置抉择时刻标志
+
+  // 重置每日临时修改器
+  gardenYieldModifier = 1.0;
+  extraQueueSize = 0;
+  adventurerInjuryModifier = 1.0;
+  potionQualityModifier = 1.0;
+  residentOrderModifier = 0;
+
+  updateReputationBonus();
+  updateUI();
+
+  // 自动采集
+  let herbG=0,rareG=0;
+  if(shopLevel===1) herbG=1;
+  else if(shopLevel===2) herbG=2;
+  else if(shopLevel===3){ herbG=2; rareG=1; }
+  else if(shopLevel>=4){ herbG=3; rareG=1; }
+
+  let msg="🌿 自动采集：";
+  if(herbG>0){
+    let herbTypes=['mintLeaf','chamomile','rosemary','lavender','sweetRoot'];
+    for(let i=0;i<herbG;i++){
+      let type=herbTypes[Math.floor(Math.random()*herbTypes.length)];
+      if(type==='mintLeaf'){ mintLeaf++; msg+="野薄荷叶 "; }
+      else if(type==='chamomile'){ chamomile++; msg+="微光洋甘菊 "; }
+      else if(type==='rosemary'){ rosemary++; msg+="尖刺迷迭香 "; }
+      else if(type==='lavender'){ lavender++; msg+="绒絮薰衣草 "; }
+      else if(type==='sweetRoot'){ sweetRoot++; msg+="甜根草 "; }
+    }
+  }
+  if(rareG>0){
+    if(Math.random()<0.5){ holyFlower+=rareG; msg+=`圣露花×${rareG}`; }
+    else{ poisonMushroom+=rareG; msg+=`毒腺菇×${rareG}`; }
+  }
+  showMessage(msg,false);
+
+  adventurers.forEach(a=>{
+    a.exp=Math.min(a.exp+5,a.expToNext*2);
+    if(Math.random()<0.2*adventurerInjuryModifier){
+      let states=["健康","轻伤","中毒","诅咒"];
+      a.status=states[Math.floor(Math.random()*states.length)];
+      showMessage(`📅 ${a.name}状态变为${a.status}`,false);
+    }
+  });
+
+  updateRecipeUnlockStatus();
+  generateDailyQueue();
+  generateDailyResidents();
+  document.getElementById("visitorEmoji").innerHTML="❓";
+  document.getElementById("visitorName").innerHTML="未接待";
+  document.getElementById("visitorStatus").innerHTML="点击右侧队列中的顾客发布订单";
+
+  // 触发每日事件（40%概率）
+  triggerDailyEvent();
+
+  showMessage(`🌞 第 ${day} 天开始了！有 ${queue.length} 位顾客来访，现有 ${orders.filter(o=>o.status==="pending").length} 个未完成订单。`,false);
+  renderBestiary();
+  renderRecipeBook();
+  checkAndTriggerEnding();
+  renderOrdersList();
+}
 function showSeasonEnding(){ let season=getCurrentSeason(); let tier=getReputationTier(); let endingText=`${season.name}结束了。声望段位：${tier.name}`; document.getElementById("endingText").innerHTML=`<div style="font-size:48px;margin-bottom:10px;">${season.emoji}</div><h2>${season.name}结束</h2><div style="margin:20px 0;font-size:18px;line-height:1.8;">${endingText}</div><div style="background:#f5f5f5;padding:15px;border-radius:12px;margin:15px 0;"><div><strong>声望段位：</strong>${tier.name} (${reputation})</div><div><strong>店铺等级：</strong>Lv.${shopLevel}</div><div><strong>金币：</strong>${gold}</div></div>`; document.getElementById("endingModal").style.display="flex"; document.getElementById("closeEndingBtn").onclick=()=>{ document.getElementById("endingModal").style.display="none"; day++; resetDailyStats(); resetDailyBuff(); dayEndedFlag=false; gardenTodayCollected=false; updateReputationBonus(); updateUI(); generateDailyQueue(); generateDailyResidents(); showMessage(`🌞 第 ${day} 天开始了！${getCurrentSeason().name}的第一天！`,false); }; }
 function showFinalEnding(){ let tier=getReputationTier(); let finalText=`60天周目结束。最终声望：${tier.name}`; document.getElementById("endingText").innerHTML=`<div style="font-size:48px;margin-bottom:10px;">🎭</div><h2>60天周目结束</h2><div style="margin:20px 0;font-size:18px;line-height:1.8;">${finalText}</div><div style="background:#f5f5f5;padding:15px;border-radius:12px;margin:15px 0;"><div><strong>最终声望：</strong>${tier.name} (${reputation})</div><div><strong>店铺等级：</strong>Lv.${shopLevel}</div><div><strong>总金币：</strong>${gold}</div><div><strong>炼制总数：</strong>${Object.values(craftCount).reduce((a,b)=>a+b,0)} 瓶</div></div><div style="color:#999;font-size:14px;margin-top:20px;">感谢游玩！可以继续经营或开启新周目</div>`; document.getElementById("endingModal").style.display="flex"; document.getElementById("closeEndingBtn").onclick=()=>{ document.getElementById("endingModal").style.display="none"; showMessage("🎉 周目已完成！可以继续自由经营",false); }; }
 function checkAndTriggerEnding(){ if(day>=30 && !endingTriggered30){ endingTriggered30=true; triggerEnding(); } }
 
-function makePotion(){ if(gold>=8){ gold-=8; potion++; addExpense(8); craftCount.smallPotion++; updateRecipeUnlockStatus(); showMessage("🧪 炼制小红药水（8金币）"); updateUI(); checkAchievements(); } else showMessage("❌ 金币不足",true); }
+function makePotion(){ if(gold>=8){ gold-=8; potion++; addExpense(8); craftCount.smallPotion++; totalCrafts++; updateRecipeUnlockStatus(); showMessage("🧪 炼制小红药水（8金币）"); updateUI(); checkAchievements(); } else showMessage("❌ 金币不足",true); }
 function openUpgradeModal(){ let cost=getUpgradeCost(); document.getElementById("upgradeInfo").innerHTML=`当前Lv.${shopLevel}<br>下一级Lv.${shopLevel+1}<br>需${cost}金币<br>效果：新配方、批量炼制、租金优化`; document.getElementById("upgradeModal").style.display="flex"; }
 function doUpgrade(){ let cost=getUpgradeCost(); if(gold>=cost){ gold-=cost; shopLevel++; addExpense(cost); updateUI(); updateRecipeUnlockStatus(); showMessage(`🏆 店铺升至Lv.${shopLevel}！`,false); document.getElementById("upgradeModal").style.display="none"; checkAchievements(); } else alert(`金币不足，需${cost}`); }
 function closeUpgradeModal(){ document.getElementById("upgradeModal").style.display="none"; }
@@ -449,8 +1061,116 @@ function backToBestiary(){ document.getElementById("reportPage").classList.add("
 function renderRecipeBook(){ let container=document.getElementById("recipeGrid"); if(!container) return; container.innerHTML=""; const matNames={ mintLeaf:'🌿野薄荷', chamomile:'🌼洋甘菊', rosemary:'🌿迷迭香', lavender:'💜薰衣草', sweetRoot:'🌾甜根', holyFlower:'✨圣露花', poisonMushroom:'🍄毒菇', redOre:'⛏️赤铁髓', blueOre:'💎蓝萤石', blackOre:'⚫黑银', magicCrystal:'🔮结晶' }; recipes.forEach(recipe=>{ let card=document.createElement("div"); card.className=`recipe-card ${recipe.unlocked?"":"locked"}`; let matsText=""; for(let [mat,count] of Object.entries(recipe.cost)) if(count>0) matsText+=`${matNames[mat]}×${count} `; const stars='⭐'.repeat(recipe.stars||1); card.innerHTML=`<div class="recipe-name">${recipe.name} ${stars}</div><div class="recipe-materials">📦 所需: ${matsText}</div><div class="recipe-effect">✨ 效果：${recipe.effect}</div>${!recipe.unlocked?`<div style="color:#999;">🔒 ${recipe.lockCondition}</div>`:'<div style="color:#4caf50;">✅ 已解锁</div>'}`; if(recipe.unlocked){ card.style.cursor="pointer"; card.addEventListener("click",()=>{ openModal(); }); } container.appendChild(card); }); }
 function openGarden(){ updateGardenUI(); document.getElementById("gardenModal").style.display="flex"; }
 function closeGarden(){ document.getElementById("gardenModal").style.display="none"; }
-function updateGardenUI(){ document.getElementById("gardenInfo").innerHTML=`花园 Lv.${gardenLevel}<br>今日采集: ${gardenTodayCollected?"已完成":"未采集"}<br>采集产出: 普通草药2-5份 + 稀有草药概率产出`; let upgradeBtn=document.getElementById("upgradeGardenBtn"); if(upgradeBtn) upgradeBtn.disabled=(gardenLevel>=5); }
-function collectGarden(){ if(gardenTodayCollected){ showMessage("今日已经采集过了！",true); return; } let output=getGardenOutput(); for(let [type,count] of Object.entries(output.common)){ if(type==='mintLeaf') mintLeaf+=count; else if(type==='chamomile') chamomile+=count; else if(type==='rosemary') rosemary+=count; else if(type==='lavender') lavender+=count; else if(type==='sweetRoot') sweetRoot+=count; } if(output.rare>0){ if(output.rareType==='holyFlower') holyFlower+=output.rare; else poisonMushroom+=output.rare; } gardenTodayCollected=true; showMessage(`🌿 采集成功！获得多种草药`,false); updateUI(); updateGardenUI(); }
+function updateGardenUI(){
+  let commonRange = "2-5份";
+  let rareChance = "低概率";
+
+  if(gardenLevel >= 2) commonRange = "3-6份";
+  if(gardenLevel >= 4) commonRange = "4-7份";
+
+  if(gardenLevel >= 3) rareChance = "30%概率";
+  if(gardenLevel >= 5) rareChance = "50%概率";
+
+  let modifierText = "";
+  if(gardenYieldModifier !== 1.0) {
+    modifierText = `<br><span style="color: ${gardenYieldModifier > 1 ? '#2e7d32' : '#c0392b'};">🌟 今日产出加成：${(gardenYieldModifier * 100).toFixed(0)}%</span>`;
+  }
+
+  document.getElementById("gardenInfo").innerHTML = `
+    <strong>🏡 花园等级：Lv.${gardenLevel}</strong><br>
+    <span style="font-size: 14px; color: #666;">今日采集: ${gardenTodayCollected ? "✅ 已完成" : "⏳ 未采集"}</span><br>
+    <br>
+    <strong>📊 预期产出：</strong><br>
+    <span style="font-size: 14px;">
+    🌿 普通草药：${commonRange}<br>
+    ✨ 稀有草药：${rareChance}
+    </span>
+    ${modifierText}
+    <br><br>
+    <span style="font-size: 12px; color: #999;">升级花园可提升产出和稀有草药概率</span>
+  `;
+
+  let upgradeBtn = document.getElementById("upgradeGardenBtn");
+  if(upgradeBtn) {
+    upgradeBtn.disabled = (gardenLevel >= 5);
+    if(gardenLevel >= 5) {
+      upgradeBtn.textContent = "🏆 已达最高等级";
+    } else {
+      upgradeBtn.textContent = `🏆 升级花园（${getGardenUpgradeCost()}金币）`;
+    }
+  }
+}
+function collectGarden(){
+  if(gardenTodayCollected){
+    showMessage("今日已经采集过了！",true);
+    return;
+  }
+
+  let output = getGardenOutput();
+  let detailMsg = "🌿 后花园采集成功！\n\n";
+  let hasItems = false;
+
+  // 应用花园产出修改器
+  let finalCommon = {};
+  for(let [type, count] of Object.entries(output.common)) {
+    let finalCount = Math.floor(count * gardenYieldModifier);
+    if(finalCount > 0) {
+      finalCommon[type] = finalCount;
+    }
+  }
+  let finalRare = Math.floor(output.rare * gardenYieldModifier);
+
+  // 显示普通草药详细信息
+  const herbNames = {
+    mintLeaf: '🌿 野薄荷叶',
+    chamomile: '🌼 微光洋甘菊',
+    rosemary: '🌿 尖刺迷迭香',
+    lavender: '💜 绒絮薰衣草',
+    sweetRoot: '🌾 甜根草'
+  };
+
+  let commonList = [];
+  for(let [type, count] of Object.entries(finalCommon)){
+    if(type === 'mintLeaf') mintLeaf += count;
+    else if(type === 'chamomile') chamomile += count;
+    else if(type === 'rosemary') rosemary += count;
+    else if(type === 'lavender') lavender += count;
+    else if(type === 'sweetRoot') sweetRoot += count;
+
+    commonList.push(`${herbNames[type]} ×${count}`);
+    hasItems = true;
+  }
+
+  if(commonList.length > 0) {
+    detailMsg += "【普通草药】\n" + commonList.join('\n') + "\n\n";
+  }
+
+  // 显示稀有草药详细信息
+  if(finalRare > 0){
+    if(output.rareType === 'holyFlower') {
+      holyFlower += finalRare;
+      detailMsg += `【稀有草药】\n✨ 圣露花 ×${finalRare}\n\n`;
+    } else {
+      poisonMushroom += finalRare;
+      detailMsg += `【稀有草药】\n🍄 毒腺菇 ×${finalRare}\n\n`;
+    }
+    hasItems = true;
+  }
+
+  // 显示花园等级和修改器信息
+  detailMsg += `🏡 花园等级：Lv.${gardenLevel}`;
+  if(gardenYieldModifier !== 1.0) {
+    detailMsg += `\n🌟 今日产出修正：${(gardenYieldModifier * 100).toFixed(0)}%`;
+  }
+
+  gardenTodayCollected = true;
+
+  // 使用Toast显示详细信息（需要支持多行）
+  showMessage(detailMsg, false);
+
+  updateUI();
+  updateGardenUI();
+}
 function upgradeGarden(){ let cost=getGardenUpgradeCost(); if(gold>=cost && gardenLevel<5){ gold-=cost; addExpense(cost); gardenLevel++; showMessage(`花园升级到 Lv.${gardenLevel}！`,false); updateUI(); updateGardenUI(); } else showMessage("金币不足或已达最高级",true); }
 
 // 页面导航与事件绑定
@@ -529,7 +1249,19 @@ document.addEventListener("DOMContentLoaded", () => {
   if(msgSlider) msgSlider.addEventListener("input", (e) => { msgDuration = parseFloat(e.target.value); document.getElementById("msgDurationValue").innerText = msgDuration; });
   let batchQty = document.getElementById("batchQuantity");
   if(batchQty) batchQty.addEventListener("input", (e) => { document.getElementById("batchQuantityValue").innerText = e.target.value; });
-  document.querySelectorAll(".buy-material-btn").forEach(btn => { btn.addEventListener("click", (e) => { let mat = btn.getAttribute("data-material"); let amount = parseInt(btn.getAttribute("data-amount")); buyMaterial(mat, amount); }); });
+
+  // 批量炼制配方选择器变化时更新最大值
+  let batchRecipeSelect = document.getElementById("batchRecipeSelect");
+  if(batchRecipeSelect) batchRecipeSelect.addEventListener("change", updateBatchMaxByRecipe);
+
+  document.querySelectorAll(".buy-material-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      let mat = btn.getAttribute("data-material");
+      let qtyInput = document.getElementById("batchBuyQty");
+      let amount = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
+      buyMaterial(mat, amount);
+    });
+  });
 });
 </script>
 </body>
