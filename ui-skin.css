@@ -1,0 +1,3216 @@
+:root{
+  --right-w:400px;
+  --left-w:1520px;
+  --top-h:86px;
+  --text:#5a321b;
+  --bg-dark:#1d1712;
+}
+
+/* =========================================================
+   基础：所有游戏画面使用 1920x1080 固定画布，按 --ui-scale 等比缩放居中
+   ========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:hidden!important;
+  background:var(--bg-dark)!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif;
+}
+
+.page{
+  width:100vw!important;
+  height:100vh!important;
+  overflow:hidden!important;
+}
+
+.page.hidden-page,
+#gameMainPage.page.hidden-page,
+#startScreen.page.hidden-page{
+  display:none!important;
+}
+
+/* 主界面外层只负责居中 1920x1080 画布 */
+#gameMainPage.page:not(.hidden-page){
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:var(--bg-dark)!important;
+  z-index:auto!important;
+}
+
+/* 主画布：固定 1920x1080，等比缩放居中 */
+.main-ui{
+  position:relative!important;
+  width:1920px!important;
+  height:1080px!important;
+  min-width:1920px!important;
+  min-height:1080px!important;
+  max-width:1920px!important;
+  max-height:1080px!important;
+  flex:0 0 1920px!important;
+  overflow:hidden!important;
+  transform:scale(var(--ui-scale, 1))!important;
+  transform-origin:center center!important;
+  background:url("Assets/背景Background/InsideStore店内.png") center/100% 100% no-repeat!important;
+  color:var(--text)!important;
+}
+
+/* =========================================================
+   开始营业页面
+   ========================================================= */
+
+#startScreen{
+  position:fixed!important;
+  inset:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:var(--bg-dark)!important;
+  overflow:hidden!important;
+  z-index:5000!important;
+}
+
+.start-scene{
+  position:relative!important;
+  width:1920px!important;
+  height:1080px!important;
+  min-width:1920px!important;
+  min-height:1080px!important;
+  max-width:1920px!important;
+  max-height:1080px!important;
+  flex:0 0 1920px!important;
+  overflow:hidden!important;
+  background:url("Assets/背景Background/1店外视图（开始营业界面）.png") center/100% 100% no-repeat!important;
+  transform:scale(var(--ui-scale, 1))!important;
+  transform-origin:center center!important;
+}
+
+#startBtn{
+  position:absolute!important;
+  left:9.6%!important;
+  top:56.5%!important;
+  width:13.5%!important;
+  height:8.5%!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:url("Assets/按钮button/开始界面/kaishiyingyeCT  开始营业常态.png") center/100% 100% no-repeat!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  cursor:pointer!important;
+  box-shadow:none!important;
+  z-index:1!important;
+}
+
+#startBtn:hover,
+#startBtn:active{
+  background-image:url("Assets/按钮button/开始界面/kaishiyingyeAX 开始营业按下.png")!important;
+}
+
+/* =========================================================
+   顶部栏
+   ========================================================= */
+
+.main-topbar{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:var(--left-w)!important;
+  height:var(--top-h)!important;
+  background:#6d3f28!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:58px!important;
+  padding:0 18px!important;
+  z-index:300!important;
+}
+
+.top-day{
+  color:#fff0d2!important;
+  font-size:44px!important;
+  font-weight:bold!important;
+  white-space:nowrap!important;
+}
+
+.top-btn{
+  width:230px!important;
+  height:56px!important;
+  border:0!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0!important;
+  cursor:pointer!important;
+}
+
+#reputationChoiceBtn{ background-image:url("Assets/按钮button/主页面按钮/顶部栏-决策时刻常态.png")!important; }
+#achievementBtn{ background-image:url("Assets/按钮button/主页面按钮/顶部栏-周目成就常态.png")!important; }
+#upgradeShopBtn{ background-image:url("Assets/按钮button/主页面按钮/顶部栏-店铺升级常态.png")!important; }
+#endDayBtn{ background-image:url("Assets/按钮button/主页面按钮/顶部栏-结算今日按下.png")!important; }
+
+/* =========================================================
+   角色与订单
+   ========================================================= */
+
+.resident-area{
+  position:absolute!important;
+  left:30px!important;
+  bottom:0!important;
+  width:458px!important;
+  height:498px!important;
+  z-index:40!important;
+}
+
+.resident-area .role-img{
+  position:absolute!important;
+  left:0!important;
+  bottom:0!important;
+  width:458px!important;
+  max-height:498px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  filter:drop-shadow(0 18px 16px rgba(0,0,0,.35))!important;
+}
+
+.role-status{
+  position:absolute!important;
+  left:75px!important;
+  top:-78px!important;
+  padding:6px 18px!important;
+  background:#f7ecd4!important;
+  border-radius:4px!important;
+  color:#5a321b!important;
+  font-size:20px!important;
+  font-weight:bold!important;
+  z-index:5!important;
+}
+
+.role-name{
+  position:absolute!important;
+  left:48px!important;
+  top:-35px!important;
+  min-width:230px!important;
+  padding:10px 20px!important;
+  background:#f7ecd4!important;
+  border-radius:4px!important;
+  color:#5a321b!important;
+  font-size:34px!important;
+  font-weight:bold!important;
+  text-align:center!important;
+  z-index:5!important;
+}
+
+.visitor-area{
+  position:absolute!important;
+  left:455px!important;
+  bottom:0!important;
+  width:458px!important;
+  height:498px!important;
+  z-index:45!important;
+}
+
+.visitor-area .emoji,
+#visitorStatus{
+  display:none!important;
+}
+
+#visitorPortrait{
+  display:block!important;
+  position:absolute!important;
+  left:0!important;
+  bottom:0!important;
+  width:458px!important;
+  max-height:498px!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  filter:drop-shadow(0 18px 16px rgba(0,0,0,.35))!important;
+  z-index:2!important;
+}
+
+#visitorPortrait:not([src]),
+#visitorPortrait[src=""]{
+  display:none!important;
+}
+
+.visitor-name{
+  position:absolute!important;
+  left:45px!important;
+  top:-35px!important;
+  min-width:260px!important;
+  padding:10px 20px!important;
+  background:#f7ecd4!important;
+  border-radius:4px!important;
+  color:#5a321b!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  text-align:center!important;
+  z-index:5!important;
+}
+
+/* 顾客需求气泡 */
+#visitorBubble{
+  position:absolute!important;
+  left:500px!important;
+  top:326px!important;
+  width:542px!important;
+  height:150px!important;
+  padding:0!important;
+  background:url("Assets/按钮button/主页面按钮/对话框-顾客需求.png") center/100% 100% no-repeat!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  z-index:120!important;
+  display:block!important;
+}
+
+#visitorBubble::after{
+  display:none!important;
+}
+
+#visitorBubble .bubble-text{
+  position:absolute!important;
+  left:58px!important;
+  top:26px!important;
+  width:340px!important;
+  height:42px!important;
+  margin:0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  color:#5a321b!important;
+  font-size:30px!important;
+  line-height:42px!important;
+  font-weight:400!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+#visitorBubble .bubble-buttons{
+  position:static!important;
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+}
+
+#visitorBubble #acceptAutoOrderBtn,
+#visitorBubble #rejectAutoOrderBtn{
+  position:absolute!important;
+  right:16px!important;
+  width:128px!important;
+  height:36px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  outline:0!important;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  cursor:pointer!important;
+}
+
+#visitorBubble #acceptAutoOrderBtn{
+  top:10px!important;
+  background-image:url("Assets/按钮button/主页面按钮/对话框-接受订单常态.png")!important;
+}
+
+#visitorBubble #rejectAutoOrderBtn{
+  top:54px!important;
+  background-image:url("Assets/按钮button/主页面按钮/对话框-无视常态.png")!important;
+}
+
+#visitorBubble #acceptAutoOrderBtn:hover,
+#visitorBubble #acceptAutoOrderBtn:active{
+  background-image:url("Assets/按钮button/主页面按钮/对话框-接受订单按下.png")!important;
+}
+
+#visitorBubble #rejectAutoOrderBtn:hover,
+#visitorBubble #rejectAutoOrderBtn:active{
+  background-image:url("Assets/按钮button/主页面按钮/对话框-无视按下.png")!important;
+}
+
+/* 当前订单卷轴 */
+.center-orders{
+  position:absolute!important;
+  left:956px!important;
+  bottom:74px!important;
+  width:542px!important;
+  height:482px!important;
+  background:#efe0c4!important;
+  border:6px solid #8a5b35!important;
+  border-radius:4px!important;
+  box-shadow:inset 0 0 0 4px rgba(255,245,220,.45),0 8px 18px rgba(0,0,0,.28)!important;
+  padding:24px 32px 28px!important;
+  z-index:60!important;
+}
+
+.center-orders::before,
+.center-orders::after{
+  content:"";
+  position:absolute;
+  top:16px;
+  width:24px;
+  height:calc(100% - 32px);
+  background:#7a4a2b;
+  border-radius:16px;
+  box-shadow:inset 0 0 0 4px rgba(255,225,170,.18);
+}
+
+.center-orders::before{ left:-22px; }
+.center-orders::after{ right:-22px; }
+
+.center-orders-title{
+  text-align:center!important;
+  font-size:34px!important;
+  color:#6a3518!important;
+  font-weight:bold!important;
+  margin-bottom:18px!important;
+  letter-spacing:4px!important;
+}
+
+#ordersList{
+  max-height:365px!important;
+  overflow-y:auto!important;
+  padding-right:8px!important;
+}
+
+.order-card{
+  background:#d8bd91!important;
+  border:0!important;
+  border-radius:6px!important;
+  padding:12px 14px!important;
+  margin:12px 0!important;
+  color:#5a321b!important;
+  display:flex!important;
+  align-items:center!important;
+  box-shadow:0 4px 8px rgba(0,0,0,.16)!important;
+}
+
+.order-info{
+  font-size:17px!important;
+  color:#5a321b!important;
+  line-height:1.45!important;
+}
+
+.order-buttons button{
+  background:#a87350!important;
+  border-radius:6px!important;
+  color:#fff3d6!important;
+  width:78px!important;
+  height:38px!important;
+  font-size:17px!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+/* =========================================================
+   右侧通用背包栏：除开始页和真正弹窗外最前
+   ========================================================= */
+
+.right-ui-panel{
+  position:absolute!important;
+  right:0!important;
+  top:0!important;
+  width:400px!important;
+  height:1080px!important;
+  background:#8b6542!important;
+  border-left:6px solid #5b351f!important;
+  padding:72px 10px 18px!important;
+  z-index:900!important;
+  overflow:hidden!important;
+  pointer-events:auto!important;
+}
+
+.right-status-ui{
+  position:relative!important;
+  height:112px!important;
+  margin-bottom:10px!important;
+}
+
+.season-card{
+  position:absolute!important;
+  left:0!important;
+  top:4px!important;
+  width:96px!important;
+  height:96px!important;
+  display:block!important;
+}
+
+.season-icon{
+  width:96px!important;
+  height:96px!important;
+  margin:0!important;
+  background:url("Assets/按钮button/主页面按钮/右侧栏/归仓季.png") center/contain no-repeat!important;
+}
+
+#seasonDisplay{
+  display:none!important;
+}
+
+.status-lines{
+  position:absolute!important;
+  left:105px!important;
+  top:2px!important;
+  width:170px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+}
+
+.status-line,
+.status-lines div{
+  height:28px!important;
+  line-height:28px!important;
+  background:#efe2c8!important;
+  border:3px solid #7a4b2c!important;
+  border-radius:9px!important;
+  padding:0 12px!important;
+  color:#5a321b!important;
+  font-size:15px!important;
+  font-weight:bold!important;
+  box-shadow:inset 0 0 0 2px rgba(255,250,230,.45)!important;
+}
+
+.level-circle{
+  position:absolute!important;
+  right:0!important;
+  top:16px!important;
+  width:78px!important;
+  height:78px!important;
+  border-radius:50%!important;
+  background:#eadcc2!important;
+  border:5px solid #8a5b35!important;
+  color:#5a321b!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:18px!important;
+  font-weight:bold!important;
+  box-shadow:inset 0 0 0 4px rgba(255,250,230,.45),0 4px 8px rgba(0,0,0,.2)!important;
+}
+
+/* 右侧六个功能按钮 */
+.right-buttons{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:4px!important;
+  width:373px!important;
+  height:47px!important;
+  margin:8px auto!important;
+  padding:0!important;
+}
+
+.right-buttons button{
+  width:58px!important;
+  height:47px!important;
+  flex:0 0 58px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background-color:transparent!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  cursor:pointer!important;
+}
+
+#openRecipeBookBtn{ background-image:url("Assets/按钮button/主页面按钮/右侧栏/右侧栏-配方.png")!important; }
+#openAlchemyBtn{ background-image:url("Assets/按钮button/主页面按钮/右侧栏/右侧栏-炼金.png")!important; }
+#gardenBtn{ background-image:url("Assets/按钮button/主页面按钮/右侧栏/右侧栏-花园.png")!important; }
+#achievementBtnFake{ background-image:url("Assets/按钮button/主页面按钮/右侧栏/右侧栏-成就.png")!important; }
+#materialManageBtn{ background-image:url("Assets/按钮button/主页面按钮/右侧栏/右侧栏-商店.png")!important; }
+#settingsBtn{ background-image:url("Assets/按钮button/主页面按钮/右侧栏/右侧栏-设置.png")!important; }
+
+/* 材料/药剂/图鉴 Tab */
+.right-tabs{
+  width:373px!important;
+  height:62px!important;
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:0!important;
+  margin:10px auto 8px!important;
+  padding:0!important;
+  overflow:hidden!important;
+  position:relative!important;
+  z-index:1!important;
+  pointer-events:auto!important;
+}
+
+.right-tabs button{
+  width:124.333px!important;
+  height:62px!important;
+  flex:0 0 124.333px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  overflow:hidden!important;
+  background:none!important;
+  cursor:pointer!important;
+}
+
+.right-tabs button img{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+  object-fit:fill!important;
+  pointer-events:none!important;
+}
+
+/* 右侧物品区 */
+.right-inventory{
+  width:373px!important;
+  height:604px!important;
+  max-height:604px!important;
+  margin:0 auto!important;
+  background:#e6d5b9!important;
+  padding:18px 18px 10px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+
+.right-inventory .inventory{
+  position:static!important;
+  width:100%!important;
+  height:auto!important;
+  background:transparent!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+}
+
+.right-inventory h3{
+  display:none!important;
+}
+
+#inventoryGrid,
+.inventory-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3, 92px)!important;
+  justify-content:center!important;
+  justify-items:center!important;
+  align-items:start!important;
+  gap:12px 18px!important;
+  overflow:visible!important;
+  padding-bottom:10px!important;
+}
+
+.inventory-item{
+  width:92px!important;
+  height:92px!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#f3e6cd!important;
+  border:3px solid #7b4b2a!important;
+  border-radius:10px!important;
+}
+
+.inventory-img{
+  width:84px!important;
+  height:84px!important;
+  object-fit:contain!important;
+  display:block!important;
+  margin:0!important;
+}
+
+.inventory-item-icon{
+  font-size:36px!important;
+}
+
+.inventory-item-name,
+.inventory-item-desc{
+  display:none!important;
+}
+
+.inventory-item-count{
+  font-size:14px!important;
+  line-height:14px!important;
+  margin-top:-2px!important;
+  color:#d48806!important;
+  font-weight:bold!important;
+}
+
+.bestiary-grid-mode .inventory-item{
+  padding:0!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  position:relative!important;
+}
+
+.bestiary-grid-mode .inventory-img{
+  width:92px!important;
+  height:92px!important;
+  object-fit:cover!important;
+  object-position:center bottom!important;
+}
+
+.bestiary-grid-mode .inventory-item-count{
+  position:absolute!important;
+  bottom:0!important;
+  left:0!important;
+  right:0!important;
+  text-align:center!important;
+  font-size:14px!important;
+  line-height:14px!important;
+  background:rgba(244,230,202,.75)!important;
+}
+
+/* 主线任务 */
+.main-quest{
+  position:absolute!important;
+  left:18px!important;
+  bottom:20px!important;
+  width:350px!important;
+  font-size:16px!important;
+  font-weight:bold!important;
+  color:#5a321b!important;
+}
+
+.quest-bar{
+  margin-top:8px!important;
+  height:14px!important;
+  background:#e4d0ad!important;
+  border-radius:20px!important;
+  overflow:hidden!important;
+}
+
+#mainQuestProgress{
+  height:100%!important;
+  background:#89a65b!important;
+}
+
+/* =========================================================
+   后花园页面：固定 1920x1080 画布，覆盖左侧主区域，右侧背包栏保持可见
+   ========================================================= */
+
+#gardenModal.garden-page{
+  position:fixed!important;
+  inset:0!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:transparent!important;
+  z-index:500!important;
+  pointer-events:none!important;
+  overflow:hidden!important;
+}
+
+#gardenModal.garden-page[style*="flex"],
+#gardenModal.garden-page[style*="block"]{
+  display:flex!important;
+}
+
+#gardenModal .garden-scene{
+  position:relative!important;
+  width:1920px!important;
+  height:1080px!important;
+  min-width:1920px!important;
+  min-height:1080px!important;
+  max-width:1920px!important;
+  max-height:1080px!important;
+  flex:0 0 1920px!important;
+  transform:scale(var(--ui-scale, 1))!important;
+  transform-origin:center center!important;
+  background:url("Assets/背景Background/后花园Backyard/BackyardLv1后花园一级.png") center/100% 100% no-repeat!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+  clip-path:inset(0 400px 0 0)!important;
+}
+
+/* 不再绘制任何右侧色块 */
+#gardenModal .garden-scene::after{
+  display:none!important;
+  content:none!important;
+}
+
+/* 后花园信息弹窗 */
+#gardenInfoPanel{
+  position:absolute!important;
+  left:30px!important;
+  top:18px!important;
+  width:475px!important;
+  height:341px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:13px!important;
+  background:url("Assets/弹窗Popup/BackyardPopup后花园弹窗.png") center/100% 100% no-repeat!important;
+  z-index:520!important;
+  display:block!important;
+  overflow:hidden!important;
+  pointer-events:auto!important;
+}
+
+.garden-title{
+  position:absolute!important;
+  left:103px!important;
+  top:18px!important;
+  width:269px!important;
+  height:70px!important;
+  color:#fff6e6!important;
+  font-size:44px!important;
+  line-height:70px!important;
+  font-weight:bold!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+}
+
+#gardenInfo{
+  position:absolute!important;
+  left:66px!important;
+  top:132px!important;
+  width:343px!important;
+  height:120px!important;
+  color:#fff6e6!important;
+  font-size:24px!important;
+  line-height:1.7!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+}
+
+.garden-actions{
+  position:absolute!important;
+  left:16px!important;
+  top:275px!important;
+  width:443px!important;
+  height:52px!important;
+  display:flex!important;
+  gap:30px!important;
+  z-index:530!important;
+  pointer-events:auto!important;
+}
+
+#collectGardenBtn,
+#upgradeGardenBtn{
+  width:206px!important;
+  height:52px!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:0!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  box-shadow:none!important;
+}
+
+#collectGardenBtn{
+  background-image:url("Assets/按钮button/后花园/caijiCT 今日采集常态.png")!important;
+}
+
+#collectGardenBtn:hover,
+#collectGardenBtn:active{
+  background-image:url("Assets/按钮button/后花园/caijiAX 今日采集按下.png")!important;
+}
+
+#upgradeGardenBtn{
+  background-image:url("Assets/按钮button/后花园/shengjihuayuanCT 升级花园常态.png")!important;
+}
+
+#upgradeGardenBtn:hover,
+#upgradeGardenBtn:active{
+  background-image:url("Assets/按钮button/后花园/shengjihuayuanAX 升级花园按下.png")!important;
+}
+
+/* 当前订单角标 */
+.garden-back-order{
+  position:absolute!important;
+  left:1320px!important;
+  bottom:0!important;
+  width:180px!important;
+  height:70px!important;
+  border:0!important;
+  background:transparent!important;
+  color:#5a321b!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  z-index:530!important;
+  pointer-events:auto!important;
+}
+
+/* =========================================================
+   隐藏旧系统区
+   ========================================================= */
+
+.hidden-system-box,
+.hidden-system-btn,
+.queue-box,
+#makePotionBtn,
+#openBestiaryBtn,
+#testEventBtn,
+#orderBubbleFake{
+  display:none!important;
+}
+
+/* =========================================================
+   消息与真正弹窗层级
+   ========================================================= */
+
+.message,
+#message{
+  position:absolute!important;
+  left:649px!important;
+  top:479px!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:700px!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:12px 18px!important;
+  margin:0!important;
+  background:#dfe8d8!important;
+  border:1px solid rgba(255,255,255,1)!important;
+  border-radius:5px!important;
+  display:inline-block!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  overflow-wrap:anywhere!important;
+  line-height:1.4!important;
+  z-index:999999!important;
+}
+
+.message:empty,
+#message:empty,
+#toastMsg:empty{
+  display:none!important;
+}
+
+#toastMsg{
+  display:none!important;
+  z-index:999999!important;
+}
+
+/* 真正弹窗 / 事件 / 居民需求弹窗：高于右侧栏 */
+.modal:not(#gardenModal),
+#residentModal{
+  z-index:3000!important;
+}
+
+/* =========================================================
+   最终保护：固定比例与层级
+   ========================================================= */
+
+#gameMainPage.page:not(.hidden-page){
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.main-ui,
+.start-scene,
+#gardenModal .garden-scene{
+  transform:scale(var(--ui-scale, 1))!important;
+  transform-origin:center center!important;
+}
+
+.right-ui-panel{
+  z-index:900!important;
+  pointer-events:auto!important;
+}
+
+#startScreen{
+  z-index:5000!important;
+}
+
+.modal:not(#gardenModal),
+#residentModal,
+#toastMsg,
+.message,
+#message{
+  z-index:3000!important;
+}
+
+
+/* =========================================================
+   后花园 UI 细节修复：纯图片按钮、动态文本、关闭角标
+   说明：放在文件末尾，用于覆盖旧按钮背景/默认按钮样式。
+   ========================================================= */
+
+#gardenInfoPanel{
+  background:url("Assets/弹窗Popup/BackyardPopup后花园弹窗.png") center/100% 100% no-repeat!important;
+}
+
+#gardenInfo{
+  top:132px!important;
+  left:66px!important;
+  width:343px!important;
+  height:120px!important;
+  font-size:24px!important;
+  line-height:1.55!important;
+  color:#fff6e6!important;
+  text-shadow:none!important;
+}
+
+.garden-actions{
+  top:275px!important;
+  left:16px!important;
+  right:auto!important;
+  width:443px!important;
+  height:52px!important;
+  gap:30px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  pointer-events:auto!important;
+}
+
+#collectGardenBtn,
+#upgradeGardenBtn,
+#collectBtn{
+  width:206px!important;
+  height:52px!important;
+  min-width:206px!important;
+  max-width:206px!important;
+  min-height:52px!important;
+  max-height:52px!important;
+  display:block!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  border:0!important;
+  outline:0!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  text-shadow:none!important;
+  overflow:hidden!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+}
+
+#collectGardenBtn,
+#collectBtn{
+  background-image:url("Assets/按钮button/后花园/caijiCT 今日采集常态.png")!important;
+}
+
+#collectGardenBtn:hover,
+#collectGardenBtn:active,
+#collectBtn:hover,
+#collectBtn:active{
+  background-image:url("Assets/按钮button/后花园/caijiAX 今日采集按下.png")!important;
+}
+
+#upgradeGardenBtn{
+  background-image:url("Assets/按钮button/后花园/shengjihuayuanCT 升级花园常态.png")!important;
+}
+
+#upgradeGardenBtn:hover,
+#upgradeGardenBtn:active{
+  background-image:url("Assets/按钮button/后花园/shengjihuayuanAX 升级花园按下.png")!important;
+}
+
+#collectGardenBtn:disabled,
+#collectBtn:disabled,
+#upgradeGardenBtn:disabled{
+  filter:grayscale(.2) brightness(.82)!important;
+  cursor:not-allowed!important;
+  opacity:.82!important;
+}
+
+/* 关闭角标：改文本为“关闭”，移除背后橙色按钮感 */
+.garden-back-order,
+#closeGardenBtn.garden-back-order,
+#closeGardenBtn{
+  position:absolute!important;
+  left:1320px!important;
+  bottom:0!important;
+  width:180px!important;
+  height:70px!important;
+  border:0!important;
+  outline:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:none!important;
+  background-image:none!important;
+  background-color:transparent!important;
+  box-shadow:none!important;
+  color:rgba(201,174,123,1)!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  line-height:70px!important;
+  text-align:center!important;
+  text-indent:0!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  z-index:530!important;
+}
+
+.garden-back-order::before,
+.garden-back-order::after,
+#closeGardenBtn::before,
+#closeGardenBtn::after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+}
+
+
+/* =========================================================
+   后花园最终覆盖：动态背景、弹窗文字、关闭按钮
+   ========================================================= */
+
+#gardenModal .garden-scene{
+  background:var(--garden-bg, url("Assets/背景Background/后花园Backyard/BackyardLv1后花园一级.png")) center/100% 100% no-repeat!important;
+}
+
+#gardenInfoPanel{
+  background:url("Assets/弹窗Popup/BackyardPopup后花园弹窗.png") center/100% 100% no-repeat!important;
+}
+
+#gardenInfo{
+  position:absolute!important;
+  left:66px!important;
+  top:132px!important;
+  width:343px!important;
+  height:126px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  padding:0!important;
+  margin:0!important;
+  color:#fff6e6!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  font-size:22px!important;
+  line-height:1.35!important;
+  font-weight:bold!important;
+  text-shadow:none!important;
+  background:transparent!important;
+}
+
+#gardenOutputText,
+#gardenRareText,
+#gardenUpgradeText{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  color:#fff6e6!important;
+  background:transparent!important;
+  text-shadow:none!important;
+}
+
+.garden-actions{
+  background:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+
+#collectGardenBtn,
+#upgradeGardenBtn,
+#collectBtn{
+  background-color:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+}
+
+/* 右下角关闭按钮：替代“当前订单”，不再使用橙色底 */
+.garden-back-order,
+#closeGardenBtn.garden-back-order,
+#closeGardenBtn{
+  position:absolute!important;
+  left:1320px!important;
+  bottom:0!important;
+  width:180px!important;
+  height:70px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:rgba(201,174,123,1)!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  color:rgba(89,59,45,1)!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  line-height:70px!important;
+  text-align:center!important;
+  text-indent:0!important;
+  cursor:pointer!important;
+  pointer-events:auto!important;
+  z-index:530!important;
+}
+
+.garden-back-order::before,
+.garden-back-order::after,
+#closeGardenBtn::before,
+#closeGardenBtn::after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+  background-image:none!important;
+}
+
+/* =========================================================
+   2026-06 后花园稳定修复覆盖
+   - 修复标题重复
+   - 保持右侧背包栏交互层级
+   - 升级后背景直接切换 Lv1-Lv5
+   - 关闭按钮样式固定
+   ========================================================= */
+
+/* 后花园打开时，隐藏主页面顾客/居民立绘和气泡，避免露出不可交互的旧元素 */
+body.garden-open .resident-area,
+body.garden-open .visitor-area,
+body.garden-open #visitorBubble{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+/* 右侧背包栏始终位于普通页面背景上方，且可交互 */
+.right-ui-panel{
+  z-index:900!important;
+  pointer-events:auto!important;
+}
+
+/* 后花园覆盖层低于右侧背包栏，高于主场景 */
+#gardenModal.garden-page{
+  z-index:500!important;
+  pointer-events:none!important;
+}
+
+#gardenModal .garden-scene{
+  background-image:var(--garden-bg, url("Assets/背景Background/后花园Backyard/BackyardLv1后花园一级.png"))!important;
+  background-size:100% 100%!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  pointer-events:none!important;
+}
+
+#gardenModal[data-garden-level="1"] .garden-scene{
+  background-image:url("Assets/背景Background/后花园Backyard/BackyardLv1后花园一级.png")!important;
+}
+#gardenModal[data-garden-level="2"] .garden-scene{
+  background-image:url("Assets/背景Background/后花园Backyard/BackyardLv2后花园二级.png")!important;
+}
+#gardenModal[data-garden-level="3"] .garden-scene{
+  background-image:url("Assets/背景Background/后花园Backyard/BackyardLv3后花园三级.png")!important;
+}
+#gardenModal[data-garden-level="4"] .garden-scene{
+  background-image:url("Assets/背景Background/后花园Backyard/BackyardLv4后花园四级.png")!important;
+}
+#gardenModal[data-garden-level="5"] .garden-scene{
+  background-image:url("Assets/背景Background/后花园Backyard/BackyardLv5后花园五级.png")!important;
+}
+
+/* 弹窗和按钮可交互 */
+#gardenInfoPanel,
+#gardenInfoPanel *,
+#collectGardenBtn,
+#upgradeGardenBtn,
+#closeGardenBtn{
+  pointer-events:auto!important;
+}
+
+#gardenInfoPanel{
+  z-index:530!important;
+  background:url("Assets/弹窗Popup/BackyardPopup后花园弹窗.png") center/100% 100% no-repeat!important;
+}
+
+/* 修复“后花园 LV.后花园 LV.2”标题重复：span 只显示数字，不能变成块级 */
+#gardenInfoPanel .garden-title{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+
+#gardenInfoPanel .garden-title #gardenLevelText{
+  position:static!important;
+  display:inline!important;
+  width:auto!important;
+  height:auto!important;
+  line-height:inherit!important;
+  font:inherit!important;
+  color:inherit!important;
+  background:transparent!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  text-indent:0!important;
+}
+
+#gardenInfoPanel #gardenInfo{
+  position:absolute!important;
+  left:66px!important;
+  top:132px!important;
+  width:343px!important;
+  height:126px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  padding:0!important;
+  margin:0!important;
+  color:#fff6e6!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  font-size:22px!important;
+  line-height:1.35!important;
+  font-weight:bold!important;
+  background:transparent!important;
+  text-shadow:none!important;
+}
+
+#gardenOutputText,
+#gardenRareText,
+#gardenUpgradeText{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  color:#fff6e6!important;
+  background:transparent!important;
+  text-shadow:none!important;
+}
+
+/* 采集/升级按钮：只显示 PNG，不显示额外橙色底或文字 */
+.garden-actions{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+#collectGardenBtn,
+#upgradeGardenBtn,
+#collectBtn{
+  background-color:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+}
+
+/* 右下角关闭按钮 */
+.garden-back-order,
+#closeGardenBtn.garden-back-order,
+#closeGardenBtn{
+  background:rgba(201,174,123,1)!important;
+  background-image:none!important;
+  color:rgba(89,59,45,1)!important;
+  border:0!important;
+  box-shadow:none!important;
+  text-indent:0!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+}
+
+.garden-back-order::before,
+.garden-back-order::after,
+#closeGardenBtn::before,
+#closeGardenBtn::after{
+  display:none!important;
+  content:none!important;
+}
+
+
+/* =========================================================
+   小镇居民订单显示修复
+   - 没有居民订单时不显示小镇居民立绘
+   - 有居民订单时才允许点击交互
+   ========================================================= */
+body:not(.resident-available) .resident-area{
+  display:none!important;
+  pointer-events:none!important;
+}
+
+body.resident-available .resident-area{
+  display:block!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+/* 后花园打开时仍然隐藏主页面居民，避免压在花园层上 */
+body.garden-open .resident-area{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+
+/* =========================================================
+   小镇居民显示与交互最终修复
+   - 没有居民订单：居民立绘完全隐藏，不显示“今日没有小镇居民”。
+   - 有居民订单：居民立绘显示，可点击打开 residentModal。
+   - residentModal 不依赖 resident-modal.css。
+   ========================================================= */
+body:not(.resident-available) .resident-area{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+body.resident-available .resident-area{
+  display:block!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+}
+
+#residentsList{
+  display:none!important;
+}
+
+#residentModal.resident-modal{
+  position:fixed!important;
+  inset:0!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(0,0,0,.58)!important;
+  z-index:3200!important;
+  pointer-events:auto!important;
+}
+
+#residentModal .resident-modal-panel{
+  position:relative!important;
+  width:760px!important;
+  min-height:500px!important;
+  padding:70px 82px 58px!important;
+  background:#efe1c6!important;
+  border:24px solid #cdb487!important;
+  box-shadow:0 18px 40px rgba(0,0,0,.42)!important;
+  color:#5a321b!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",serif!important;
+}
+
+#residentModal .resident-modal-title{
+  position:absolute!important;
+  left:50%!important;
+  top:-42px!important;
+  transform:translateX(-50%)!important;
+  width:360px!important;
+  height:92px!important;
+  line-height:92px!important;
+  text-align:center!important;
+  background:#6d3f28!important;
+  color:#fff6e6!important;
+  font-size:52px!important;
+  font-weight:bold!important;
+}
+
+#residentModal .resident-close-btn{
+  position:absolute!important;
+  right:28px!important;
+  top:24px!important;
+  width:110px!important;
+  height:52px!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:rgba(100,100,90,.7)!important;
+  color:#fff6e6!important;
+  font-size:26px!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+}
+
+#residentModal .resident-info-card{
+  margin:38px auto 34px!important;
+  padding:24px 30px!important;
+  background:rgba(255,250,238,.82)!important;
+  border-radius:18px!important;
+  text-align:center!important;
+}
+
+#residentModal .resident-emoji-large{
+  font-size:66px!important;
+  line-height:1!important;
+  margin-bottom:10px!important;
+}
+
+#residentModal .resident-name-large{
+  font-size:34px!important;
+  font-weight:bold!important;
+  margin-bottom:10px!important;
+}
+
+#residentModal .resident-need-text{
+  font-size:24px!important;
+  color:#6e6156!important;
+  margin-bottom:14px!important;
+}
+
+#residentModal .resident-payment-text{
+  font-size:28px!important;
+  color:#5a321b!important;
+  font-weight:bold!important;
+}
+
+#residentModal .resident-potion-options{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:18px!important;
+  width:440px!important;
+  margin:0 auto!important;
+}
+
+#residentModal .resident-potion-option{
+  display:grid!important;
+  grid-template-columns:1fr 180px!important;
+  gap:16px!important;
+  align-items:center!important;
+}
+
+#residentModal .resident-potion-label{
+  font-size:28px!important;
+  font-weight:bold!important;
+  color:#5a321b!important;
+  text-align:center!important;
+}
+
+#residentModal .resident-sell-btn{
+  width:180px!important;
+  height:52px!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:rgba(99,59,41,1)!important;
+  color:#fff6e6!important;
+  font-size:24px!important;
+  font-weight:bold!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+}
+
+#residentModal .resident-sell-btn.out-of-stock,
+#residentModal .resident-sell-btn:disabled{
+  background:#8f8a7a!important;
+  opacity:.72!important;
+  cursor:not-allowed!important;
+}
+
+
+/* =========================================================
+   配方书页面：固定 1920x1080 主画布内左侧覆盖层，右侧背包栏保持不变
+   ========================================================= */
+
+#recipeBookPage.recipe-book-page{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1920px!important;
+  height:1080px!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  z-index:180!important;
+  background:url("Assets/背景Background/配方书背景.png") center/100% 100% no-repeat!important;
+  pointer-events:auto!important;
+}
+
+#recipeBookPage.recipe-book-page.hidden-page{
+  display:none!important;
+}
+
+#recipeBookPage .recipe-book-grid{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1520px!important;
+  height:1080px!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  overflow:hidden!important;
+  z-index:181!important;
+}
+
+#recipeBookPage .recipe-book-card{
+  position:absolute!important;
+  width:235px!important;
+  height:141px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  opacity:1!important;
+  background-color:rgba(201,176,141,1)!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  cursor:pointer!important;
+  overflow:hidden!important;
+}
+
+#recipeBookPage .recipe-book-card.locked{
+  cursor:not-allowed!important;
+}
+
+#recipeBookPage .recipe-book-card:active{
+  transform:translateY(2px)!important;
+}
+
+/* 左页：x=144/411, y=228/449/670 */
+#recipeBookPage .recipe-slot-1{ left:144px!important; top:228px!important; }
+#recipeBookPage .recipe-slot-2{ left:411px!important; top:228px!important; }
+#recipeBookPage .recipe-slot-3{ left:144px!important; top:449px!important; }
+#recipeBookPage .recipe-slot-4{ left:411px!important; top:449px!important; }
+#recipeBookPage .recipe-slot-5{ left:144px!important; top:670px!important; }
+#recipeBookPage .recipe-slot-6{ left:411px!important; top:670px!important; }
+
+/* 右页：x=840/1107, y=228/449/670 */
+#recipeBookPage .recipe-slot-7{ left:840px!important; top:228px!important; }
+#recipeBookPage .recipe-slot-8{ left:1107px!important; top:228px!important; }
+#recipeBookPage .recipe-slot-9{ left:840px!important; top:449px!important; }
+#recipeBookPage .recipe-slot-10{ left:1107px!important; top:449px!important; }
+#recipeBookPage .recipe-slot-11{ left:840px!important; top:670px!important; }
+#recipeBookPage .recipe-slot-12{ left:1107px!important; top:670px!important; }
+
+#recipeBookPage .recipe-book-close-btn{
+  position:absolute!important;
+  left:1276px!important;
+  top:124px!important;
+  width:131px!important;
+  height:64px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  opacity:1!important;
+  background:url("Assets/按钮button/配方书/PFguanbCTi 配方关闭常态.png") center/100% 100% no-repeat!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  cursor:pointer!important;
+  z-index:190!important;
+}
+
+#recipeBookPage .recipe-book-close-btn:hover,
+#recipeBookPage .recipe-book-close-btn:active{
+  background-image:url("Assets/按钮button/配方书/PFguanbiAX 配方关闭按下.png")!important;
+}
+
+/* 右侧背包栏永远压在配方书背景之上 */
+.right-ui-panel{
+  z-index:900!important;
+}
+
+
+/* =========================================================
+   配方书导航修复：打开配方书时只保留右侧背包栏
+   ========================================================= */
+body.recipe-book-open .main-topbar,
+body.recipe-book-open .resident-area,
+body.recipe-book-open .visitor-area,
+body.recipe-book-open .center-orders,
+body.recipe-book-open #visitorBubble,
+body.recipe-book-open .message{
+  display:none!important;
+}
+
+body.recipe-book-open #recipeBookPage.recipe-book-page{
+  display:block!important;
+  z-index:800!important;
+}
+
+body.recipe-book-open .right-ui-panel{
+  z-index:900!important;
+}
+
+#recipeBookPage .recipe-book-close-btn{
+  z-index:850!important;
+  pointer-events:auto!important;
+}
+
+
+/* =========================================================
+   成就页面固定画布修复：左侧 1520 区域 + 右侧通用背包栏
+   ========================================================= */
+
+body.achievement-page-open .main-topbar,
+body.achievement-page-open .resident-area,
+body.achievement-page-open .visitor-area,
+body.achievement-page-open .center-orders,
+body.achievement-page-open #visitorBubble,
+body.achievement-page-open #recipeBookPage{
+  display:none!important;
+}
+
+body.achievement-page-open #gameMainPage.page{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:var(--bg-dark)!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:var(--left-w)!important;
+  height:1080px!important;
+  min-width:var(--left-w)!important;
+  min-height:1080px!important;
+  max-width:var(--left-w)!important;
+  max-height:1080px!important;
+  padding:72px 72px 80px!important;
+  margin:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  background-color:#6b412d!important;
+  background-image:url("Assets/背景Background/石墙stone wall.png")!important;
+  background-repeat:repeat!important;
+  background-position:left top!important;
+  background-size:auto!important;
+  z-index:260!important;
+  color:#5a321b!important;
+  transform:none!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage.hidden-page{
+  display:none!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage:not(.hidden-page){
+  display:block!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage > div{
+  max-width:1340px!important;
+  margin-left:0!important;
+  margin-right:auto!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage h1{
+  color:#fff0d2!important;
+  font-size:54px!important;
+  line-height:1.1!important;
+  margin:0!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage h2{
+  color:#5a321b!important;
+  font-size:34px!important;
+  margin:0 0 14px!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage .secondary,
+#backToGameFromAchievement{
+  min-width:180px!important;
+  height:56px!important;
+  padding:0 22px!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#8b6542!important;
+  color:#fff0d2!important;
+  font-size:24px!important;
+  font-weight:bold!important;
+  cursor:pointer!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage .quest-progress,
+#gameMainPage .main-ui > #achievementGalleryPage .achievement-grid{
+  max-width:1280px!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage .achievement-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3, 1fr)!important;
+  gap:18px!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage .achievement-card{
+  background:#f4e6c8!important;
+  border:3px solid #8a5b35!important;
+  border-radius:14px!important;
+  padding:18px!important;
+  color:#5a321b!important;
+  min-height:130px!important;
+}
+
+#gameMainPage .main-ui > #achievementGalleryPage .achievement-card.locked{
+  filter:grayscale(.55)!important;
+  opacity:.72!important;
+}
+
+body.achievement-page-open .right-ui-panel{
+  display:block!important;
+  z-index:900!important;
+}
+
+
+/* =========================================================
+   炼金台页面：1920x1080 主画布左侧区域 + 右侧通用背包栏
+   层级：背景图 → 炼金台弹窗 → 炼金台前景；右侧背包栏保持最前
+   ========================================================= */
+
+#alchemyModal.alchemy-page{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1920px!important;
+  height:1080px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  z-index:800!important;
+  background:url("Assets/背景Background/炼金台研制背景.png") center/100% 100% no-repeat!important;
+  pointer-events:auto!important;
+}
+
+#alchemyModal.alchemy-page.hidden-page{
+  display:none!important;
+}
+
+#alchemyModal .alchemy-work-panel{
+  position:absolute!important;
+  left:94px!important;
+  top:18px!important;
+  width:1327px!important;
+  height:774px!important;
+  opacity:1!important;
+  background:url("Assets/背景Background/矩形 21.png") center/100% 100% no-repeat, rgba(214,184,129,1)!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+  z-index:801!important;
+}
+
+#alchemyModal .alchemy-foreground{
+  position:absolute!important;
+  left:0!important;
+  right:auto!important;
+  bottom:0!important;
+  width:1920px!important;
+  height:420px!important;
+  background:url("Assets/背景Background/炼金台前景.png") left bottom/1920px auto no-repeat!important;
+  z-index:802!important;
+  pointer-events:none!important;
+}
+
+#alchemyModal .alchemy-title{
+  position:absolute!important;
+  width:192px!important;
+  height:67px!important;
+  opacity:1!important;
+  font-size:48px!important;
+  font-weight:700!important;
+  letter-spacing:0!important;
+  line-height:66.53px!important;
+  color:rgba(97,61,42,1)!important;
+  text-align:left!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif!important;
+  z-index:803!important;
+  pointer-events:none!important;
+}
+
+#alchemyModal .alchemy-title-single{
+  left:47px!important;
+  top:52px!important;
+}
+
+#alchemyModal .alchemy-title-batch{
+  left:-47px!important;
+  top:-75px!important;
+}
+
+#alchemyModal .alchemy-single-list{
+  position:absolute!important;
+  left:94px!important;
+  top:136px!important;
+  width:1161px!important;
+  max-height:271px!important;
+  display:grid!important;
+  grid-template-columns:repeat(3, 357px)!important;
+  grid-auto-rows:108px!important;
+  column-gap:45px!important;
+  row-gap:22px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:0 8px 0 0!important;
+  margin:0!important;
+  z-index:803!important;
+}
+
+#alchemyModal .alchemy-single-list .alchemy-empty{
+  font-size:28px!important;
+  color:rgba(97,61,42,1)!important;
+}
+
+#alchemyModal .alchemy-recipe-btn{
+  position:relative!important;
+  width:357px!important;
+  height:108px!important;
+  min-width:357px!important;
+  min-height:108px!important;
+  padding:0!important;
+  margin:0!important;
+  opacity:1!important;
+  border:0!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+  overflow:hidden!important;
+}
+
+#alchemyModal .alchemy-recipe-btn.selected,
+#alchemyModal .alchemy-recipe-btn:focus{
+  border:3px solid rgba(89,56,18,1)!important;
+  border-radius:10px!important;
+  outline:0!important;
+}
+
+#alchemyModal .alchemy-recipe-btn.disabled,
+#alchemyModal .alchemy-recipe-btn:disabled{
+  opacity:.55!important;
+  cursor:not-allowed!important;
+}
+
+#alchemyModal .alchemy-batch-area{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:100%!important;
+  height:100%!important;
+  padding:0!important;
+  margin:0!important;
+  background:transparent!important;
+  border:0!important;
+  z-index:803!important;
+  pointer-events:none!important;
+}
+
+#alchemyModal .alchemy-batch-select-box{
+  position:absolute!important;
+  left:94px!important;
+  top:497px!important;
+  width:545px!important;
+  height:108px!important;
+  opacity:1!important;
+  background:rgba(180,152,114,1)!important;
+  border-radius:8px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:18px!important;
+  padding:0 30px!important;
+  color:rgba(97,61,42,1)!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  pointer-events:auto!important;
+}
+
+#alchemyModal .alchemy-batch-select-box select{
+  flex:1 1 auto!important;
+  height:72px!important;
+  border:0!important;
+  border-radius:22px!important;
+  padding:0 46px 0 24px!important;
+  background:rgba(238,225,196,.9)!important;
+  color:rgba(97,61,42,1)!important;
+  font-size:30px!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif!important;
+}
+
+#alchemyModal .alchemy-batch-qty-box{
+  position:absolute!important;
+  left:94px!important;
+  top:621px!important;
+  width:545px!important;
+  height:80px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:20px!important;
+  color:rgba(97,61,42,1)!important;
+  font-size:30px!important;
+  font-weight:bold!important;
+  pointer-events:auto!important;
+}
+
+#alchemyModal #batchQuantity{
+  width:170px!important;
+  accent-color:rgba(97,61,42,1)!important;
+}
+
+#alchemyModal #batchQuantityValue,
+#alchemyModal #batchMaxInfo{
+  font-size:28px!important;
+  color:rgba(97,61,42,1)!important;
+}
+
+#alchemyModal .alchemy-batch-craft-btn,
+#alchemyModal .alchemy-close-btn{
+  position:absolute!important;
+  width:232px!important;
+  height:80px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  opacity:1!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+  z-index:804!important;
+  pointer-events:auto!important;
+}
+
+#alchemyModal .alchemy-batch-craft-btn{
+  left:711px!important;
+  top:614px!important;
+  background-color:transparent!important;
+  background-image:url("Assets/按钮button/炼金台/lianjinpiliangCT 炼金批量常态.png")!important;
+}
+
+#alchemyModal .alchemy-batch-craft-btn:hover,
+#alchemyModal .alchemy-batch-craft-btn:active{
+  background-image:url("Assets/按钮button/炼金台/lianjinpiliangAX 批量炼金按下.png")!important;
+}
+
+#alchemyModal .alchemy-close-btn{
+  left:1023px!important;
+  top:614px!important;
+  background-color:transparent!important;
+  background-image:url("Assets/按钮button/炼金台/lianjinuanbiCT 炼金关闭常态.png")!important;
+}
+
+#alchemyModal .alchemy-close-btn:hover,
+#alchemyModal .alchemy-close-btn:active{
+  background-image:url("Assets/按钮button/炼金台/lianjinguanbiAX 关闭炼金按下.png")!important;
+}
+
+body.alchemy-open .main-topbar,
+body.alchemy-open .resident-area,
+body.alchemy-open .visitor-area,
+body.alchemy-open .center-orders,
+body.alchemy-open #visitorBubble,
+body.alchemy-open #recipeBookPage,
+body.alchemy-open #achievementGalleryPage,
+body.alchemy-open .message{
+  display:none!important;
+}
+
+body.alchemy-open #alchemyModal.alchemy-page{
+  display:block!important;
+}
+
+body.alchemy-open .right-ui-panel{
+  z-index:900!important;
+}
+
+
+/* =========================================================
+   交易所页面：左侧交易所 + 右侧通用背包栏
+   ========================================================= */
+.exchange-page{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1920px!important;
+  height:1080px!important;
+  background:url("Assets/背景Background/Exchange交易所.png") center/100% 100% no-repeat!important;
+  z-index:760!important;
+  overflow:hidden!important;
+  pointer-events:auto!important;
+}
+
+.exchange-page.hidden-page{
+  display:none!important;
+}
+
+body.exchange-open .main-topbar,
+body.exchange-open .resident-area,
+body.exchange-open .visitor-area,
+body.exchange-open .center-orders,
+body.exchange-open #visitorBubble,
+body.exchange-open #recipeBookPage,
+body.exchange-open #alchemyModal,
+body.exchange-open #achievementGalleryPage,
+body.exchange-open .message{
+  display:none!important;
+}
+
+body.exchange-open .right-ui-panel{
+  z-index:900!important;
+  pointer-events:auto!important;
+}
+
+.exchange-products{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1520px!important;
+  height:1080px!important;
+  z-index:2!important;
+}
+
+.exchange-product-btn{
+  position:absolute!important;
+  width:164px!important;
+  height:146px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  overflow:hidden!important;
+  cursor:pointer!important;
+}
+
+.exchange-product-btn.selected{
+  border:4px solid rgba(128, 75, 14, 1)!important;
+}
+
+.exchange-product-1{ left:352px!important; top:280px!important; }
+.exchange-product-2{ left:576px!important; top:280px!important; }
+.exchange-product-3{ left:800px!important; top:280px!important; }
+.exchange-product-4{ left:1024px!important; top:280px!important; }
+
+.exchange-product-5{ left:352px!important; top:476px!important; }
+.exchange-product-6{ left:576px!important; top:476px!important; }
+.exchange-product-7{ left:800px!important; top:476px!important; }
+.exchange-product-8{ left:1024px!important; top:476px!important; }
+
+.exchange-product-9{ left:352px!important; top:672px!important; }
+.exchange-product-10{ left:576px!important; top:672px!important; }
+
+.exchange-price-card{
+  position:absolute!important;
+  left:804px!important;
+  top:645px!important;
+  width:388px!important;
+  height:247px!important;
+  background:url("Assets/按钮button/交易所按钮/今日价格.png") center/100% 100% no-repeat!important;
+  z-index:3!important;
+  pointer-events:none!important;
+}
+
+.exchange-price-text{
+  position:absolute!important;
+  left:43px!important;
+  top:76px!important;
+  width:305px!important;
+  height:142px!important;
+  color:rgba(99, 59, 41, 1)!important;
+  font-size:17px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+  line-height:23.56px!important;
+  text-align:left!important;
+  overflow:hidden!important;
+}
+
+.exchange-price-reputation{
+  color:rgba(153, 48, 0, 1)!important;
+  margin-bottom:2px!important;
+}
+
+.exchange-price-columns{
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  column-gap:28px!important;
+}
+
+.exchange-price-line{
+  display:flex!important;
+  justify-content:space-between!important;
+  gap:4px!important;
+  white-space:nowrap!important;
+}
+
+.exchange-price-line.selected-price{
+  color:rgba(153, 48, 0, 1)!important;
+}
+
+.exchange-buy-panel{
+  position:absolute!important;
+  left:352px!important;
+  top:918px!important;
+  width:460px!important;
+  height:81px!important;
+  background:url("Assets/按钮button/交易所按钮/pilianggoumaiCT 批量购买常态.png") center/100% 100% no-repeat!important;
+  border:0!important;
+  z-index:4!important;
+  overflow:hidden!important;
+}
+
+.exchange-buy-label{
+  position:absolute!important;
+  left:34px!important;
+  top:14px!important;
+  width:170px!important;
+  height:54px!important;
+  color:#f5ead1!important;
+  font-size:38px!important;
+  line-height:54px!important;
+  font-weight:700!important;
+  letter-spacing:2px!important;
+  pointer-events:none!important;
+}
+
+.exchange-buy-qty{
+  position:absolute!important;
+  left:245px!important;
+  top:16px!important;
+  width:96px!important;
+  height:50px!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  background:rgba(214, 184, 129, .92)!important;
+  color:rgba(99, 59, 41, 1)!important;
+  font-size:30px!important;
+  font-weight:700!important;
+  line-height:50px!important;
+  text-align:center!important;
+  appearance:textfield!important;
+  -moz-appearance:textfield!important;
+  z-index:2!important;
+}
+
+.exchange-buy-qty::-webkit-outer-spin-button,
+.exchange-buy-qty::-webkit-inner-spin-button{
+  -webkit-appearance:none!important;
+  margin:0!important;
+}
+
+.exchange-qty-btn{
+  position:absolute!important;
+  right:28px!important;
+  width:50px!important;
+  height:32px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  cursor:pointer!important;
+  z-index:3!important;
+}
+
+.exchange-qty-plus{ top:6px!important; }
+.exchange-qty-minus{ bottom:6px!important; }
+
+.exchange-qty-plus::before,
+.exchange-qty-minus::before{
+  content:""!important;
+  display:block!important;
+  width:0!important;
+  height:0!important;
+  margin:0 auto!important;
+  border-left:20px solid transparent!important;
+  border-right:20px solid transparent!important;
+}
+
+.exchange-qty-plus::before{
+  border-bottom:24px solid rgba(214, 184, 129, 1)!important;
+}
+
+.exchange-qty-minus::before{
+  border-top:24px solid rgba(214, 184, 129, 1)!important;
+}
+
+.exchange-buy-btn{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  cursor:pointer!important;
+  z-index:1!important;
+}
+
+.exchange-buy-panel:hover,
+.exchange-buy-panel:active{
+  background-image:url("Assets/按钮button/交易所按钮/pilianggoumaiAX 批量购买按下.png")!important;
+}
+
+.exchange-close-btn{
+  position:absolute!important;
+  left:975px!important;
+  top:918px!important;
+  width:232.08px!important;
+  height:80.69px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  background:url("Assets/按钮button/交易所按钮/GYguanbiCT 交易所关闭常态.png") center/100% 100% no-repeat!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+  z-index:4!important;
+}
+
+.exchange-close-btn:hover,
+.exchange-close-btn:active{
+  background-image:url("Assets/按钮button/交易所按钮/GYguanbiAX 交易所关闭按下.png")!important;
+}
+
+
+/* =========================================================
+   交易所批量购买控件细节修复
+   - 删除批量购买按钮程序文本/额外底色
+   - 数量输入框按 Figma 尺寸定位
+   - 加减按钮去除橙色，仅保留浅色按钮底
+   ========================================================= */
+
+.exchange-buy-panel{
+  left:352px!important;
+  top:918px!important;
+  width:460px!important;
+  height:81px!important;
+  background:url("Assets/按钮button/交易所按钮/pilianggoumaiCT 批量购买常态.png") center/100% 100% no-repeat!important;
+  background-color:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+.exchange-buy-panel:hover,
+.exchange-buy-panel:active{
+  background-image:url("Assets/按钮button/交易所按钮/pilianggoumaiAX 批量购买按下.png")!important;
+  background-color:transparent!important;
+}
+
+/* 删除按钮上的程序生成文字 */
+.exchange-buy-label{
+  display:none!important;
+}
+
+/* 购买按钮本体只负责点击，不显示任何颜色/文字 */
+.exchange-buy-btn{
+  background:transparent!important;
+  background-image:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+/* 数量输入框：按整页 1920x1080 坐标定位 */
+.exchange-buy-qty{
+  position:absolute!important;
+  left:268px!important;   /* 620 - 352 */
+  top:10px!important;     /* 928 - 918 */
+  width:120px!important;
+  height:62px!important;
+  opacity:1!important;
+  border-radius:10px!important;
+  border:0!important;
+  outline:0!important;
+  background:rgba(212, 191, 155, 1)!important;
+  color:rgba(99,59,41,1)!important;
+  font-size:32px!important;
+  font-weight:700!important;
+  line-height:62px!important;
+  text-align:center!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0!important;
+  appearance:textfield!important;
+  -moz-appearance:textfield!important;
+  z-index:5!important;
+}
+
+.exchange-buy-qty::-webkit-outer-spin-button,
+.exchange-buy-qty::-webkit-inner-spin-button{
+  -webkit-appearance:none!important;
+  margin:0!important;
+}
+
+/* 数量增加/减少按钮：去除橙色三角，改成浅色矩形按钮 */
+.exchange-qty-btn{
+  position:absolute!important;
+  left:401px!important;   /* 753 - 352 */
+  width:39px!important;
+  height:28px!important;
+  opacity:1!important;
+  border-radius:1px!important;
+  border:0!important;
+  outline:0!important;
+  background:rgba(212, 191, 155, 1)!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0!important;
+  cursor:pointer!important;
+  z-index:6!important;
+}
+
+./* 加号按钮 */
+.exchange-qty-plus{
+    top:10px!important;
+}
+
+/* 减号按钮 */
+/* 10 + 28 + 6 = 44 */
+.exchange-qty-minus{
+    top:44px!important;
+}
+
+.exchange-qty-plus::before,
+.exchange-qty-minus::before{
+  display:none!important;
+  content:none!important;
+  border:0!important;
+}
+
+
+/* 2026-06 exchange qty triangle adjustment */
+.exchange-qty-plus,
+.exchange-qty-minus{
+  right:20px!important;
+  width:39px!important;
+  height:28px!important;
+  background:transparent!important;
+}
+.exchange-qty-plus{top:10px!important;}
+.exchange-qty-minus{bottom:10px!important;}
+.exchange-qty-plus::before,
+.exchange-qty-minus::before{
+  content:""!important;
+  width:0!important;height:0!important;display:block!important;margin:0 auto!important;
+  border-left:19px solid transparent!important;
+  border-right:19px solid transparent!important;
+}
+.exchange-qty-plus::before{
+  border-bottom:28px solid rgba(212,191,155,1)!important;
+}
+.exchange-qty-minus::before{
+  border-top:28px solid rgba(212,191,155,1)!important;
+}
+
+/* =========================================================
+   设置页面：左侧 1520 区域 + 右侧通用背包栏
+   - 背景使用 12设置.png
+   - 删除旧文本/图标视觉，只保留图片按钮与消息时长滑条
+   ========================================================= */
+
+#settingsModal.settings-page{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1920px!important;
+  height:1080px!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  z-index:780!important;
+  background:url("Assets/背景Background/12设置.png") center/100% 100% no-repeat!important;
+  pointer-events:auto!important;
+}
+
+#settingsModal.settings-page[style*="none"]{
+  display:none!important;
+}
+
+body:has(#settingsModal.settings-page[style*="block"]) .main-topbar,
+body:has(#settingsModal.settings-page[style*="block"]) .resident-area,
+body:has(#settingsModal.settings-page[style*="block"]) .visitor-area,
+body:has(#settingsModal.settings-page[style*="block"]) .center-orders,
+body:has(#settingsModal.settings-page[style*="block"]) #visitorBubble,
+body:has(#settingsModal.settings-page[style*="block"]) #recipeBookPage,
+body:has(#settingsModal.settings-page[style*="block"]) #alchemyModal,
+body:has(#settingsModal.settings-page[style*="block"]) #exchangePage,
+body:has(#settingsModal.settings-page[style*="block"]) #achievementGalleryPage,
+body:has(#settingsModal.settings-page[style*="block"]) .message{
+  display:none!important;
+}
+
+#settingsModal .settings-save-btn,
+#settingsModal .settings-load-btn,
+#settingsModal .settings-close-btn{
+  position:absolute!important;
+  width:232px!important;
+  height:80px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:100% 100%!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  cursor:pointer!important;
+  z-index:782!important;
+  pointer-events:auto!important;
+}
+
+#settingsModal .settings-save-btn{
+  left:422px!important;
+  top:475px!important;
+  background-image:url("Assets/按钮button/设置页面/baocunCT 保存游戏常态.png")!important;
+}
+
+#settingsModal .settings-save-btn:hover,
+#settingsModal .settings-save-btn:active{
+  background-image:url("Assets/按钮button/设置页面/baocunAX 保存游戏按下.png")!important;
+}
+
+#settingsModal .settings-load-btn{
+  left:972px!important;
+  top:475px!important;
+  background-image:url("Assets/按钮button/设置页面/cundangCT 读取存档常态.png")!important;
+}
+
+#settingsModal .settings-load-btn:hover,
+#settingsModal .settings-load-btn:active{
+  background-image:url("Assets/按钮button/设置页面/cundangAX 存档按下.png")!important;
+}
+
+#settingsModal .settings-close-btn{
+  left:712px!important;
+  top:792px!important;
+  background-image:url("Assets/按钮button/设置页面/SZguanbiCT 设置界面关闭常态.png")!important;
+}
+
+#settingsModal .settings-close-btn:hover,
+#settingsModal .settings-close-btn:active{
+  background-image:url("Assets/按钮button/设置页面/SZguanbiAX 设置页面关闭按下.png")!important;
+}
+
+#settingsModal .settings-duration-row{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:1520px!important;
+  height:1080px!important;
+  z-index:781!important;
+  pointer-events:none!important;
+}
+
+#settingsModal #msgDuration{
+  position:absolute!important;
+  left:823px!important;
+  top:707px!important;
+  width:275px!important;
+  height:23px!important;
+  opacity:1!important;
+  border-radius:9px!important;
+  background:rgba(194,169,129,1)!important;
+  accent-color:rgba(97,61,42,1)!important;
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+}
+
+#settingsModal #msgDuration::-webkit-slider-runnable-track{
+  height:23px!important;
+  border-radius:9px!important;
+  background:rgba(194,169,129,1)!important;
+}
+
+#settingsModal #msgDuration::-webkit-slider-thumb{
+  -webkit-appearance:none!important;
+  width:92px!important;
+  height:23px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:rgba(97,61,42,1)!important;
+  cursor:pointer!important;
+}
+
+#settingsModal #msgDuration::-moz-range-track{
+  height:23px!important;
+  border-radius:9px!important;
+  background:rgba(194,169,129,1)!important;
+}
+
+#settingsModal #msgDuration::-moz-range-progress{
+  height:23px!important;
+  border-radius:9px!important;
+  background:rgba(97,61,42,1)!important;
+}
+
+#settingsModal #msgDuration::-moz-range-thumb{
+  width:92px!important;
+  height:23px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:rgba(97,61,42,1)!important;
+  cursor:pointer!important;
+}
+
+#settingsModal #msgDurationValue,
+#settingsModal .settings-duration-unit{
+  position:absolute!important;
+  top:691px!important;
+  height:50px!important;
+  opacity:1!important;
+  font-size:36px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+  line-height:49.9px!important;
+  color:rgba(97,61,42,1)!important;
+  text-align:left!important;
+  vertical-align:top!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif!important;
+  pointer-events:none!important;
+}
+
+#settingsModal #msgDurationValue{
+  left:1156px!important;
+  width:70px!important;
+}
+
+#settingsModal .settings-duration-unit{
+  left:1220px!important;
+  width:60px!important;
+}
+
+#settingsModal .settings-hidden-control{
+  display:none!important;
+}
+
+body:has(#settingsModal.settings-page[style*="block"]) .right-ui-panel{
+  display:block!important;
+  z-index:900!important;
+  pointer-events:auto!important;
+}
+
+
+/* ===== 设置页：店铺名称输入框恢复 ===== */
+#settingsModal .settings-shop-name-input{
+  position:absolute!important;
+  left:648px!important;
+  top:267px!important;
+  width:400px!important;
+  height:81px!important;
+  opacity:1!important;
+  border:0!important;
+  outline:0!important;
+  border-radius:25px!important;
+  background:rgba(199,176,140,1)!important;
+  box-shadow:inset 2px 2px 4px rgba(0,0,0,0.25)!important;
+  z-index:782!important;
+  pointer-events:auto!important;
+  padding:0 36px!important;
+  color:rgba(97,61,42,1)!important;
+  font-size:38px!important;
+  line-height:81px!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif!important;
+  font-weight:400!important;
+  text-align:left!important;
+}
+
+#settingsModal .settings-shop-name-input:focus{
+  box-shadow:inset 2px 2px 4px rgba(0,0,0,0.25),0 0 0 3px rgba(97,61,42,0.35)!important;
+}
+
+
+/* =========================================================
+   设置页导航修复：使用 body.settings-open 立即隐藏主界面元素，
+   避免首次切换时短暂闪回主页面。
+   ========================================================= */
+body.settings-open .main-topbar,
+body.settings-open .resident-area,
+body.settings-open .visitor-area,
+body.settings-open .center-orders,
+body.settings-open #visitorBubble,
+body.settings-open #recipeBookPage,
+body.settings-open #alchemyModal,
+body.settings-open #exchangePage,
+body.settings-open #achievementGalleryPage,
+body.settings-open .message{
+  display:none!important;
+}
+
+body.settings-open #settingsModal.settings-page{
+  display:block!important;
+}
+
+body.settings-open .right-ui-panel{
+  display:block!important;
+  z-index:900!important;
+  pointer-events:auto!important;
+}
+
+
+
+/* =========================================================
+   冒险者图鉴详情弹窗：右侧头像点击显示，右侧背包栏保持在上层
+   ========================================================= */
+#adventurerInfoPopup{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:var(--left-w)!important;
+  height:1080px!important;
+  z-index:850!important;
+  pointer-events:none!important;
+}
+
+#adventurerInfoPopup.hidden-page{
+  display:none!important;
+}
+
+.adventurer-info-card{
+  position:absolute!important;
+  left:638px!important;
+  top:183px!important;
+  width:645px!important;
+  height:714px!important;
+  opacity:1!important;
+  background:url("Assets/弹窗Popup/CharacterPopup冒险者信息弹窗.png") center/100% 100% no-repeat!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  pointer-events:auto!important;
+  color:rgba(99, 59, 41, 1)!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif!important;
+}
+
+.adventurer-info-name{
+  position:absolute!important;
+  left:0!important;
+  top:28px!important;
+  width:645px!important;
+  height:77px!important;
+  font-size:60px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+  line-height:76.68px!important;
+  color:rgba(99, 59, 41, 1)!important;
+  text-align:center!important;
+  vertical-align:top!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+.adventurer-info-text{
+  position:absolute!important;
+  left:21px!important;
+  top:141px!important;
+  width:603px!important;
+  height:387px!important;
+  opacity:1!important;
+  font-size:30px!important;
+  font-weight:400!important;
+  letter-spacing:0!important;
+  line-height:38.34px!important;
+  color:rgba(99, 59, 41, 1)!important;
+  text-align:center!important;
+  vertical-align:top!important;
+  overflow:hidden!important;
+}
+
+.adventurer-info-expbar{
+  position:absolute!important;
+  left:40px!important;
+  top:540px!important;
+  width:565px!important;
+  height:31px!important;
+  border-radius:8px!important;
+  background:rgba(201, 174, 123, 1)!important;
+  overflow:hidden!important;
+}
+
+.adventurer-info-expfill{
+  width:0;
+  height:100%!important;
+  border-radius:8px!important;
+  background:rgba(99, 59, 41, 1)!important;
+}
+
+.adventurer-info-close-btn{
+  position:absolute!important;
+  left:206px!important;
+  top:606px!important;
+  width:232px!important;
+  height:80px!important;
+  opacity:1!important;
+  border:0!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-image:url("Assets/按钮button/冒险者图鉴详情页/guanbiAX 关闭按下.png"), url("Assets/按钮button/冒险者图鉴详情页/guanbiCT 关闭常态.png")!important;
+  background-position:center!important;
+  background-size:100% 100%!important;
+  background-repeat:no-repeat!important;
+  color:transparent!important;
+  font-size:0!important;
+  line-height:0!important;
+  text-indent:-9999px!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+}
+
+.adventurer-info-close-btn:hover,
+.adventurer-info-close-btn:active{
+  filter:brightness(0.96)!important;
+}
+
+.bestiary-grid-mode .adventurer-inventory-item{
+  position:relative!important;
+  width:92px!important;
+  height:92px!important;
+  padding:0!important;
+  border:3px solid #7b4b2a!important;
+  border-radius:10px!important;
+  background:#f3e6cd!important;
+  overflow:hidden!important;
+  cursor:pointer!important;
+  appearance:none!important;
+  -webkit-appearance:none!important;
+}
+
+.bestiary-grid-mode .adventurer-avatar-img{
+  width:92px!important;
+  height:92px!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+  display:block!important;
+}
+
+.bestiary-grid-mode .adventurer-avatar-fallback{
+  width:92px!important;
+  height:92px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:42px!important;
+  background:#f3e6cd!important;
+}
+
+
+/* =========================================================
+   冒险者头像点击与弹窗固定比例最终修复
+   - 右侧背包栏不再被弹窗遮挡点击
+   - 冒险者头像强制作为按钮接收点击
+   - 所有旧弹窗取消自适应宽度，使用固定像素尺寸并随 1920x1080 画布等比缩放
+   ========================================================= */
+
+.right-ui-panel{
+  pointer-events:auto!important;
+}
+
+.right-inventory,
+.right-inventory .inventory,
+#inventoryGrid,
+.inventory-grid,
+.bestiary-grid-mode,
+.bestiary-grid-mode .adventurer-inventory-item,
+.bestiary-grid-mode .adventurer-avatar-img,
+.bestiary-grid-mode .adventurer-avatar-fallback{
+  pointer-events:auto!important;
+}
+
+.bestiary-grid-mode .adventurer-inventory-item{
+  cursor:pointer!important;
+  z-index:20!important;
+  position:relative!important;
+  touch-action:manipulation!important;
+}
+
+/* 旧 modal 只做视觉遮罩，不拦截右侧背包栏；真正面板继续可点击 */
+.modal:not(#gardenModal),
+#residentModal{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(0,0,0,.56)!important;
+  z-index:2800!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+
+.modal:not(#gardenModal)[style*="flex"],
+#residentModal[style*="flex"]{
+  display:flex!important;
+}
+
+.modal:not(#gardenModal) .modal-content,
+#residentModal .resident-modal-panel{
+  pointer-events:auto!important;
+  position:relative!important;
+  width:760px!important;
+  min-width:760px!important;
+  max-width:760px!important;
+  min-height:500px!important;
+  max-height:760px!important;
+  margin:0!important;
+  padding:82px 82px 64px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#efe1c6!important;
+  box-shadow:0 18px 40px rgba(0,0,0,.42)!important;
+  color:rgba(99,59,41,1)!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",serif!important;
+  transform:scale(var(--ui-scale, 1))!important;
+  transform-origin:center center!important;
+  overflow:hidden!important;
+}
+
+.modal:not(#gardenModal) .modal-content::before,
+#residentModal .resident-modal-panel::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  border:24px solid #cdb487!important;
+  box-shadow:inset 0 0 0 34px rgba(255,248,224,.42)!important;
+  pointer-events:none!important;
+}
+
+.modal:not(#gardenModal) .modal-content h2,
+#residentModal .resident-modal-title{
+  position:absolute!important;
+  left:50%!important;
+  top:0!important;
+  transform:translateX(-50%)!important;
+  width:420px!important;
+  height:92px!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:92px!important;
+  text-align:center!important;
+  background:rgba(99,59,41,1)!important;
+  color:#fff6e6!important;
+  font-size:52px!important;
+  font-weight:bold!important;
+  letter-spacing:4px!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  z-index:2!important;
+}
+
+.modal:not(#gardenModal) .modal-content h2::first-letter,
+#residentModal .resident-modal-title::first-letter{
+  font-size:52px!important;
+}
+
+.modal:not(#gardenModal) .modal-content button,
+#residentModal .resident-close-btn,
+#residentModal .resident-sell-btn{
+  border:0!important;
+  border-radius:10px!important;
+  min-width:180px!important;
+  height:56px!important;
+  padding:0 24px!important;
+  background:rgba(99,59,41,1)!important;
+  color:#fff6e6!important;
+  font-size:26px!important;
+  font-weight:bold!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+}
+
+.modal:not(#gardenModal) .modal-content button.secondary,
+.modal:not(#gardenModal) .modal-content .secondary,
+#residentModal .resident-close-btn{
+  background:rgba(74,74,74,1)!important;
+}
+
+#upgradeModal .modal-content,
+#confirmEndModal .modal-content,
+#endingModal .modal-content,
+#eventModal .modal-content,
+#reputationModal .modal-content,
+#shortageModal .modal-content{
+  width:760px!important;
+  min-height:520px!important;
+}
+
+#upgradeInfo,
+#confirmEndMessage,
+#endingText,
+#eventDescription,
+#reputationDescription,
+#shortageMessage{
+  position:relative!important;
+  z-index:1!important;
+  margin:36px 0 28px!important;
+  color:rgba(99,59,41,1)!important;
+  font-size:26px!important;
+  line-height:1.6!important;
+  text-align:center!important;
+  font-family:"KaiTi","STKaiti",serif!important;
+}
+
+.event-buttons{
+  position:relative!important;
+  z-index:1!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:24px!important;
+  flex-wrap:wrap!important;
+}
+
+/* 消息提示固定在 1920x1080 主画布内，不再使用自适应位置 */
+.message,
+#message,
+#toastMsg{
+  position:absolute!important;
+  left:620px!important;
+  bottom:28px!important;
+  width:460px!important;
+  min-height:54px!important;
+  padding:8px 14px!important;
+  border-radius:12px!important;
+  background:#dfe8d8!important;
+  color:rgba(99,59,41,1)!important;
+  font-size:22px!important;
+  line-height:34px!important;
+  text-align:center!important;
+  z-index:3000!important;
+  pointer-events:none!important;
+}
+
+/* 冒险者详情弹窗保持在左侧主画布中，右侧背包栏可继续点击 */
+#adventurerInfoPopup{
+  z-index:850!important;
+  pointer-events:none!important;
+}
+
+#adventurerInfoPopup:not(.hidden-page){
+  display:block!important;
+}
+
+#adventurerInfoPopup .adventurer-info-card,
+#adventurerInfoPopup .adventurer-info-close-btn{
+  pointer-events:auto!important;
+}
+
+
+
+/* =========================================================
+   本次修复：季节图标、结算居中、消息层级
+   ========================================================= */
+.season-icon{
+  background-size:contain!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+}
+
+#settlementModal .modal-content{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:118px 82px 64px!important;
+}
+
+#settlementDetails{
+  position:relative!important;
+  z-index:1!important;
+  margin:0 0 30px!important;
+  color:rgba(99,59,41,1)!important;
+  font-size:26px!important;
+  line-height:1.7!important;
+  text-align:center!important;
+}
+
+#settlementModal #confirmSettlementBtn{
+  position:relative!important;
+  z-index:2!important;
+  margin-top:0!important;
+}
+
+
+/* =========================================================
+   消息弹窗层级修复
+   - 保留原 #message 弹窗样式
+   - 删除/隐藏新增 #toastMsg 弹窗
+   - 打开花园/配方/炼金/商店/成就/设置时仍显示原弹窗
+   ========================================================= */
+#toastMsg,
+#toastMsg.toast,
+#toastMsg.toast.show{
+  display:none!important;
+}
+
+#message.message,
+.main-ui > #message.message{
+  z-index:2147483647!important;
+}
+
+body.garden-open #message.message:not(:empty),
+body.recipe-book-open #message.message:not(:empty),
+body.alchemy-open #message.message:not(:empty),
+body.exchange-open #message.message:not(:empty),
+body.achievement-page-open #message.message:not(:empty),
+body.settings-open #message.message:not(:empty){
+  display:block!important;
+  z-index:2147483647!important;
+}
+
+
+/* =========================================================
+   全局消息弹窗最终修复
+   - 删除旧 #message/#toast 显示
+   - 新弹窗挂在 body，取消画布缩放影响
+   - 固定在浏览器画面正中，大小随文本内容增长
+   ========================================================= */
+#message,
+.message,
+#toastMsg,
+#toastMsg.toast,
+#toastMsg.toast.show{
+  display:none!important;
+}
+
+#globalMessagePopup{
+  position:fixed!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%, -50%)!important;
+  width:max-content!important;
+  min-width:0!important;
+  max-width:calc(100vw - 48px)!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:calc(100vh - 48px)!important;
+  padding:12px 18px!important;
+  margin:0!important;
+  opacity:1!important;
+  border-radius:5px!important;
+  background:rgba(255,232,179,1)!important;
+  border:1px solid rgba(255,255,255,1)!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.18)!important;
+  color:rgba(99,59,41,1)!important;
+  font-family:"KaiTi","STKaiti","Microsoft YaHei",sans-serif!important;
+  font-size:22px!important;
+  font-weight:bold!important;
+  line-height:1.45!important;
+  text-align:center!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  overflow:auto!important;
+  pointer-events:none!important;
+  z-index:2147483647!important;
+  display:none;
+}
+
+#globalMessagePopup.success{
+  color:rgba(99,59,41,1)!important;
+}
+
+#globalMessagePopup.error{
+  color:#9f2f25!important;
+}
+
+#globalMessagePopup:empty{
+  display:none!important;
+}

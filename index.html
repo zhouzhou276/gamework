@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>炼金店铺 - 完整修复版</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ui-skin.css">
+</head>
+<body>
+
+<!-- 开始界面 -->
+<div id="startScreen" class="page">
+  <div class="start-scene">
+    <button id="startBtn" aria-label="开始营业"></button>
+  </div>
+</div>
+
+<!-- 游戏主界面 -->
+<div id="gameMainPage" class="page hidden-page">
+  <div class="main-ui">
+
+    <!-- 顶部栏 -->
+    <div class="main-topbar">
+      <div class="top-day">第 <span id="dayCount">1</span> / <span id="maxDay">60</span> 天</div>
+
+      <button id="reputationChoiceBtn" class="top-btn">决策时刻</button>
+      <button id="achievementBtn" class="top-btn">周目成就</button>
+      <button id="upgradeShopBtn" class="top-btn">店铺升级</button>
+      <button id="endDayBtn" class="top-btn light">结算今日</button>
+    </div>
+
+    <!-- 左侧居民位 -->
+    <div class="resident-area">
+      <div class="role-status">状态：健康</div>
+      <div class="role-name">小镇居民</div>
+      <img class="role-img" src="Assets/人物立绘character/正面front/小镇居民1半身.png" alt="">
+    </div>
+
+    <!-- 中间冒险者位：保留原JS控制 -->
+    <div class="visitor-area" id="currentVisitorArea">
+      <div class="emoji" id="visitorEmoji">❓</div>
+      <div class="role-status">状态：健康</div>
+      <div class="visitor-name" id="visitorName">已离开</div>
+      <div id="visitorStatus">等待顾客到来</div>
+    </div>
+
+    <!-- 中间订单区 -->
+    <div class="center-orders">
+      <div class="center-orders-title">当前订单</div>
+      <div id="ordersList">暂无订单</div>
+    </div>
+
+    <!-- 配方书页面：覆盖主画布左侧区域，右侧背包栏保持不变 -->
+    <div id="recipeBookPage" class="recipe-book-page hidden-page">
+      <div id="recipeGrid" class="recipe-grid recipe-book-grid"></div>
+      <button id="backToGameFromRecipe" class="recipe-book-close-btn" type="button" aria-label="关闭"></button>
+    </div>
+
+
+    <!-- 炼金台页面：覆盖主画布左侧区域，右侧背包栏保持不变 -->
+    <div id="alchemyModal" class="alchemy-page hidden-page">
+      <div class="alchemy-work-panel">
+        <div class="alchemy-title alchemy-title-single">点击炼制</div>
+        <div id="dynamicRecipeList" class="recipe-buttons alchemy-single-list"></div>
+
+        <div id="batchCraftArea" class="batch-area alchemy-batch-area" style="display:none;">
+          <div class="alchemy-title alchemy-title-batch">批量炼制</div>
+          <div class="alchemy-batch-select-box">
+            <label for="batchRecipeSelect">选择配方：</label>
+            <select id="batchRecipeSelect"></select>
+          </div>
+          <div class="alchemy-batch-qty-box">
+            <label for="batchQuantity">数量：</label>
+            <input type="range" id="batchQuantity" min="1" max="10" value="1" step="1">
+            <span id="batchQuantityValue">1</span>
+            <span id="batchMaxInfo"> / 最多：<span id="batchMaxValue">10</span></span>
+          </div>
+          <button id="craftBatchBtn" type="button" class="alchemy-batch-craft-btn" aria-label="批量炼制"></button>
+        </div>
+
+        <button id="closeModalBtn" type="button" class="alchemy-close-btn" aria-label="关闭"></button>
+      </div>
+      <div class="alchemy-foreground" aria-hidden="true"></div>
+    </div>
+
+
+    <!-- 交易所页面：覆盖主画布左侧区域，右侧背包栏保持不变 -->
+    <div id="exchangePage" class="exchange-page hidden-page">
+      <div class="exchange-products" id="exchangeProducts"></div>
+      <div class="exchange-price-card">
+        <div id="exchangePrices" class="exchange-price-text"></div>
+      </div>
+      <div class="exchange-buy-panel">
+        <span class="exchange-buy-label">批量购买</span>
+        <button id="exchangeQtyMinus" type="button" class="exchange-qty-btn exchange-qty-minus" aria-label="减少数量"></button>
+        <input id="exchangeBuyQty" class="exchange-buy-qty" type="number" min="1" value="1">
+        <button id="exchangeQtyPlus" type="button" class="exchange-qty-btn exchange-qty-plus" aria-label="增加数量"></button>
+        <button id="exchangeBuyBtn" type="button" class="exchange-buy-btn" aria-label="批量购买"></button>
+      </div>
+      <button id="exchangeCloseBtn" type="button" class="exchange-close-btn" aria-label="关闭"></button>
+    </div>
+
+    <!-- 设置页面：覆盖主画布左侧区域，右侧背包栏保持不变 -->
+    <div id="settingsModal" class="settings-page" style="display:none;">
+      <button id="saveGameBtn" type="button" class="settings-save-btn" aria-label="保存游戏"></button>
+      <button id="loadGameBtn" type="button" class="settings-load-btn" aria-label="读取存档"></button>
+
+      <input id="shopNameInput" class="settings-shop-name-input" type="text" value="炼金店铺" maxlength="12" aria-label="店铺名称">
+
+      <div class="settings-duration-row">
+        <input type="range" id="msgDuration" min="1" max="5" step="0.5" value="2" aria-label="消息显示时长">
+        <span id="msgDurationValue">2</span><span class="settings-duration-unit">秒</span>
+      </div>
+
+      <button id="closeSettingsBtn" type="button" class="settings-close-btn" aria-label="关闭"></button>
+
+      <button id="exportSaveBtn" type="button" class="settings-hidden-control" aria-hidden="true" tabindex="-1"></button>
+      <input type="file" id="importFile" class="settings-hidden-control" accept=".json" aria-hidden="true" tabindex="-1">
+    </div>
+
+
+
+    <!-- 冒险者图鉴详情弹窗：点击右侧背包栏冒险者头像后显示，右侧背包栏保持可见 -->
+    <div id="adventurerInfoPopup" class="adventurer-info-popup hidden-page" aria-hidden="true">
+      <div class="adventurer-info-card">
+        <div id="adventurerInfoName" class="adventurer-info-name"></div>
+        <div id="adventurerInfoText" class="adventurer-info-text"></div>
+        <div class="adventurer-info-expbar" aria-hidden="true">
+          <div id="adventurerInfoExpFill" class="adventurer-info-expfill"></div>
+        </div>
+        <button id="adventurerInfoCloseBtn" type="button" class="adventurer-info-close-btn" aria-label="关闭"></button>
+      </div>
+    </div>
+
+    <!-- 右侧栏 -->
+    <div class="right-ui-panel">
+      <div class="right-status-ui">
+        <div class="season-card">
+          <div class="season-icon"></div>
+          <div id="seasonDisplay">归仓季</div>
+        </div>
+
+        <div class="status-lines">
+          <div class="status-line gold-line">金币：<span id="gold">200</span></div>
+          <div class="status-line rep-line">声望：<span id="reputationValue">20</span></div>
+          <div class="status-line adv-line">冒险者数量：1</div>
+        </div>
+
+        <div class="level-circle">
+          等级 <span id="shopLevel">1</span>
+        </div>
+      </div>
+
+      <div class="right-buttons">
+        <button id="openRecipeBookBtn">配方</button>
+        <button id="openAlchemyBtn">炼金</button>
+        <button id="gardenBtn">花园</button>
+        <button id="achievementBtnFake">成就</button>
+        <button id="materialManageBtn">商店</button>
+        <button id="settingsBtn">设置</button>
+      </div>
+
+      <div class="right-tabs">
+        <button id="tabMaterials">
+          <img id="tabMaterialsImg" src="Assets/按钮button/主页面按钮/右侧栏/右侧栏-材料.png" alt="材料">
+        </button>
+
+        <button id="tabPotions">
+          <img id="tabPotionsImg" src="Assets/按钮button/主页面按钮/右侧栏/右侧栏-药剂 （未点击）.png" alt="药剂">
+        </button>
+
+        <button id="tabBestiary">
+          <img id="tabBestiaryImg" src="Assets/按钮button/主页面按钮/右侧栏/右侧栏-冒险者图鉴 （未点击）.png" alt="图鉴">
+        </button>
+      </div>
+
+      <div class="right-inventory">
+        <div class="inventory">
+          <h3>药水背包</h3>
+          <div id="inventoryGrid" class="inventory-grid"></div>
+        </div>
+      </div>
+
+      <div class="main-quest">
+        主线任务：60天内店铺LV5且声望≥100
+        <div class="quest-bar">
+          <div id="mainQuestProgress"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 隐藏但保留给原JS使用 -->
+    <div class="queue-box hidden-system-box">
+      <div>
+        <div class="queue-title">今日来访</div>
+        <div id="queueList" class="queue-list"></div>
+      </div>
+      <div>
+        <div class="queue-title">小镇居民</div>
+        <div id="residentsList" class="queue-list"></div>
+      </div>
+    </div>
+
+    <button id="makePotionBtn" class="hidden-system-btn">炼制小红药水</button>
+    <button id="openBestiaryBtn" class="hidden-system-btn">冒险者图鉴</button>
+    <button id="testEventBtn" class="hidden-system-btn">测试事件</button>
+
+    <div class="message" id="message"></div>
+  </div>
+</div>
+
+<div id="toastMsg" class="toast"></div>
+
+<!-- 其他页面 -->
+<div id="bestiaryPage" class="page hidden-page">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="color: #ffebc2; font-size: 48px;">📖 冒险者图鉴</h1>
+    <button id="backToGameFromBestiary" class="secondary">🏠 返回店铺</button>
+  </div>
+  <div id="adventurerGrid" class="grid-container"></div>
+</div>
+
+<div id="reportPage" class="page hidden-page">
+  <div style="max-width: 900px; margin: 0 auto;">
+    <button id="backToBestiary" class="secondary" style="margin-bottom: 20px;">← 返回图鉴</button>
+    <div id="reportContent" class="report-container"></div>
+  </div>
+</div>
+
+<div id="achievementGalleryPage" class="page hidden-page">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1 style="color: #ffebc2; font-size: 48px;">🏆 成就画廊</h1>
+    <button id="backToGameFromAchievement" class="secondary">🏠 返回店铺</button>
+  </div>
+  <div style="background: #fffaf0; border-radius: 48px; padding: 20px; margin-bottom: 20px;">
+    <h2>📜 主线与支线任务</h2>
+    <div class="quest-progress">
+      <div class="quest-item">🎯 主线：60天内店铺Lv.5且声望≥100 <span id="questMainStatus">未完成</span></div>
+      <div class="quest-item">📚 支线1：解锁所有配方（6种） <span id="questRecipeStatus">0/6</span></div>
+      <div class="quest-item">💖 支线2：所有冒险者好感度满值（6人） <span id="questFavorStatus">0/6</span></div>
+    </div>
+  </div>
+  <div style="background: #fffaf0; border-radius: 48px; padding: 20px;">
+    <h2>✨ 成就列表</h2>
+    <div id="achievementsList" class="achievement-grid"></div>
+  </div>
+  <div style="background: #fffaf0; border-radius: 48px; padding: 20px; margin-top: 20px;">
+    <h2>🎭 结局画廊</h2>
+    <div id="endingGalleryList" style="display: flex; gap: 15px; flex-wrap: wrap;"></div>
+  </div>
+</div>
+
+<!-- 弹窗集合 -->
+<div id="settlementModal" class="modal">
+  <div class="modal-content">
+    <h2>📊 每日结算</h2>
+    <div id="settlementDetails" class="settlement-stats"></div>
+    <button id="confirmSettlementBtn">新的一天</button>
+  </div>
+</div>
+
+<div id="confirmEndModal" class="modal">
+  <div class="modal-content">
+    <h2>结束今日营业</h2>
+    <div id="confirmEndMessage" style="font-size: 20px; margin: 20px 0;"></div>
+    <div class="event-buttons">
+      <button id="confirmEndYesBtn" style="background:#2e7d32;">确认结束</button>
+      <button id="confirmEndNoBtn" class="secondary">继续营业</button>
+    </div>
+  </div>
+</div>
+
+<div id="endingModal" class="modal">
+  <div class="modal-content">
+    <h2>🎭 结局</h2>
+    <div id="endingText" style="font-size: 20px; margin: 20px 0; line-height:1.5;"></div>
+    <button id="closeEndingBtn" class="secondary">继续游戏</button>
+  </div>
+</div>
+
+<div id="upgradeModal" class="modal">
+  <div class="modal-content">
+    <h2>🏆 店铺升级</h2>
+    <div id="upgradeInfo" class="upgrade-info"></div>
+    <button id="doUpgradeBtn" style="background:#2c6e9e;">消耗金币升级</button>
+    <button id="closeUpgradeModal" class="secondary">取消</button>
+  </div>
+</div>
+
+<div id="eventModal" class="modal">
+  <div class="modal-content">
+    <h2>突发事件</h2>
+    <div id="eventDescription" style="font-size: 18px; margin: 20px 0;"></div>
+    <div id="eventOptions" class="event-buttons"></div>
+  </div>
+</div>
+
+<div id="reputationModal" class="modal">
+  <div class="modal-content">
+    <h2>⚖️ 声望抉择</h2>
+    <div id="reputationDescription" style="font-size: 18px; margin: 20px 0;"></div>
+    <div id="reputationOptions" class="event-buttons"></div>
+  </div>
+</div>
+
+<div id="shortageModal" class="modal">
+  <div class="modal-content">
+    <h2>⚠️ 库存不足</h2>
+    <div id="shortageMessage" style="font-size: 20px; margin: 20px 0;"></div>
+    <div class="event-buttons">
+      <button id="shortageInformBtn" style="background:#b45f1b;">告知顾客（订单失败）</button>
+      <button id="shortageGetBtn" style="background:#2c6e9e;">去获得药水</button>
+    </div>
+  </div>
+</div>
+
+<div id="gardenModal" class="modal garden-page">
+  <div class="garden-scene">
+    <div id="gardenInfoPanel">
+      <div class="garden-title">后花园 LV.<span id="gardenLevelText">1</span></div>
+      <div id="gardenInfo"></div>
+
+      <div class="garden-actions">
+        <button id="collectGardenBtn">今日采集</button>
+        <button id="upgradeGardenBtn">升级花园</button>
+      </div>
+    </div>
+
+    <button id="closeGardenBtn" class="garden-back-order">关闭</button>
+  </div>
+</div>
+<script src="game.js"></script>
+<script src="ui-interaction-fix.js"></script>
+<script src="visitor-auto.js"></script>
+<script src="resident-interaction.js"></script>
+
+</body>
+</html>
