@@ -110,6 +110,37 @@ const residentScenarios = [
   { id:14, name:"酒馆老板", emoji:"🍺", need:"今晚客人爆满，需要有人帮忙熬夜看账。", acceptablePotions:["清醒露","魔力药水","小红药水"], payment:26 },
   { id:15, name:"迷信的裁缝", emoji:"🧵", need:"她说针线盒被小诅咒缠上了，想买点能压住坏运气的东西。", acceptablePotions:["祝福药水","勇气药水","诅咒毒药"], payment:28 }
 ];
+// =================== 事件文档扩展：居民求购池 V2 ===================
+const EVENT_DOC_RESIDENT_SCENARIOS = [
+  { id:100, name:"深夜偷鸡的村民", emoji:"🐔", weight:9, need:"鸡舍半夜被偷鸡贼光顾，村民想买一瓶能让贼人手脚发软的药水。", acceptablePotions:["轻微麻痹致幻剂","强力麻痹致幻剂","安眠茶"], payment:34 },
+  { id:101, name:"走失爱猫的老奶奶", emoji:"👵🐈", weight:9, need:"相伴多年的橘猫一夜未归，老奶奶想买点能安神提气的药水，撑着去街巷里找猫。", acceptablePotions:["清醒露","安眠茶","祝福药水"], payment:24 },
+  { id:102, name:"婚礼筹备的新人", emoji:"💍", weight:7, need:"镇上一对新人想为婚礼宾客准备祝福药剂，求一份喜庆又不会出岔子的药。", acceptablePotions:["祝福药水","勇气药水","清醒露"], payment:46 },
+  { id:103, name:"酒馆掌柜", emoji:"🍺", weight:8, need:"酒馆深夜闹事，醉汉已经掀翻两张桌子，掌柜急需能让场面安静下来的药水。", acceptablePotions:["安眠茶","强力安眠茶","轻微麻痹致幻剂"], payment:36 },
+  { id:104, name:"丰收庆典管事", emoji:"🌾", weight:6, need:"归仓季丰收节将至，管事想采购安神舒缓类药水，让忙碌一天的村民睡个好觉。", acceptablePotions:["安眠茶","强力安眠茶","祝福药水"], payment:38 },
+  { id:105, name:"误食毒草的孩童家长", emoji:"👨‍👧🌿", weight:8, need:"孩子进山玩耍误食毒草，家长满头大汗地冲进店里求救。", acceptablePotions:["祝福药水","清醒露","小红药水"], payment:30 },
+  { id:106, name:"铁匠铺学徒", emoji:"🛠️", weight:7, need:"铁匠被高温铁块烫伤，学徒急着寻找疗伤药，手里还攥着没冷透的铁钳。", acceptablePotions:["小红药水","大生命药水","祝福药水"], payment:42 },
+  { id:107, name:"赶考书生", emoji:"📜", weight:6, need:"书生明日要去王都赶考，紧张得握笔发抖，想买一瓶静心祈福的药。", acceptablePotions:["清醒露","勇气药水","祝福药水"], payment:32 },
+  { id:108, name:"驱蚊的村民代表", emoji:"🦟", weight:7, need:"虹光季毒蚊成灾，村民夜里睡不着，代表来求驱蚊安神的药剂。", acceptablePotions:["安眠茶","轻微麻痹致幻剂","强力麻痹致幻剂"], payment:34 },
+  { id:109, name:"寒冬求助的孤寡老人", emoji:"🧣", weight:6, need:"持夜季寒风刺骨，孤寡老人身体发冷，希望买一瓶能暖身安神的药。", acceptablePotions:["小红药水","大生命药水","安眠茶"], payment:28 },
+  { id:110, name:"迷路受伤的采药人", emoji:"🦔🌿", weight:7, need:"采药人迷路摔伤，被路人搀扶进店，身上还挂着湿漉漉的草叶。", acceptablePotions:["小红药水","大生命药水","清醒露"], payment:32 },
+  { id:111, name:"面包坊伙计", emoji:"🥖", weight:6, need:"面包坊烤炉起火，伙计扑救时被烫伤，急需药水处理伤口。", acceptablePotions:["小红药水","大生命药水","祝福药水"], payment:36 },
+  { id:112, name:"耕牛染病的农户", emoji:"🐄", weight:6, need:"家里的耕牛突然不吃不喝，农户希望用药水救回入冬前最重要的劳力。", acceptablePotions:["祝福药水","清醒露","小红药水"], payment:34 },
+  { id:113, name:"小镇守夜人", emoji:"🌙🛡️", weight:7, need:"守夜人连续值夜，眼皮沉得像石头，急需醒神药防止夜间出事。", acceptablePotions:["清醒露","魔力药水","勇气药水"], payment:30 },
+  { id:114, name:"教堂修女", emoji:"⛪", weight:5, need:"教堂要照看孤儿与老人，修女希望采购温和的祝福药水备用。", acceptablePotions:["祝福药水","安眠茶","清醒露"], payment:35 },
+  { id:115, name:"流浪旅人", emoji:"🎒", weight:5, need:"外地旅人在店门口晕倒，路人请你帮忙，他身上只有一些远方小物件。", acceptablePotions:["小红药水","清醒露","大生命药水"], payment:26 },
+  { id:116, name:"赶工的裁缝", emoji:"🧵", weight:5, need:"裁缝连日赶工熬坏眼睛，想买能稳住精神与手劲的药。", acceptablePotions:["清醒露","魔力药水","安眠茶"], payment:30 },
+  { id:117, name:"磨坊主", emoji:"🌽", weight:5, need:"磨坊工人搬粮摔伤，磨坊主希望尽快让人恢复，不耽误明日开磨。", acceptablePotions:["小红药水","大生命药水","勇气药水"], payment:38 },
+  { id:118, name:"水井管理员", emoji:"💧", weight:6, need:"镇上水井疑似被污染，居民肚子疼成一片，管理员急需净化类药剂。", acceptablePotions:["祝福药水","清醒露","魔力药水"], payment:40 },
+  { id:119, name:"被藤蔓困住的园丁", emoji:"🌿", weight:5, need:"后院藤蔓疯长，园丁被缠得寸步难行，想买点能让藤蔓安静下来的东西。", acceptablePotions:["轻微麻痹致幻剂","强力麻痹致幻剂","安眠茶"], payment:34 },
+  { id:120, name:"婴儿夜哭的母亲", emoji:"👶", weight:6, need:"婴儿整夜哭闹，母亲疲惫得快站不住，希望有温和安神药帮全家休息。", acceptablePotions:["安眠茶","清醒露","祝福药水"], payment:26 },
+  { id:121, name:"码头搬运工", emoji:"⚓", weight:4, need:"远洋货船进港，搬运工肩膀酸痛，希望买能撑过今晚卸货的药水。", acceptablePotions:["小红药水","勇气药水","魔力药水"], payment:36 },
+  { id:122, name:"镇长秘书", emoji:"📋", weight:4, need:"镇长要接待王都客人，秘书担心仪式出错，来买祈福与醒神药。", acceptablePotions:["祝福药水","清醒露","勇气药水"], payment:48 },
+  { id:123, name:"被乌鸦吓坏的农妇", emoji:"🐦‍⬛", weight:5, need:"田地里乌鸦异常聚集，农妇怕是不祥预兆，想买一瓶压住坏运气的药。", acceptablePotions:["祝福药水","勇气药水","诅咒毒药"], payment:34 },
+  { id:124, name:"鱼贩", emoji:"🐟", weight:5, need:"鱼贩说河面浮起怪泡，鱼群躁动，想买能净化水桶的药水。", acceptablePotions:["祝福药水","魔力药水","清醒露"], payment:32 },
+  { id:125, name:"失眠的钟楼匠", emoji:"🕰️", weight:4, need:"钟楼齿轮半夜自鸣，匠人已经三天没睡好，担心自己把钟修成倒着走。", acceptablePotions:["安眠茶","强力安眠茶","清醒露"], payment:30 }
+];
+residentScenarios.push(...EVENT_DOC_RESIDENT_SCENARIOS);
+
 
 let achievements = {
   "first_potion": { unlocked:false, name:"初试锋芒", desc:"首次炼制一瓶药水", reward:{ gold:20 } },
@@ -433,12 +464,29 @@ function generateDailyQueue() {
 function generateDailyResidents() {
   let baseCount = Math.floor(Math.random() * 4);  // 0~3
   let modifier = (typeof residentOrderModifier === 'number') ? residentOrderModifier : 0;
+  // 高声望与季节事件会让居民更愿意上门；低声望保留最低活跃度。
+  if(reputation >= 200 && Math.random() < 0.35) modifier += 1;
+  if(reputation <= -150 && Math.random() < 0.25) modifier -= 1;
   let count = baseCount + modifier;
   if (count < 0) count = 0;
-  if (count > 4) count = 4;   // 硬性上限 4 个
+  if (count > 5) count = 5;   // 扩展后上限 5 个，避免居民事件池浪费
   residents = [];
+  let usedScenarioIds = new Set();
   for (let i = 0; i < count; i++) {
-    let scenario = residentScenarios[Math.floor(Math.random() * residentScenarios.length)];
+    let season = getCurrentSeason().name;
+    let candidates = residentScenarios
+      .filter(s => !usedScenarioIds.has(s.id))
+      .map(s => {
+        let w = Number(s.weight || 5);
+        const text = `${s.name || ""}${s.need || ""}`;
+        if(season === "归仓季" && /(丰收|农|耕牛|粮|磨坊|藤蔓|园丁)/.test(text)) w *= 1.35;
+        if(season === "持夜季" && /(寒|夜|守夜|失眠|安眠|老人|婴儿)/.test(text)) w *= 1.35;
+        if(season === "虹光季" && /(毒|蚊|水井|鱼|草|采药|虫)/.test(text)) w *= 1.35;
+        if(season === "结晶季" && /(考|旅人|婚礼|祝福|猫|醒神)/.test(text)) w *= 1.25;
+        return { value:s, weight:w };
+      });
+    let scenario = weightedChoice(candidates) || residentScenarios[Math.floor(Math.random() * residentScenarios.length)];
+    usedScenarioIds.add(scenario.id);
     residents.push({ id: `resident_${day}_${i}`, scenario });
   }
   renderResidents();
@@ -567,7 +615,11 @@ function updateUI() {
   let seasonDisplay=document.getElementById("seasonDisplay");
   if(seasonDisplay) seasonDisplay.innerText=`${season.emoji} ${season.name}`;
   let seasonIcon=document.querySelector(".season-icon");
-  if(seasonIcon && SEASON_ICON_MAP[season.name]) seasonIcon.style.backgroundImage=`url("${SEASON_ICON_MAP[season.name]}")`;
+  if(seasonIcon && SEASON_ICON_MAP[season.name]){
+    const seasonIconUrl = `url("${SEASON_ICON_MAP[season.name]}")`;
+    seasonIcon.style.setProperty("--season-icon-url", seasonIconUrl);
+    seasonIcon.style.setProperty("background-image", seasonIconUrl, "important");
+  }
   if(document.getElementById("mintLeafCount")){
     document.getElementById("mintLeafCount").innerText=mintLeaf;
     document.getElementById("chamomileCount").innerText=chamomile;
@@ -667,8 +719,79 @@ const EVENT_POOL_CHOICE = [
   { id:"insomnia_wave", name:"失眠潮", type:"choice", weight:7, description:"整条街的居民都睡不好，连冒险者也抱怨夜里听见奇怪钟声。", options:[ { text:"调配安眠特供", effect:()=>{ addDemandTag("insomnia"); residentOrderModifier+=2; generateDailyResidents(); showMessage("安眠茶与强力安眠茶需求大幅上升，居民订单+2。",false); updateUI(); } }, { text:"调查钟声", effect:()=>{ if(Math.random()<0.55){ magicCrystal++; reputation=Math.min(500,reputation+10); showMessage("你找到钟声源头，获得魔力结晶×1，声望+10。",false); } else{ addDemandTag("curse"); showMessage("调查无果，诅咒相关订单上升。",true); } updateUI(); } } ] }
 ];
 
+
+// =================== 事件文档扩展：突发事件 V2 ===================
+function addGoldAmount(amount){ gold += amount; if(amount>=0) addIncome(amount); else addExpense(Math.abs(amount)); }
+function spendGoldAmount(amount){ gold -= amount; addExpense(amount); }
+function eventDocBoostResidents(add){ residentOrderModifier += add; generateDailyResidents(); updateResidentVisibility(); }
+function eventDocBoostQueue(add){ extraQueueSize += add; generateDailyQueue(); if(typeof showNextAutoVisitor==='function') setTimeout(showNextAutoVisitor,200); }
+
+EVENT_POOL_POSITIVE.push(
+  { id:"doc_village_banquet", name:"村民答谢宴", type:"positive", weight:8, effect:()=>{ addRandomCommonHerbs(4); reputation=Math.min(500,reputation+8); eventDocBoostResidents(1); showMessage("村民摆了一桌答谢宴，送来普通草药×4，声望+8，今日居民求购+1。",false); updateUI(); } },
+  { id:"doc_old_lady_gift", name:"老奶奶日常赠礼", type:"positive", weight:7, effect:()=>{ addRandomCommonHerbs(2+Math.floor(Math.random()*3)); if(Math.random()<0.25) holyFlower++; reputation=Math.min(500,reputation+5); showMessage("走失爱猫事件后，老奶奶送来一篮草药，声望+5。",false); updateUI(); } },
+  { id:"doc_wedding_feast", name:"婚礼喜宴", type:"positive", weight:5, effect:()=>{ reputation=Math.min(500,reputation+18); addDemandTag("holy"); eventDocBoostResidents(2); showMessage("婚礼喜宴让祝福药水口碑大涨，声望+18，居民订单+2，祝福类需求上升。",false); updateUI(); } },
+  { id:"doc_blacksmith_contract", name:"铁匠长期合作", type:"positive", weight:5, effect:()=>{ redOre++; if(Math.random()<0.5) blackOre++; addDemandTag("healing"); showMessage("铁匠铺送来谢礼：赤铁髓×1，并可能附带黑银矿。疗伤类需求上升。",false); updateUI(); } },
+  { id:"doc_scholar_success", name:"金榜题名回馈", type:"positive", weight:3, effect:()=>{ gold+=200; addIncome(200); addRandomRareMaterial(2); reputation=Math.min(500,reputation+15); showMessage("你曾帮助的书生金榜题名，回赠200金币与稀有材料×2，声望+15。",false); updateUI(); } },
+  { id:"doc_guard_route_safe", name:"守夜路线变安全", type:"positive", weight:6, effect:()=>{ reputation=Math.min(500,reputation+8); residentOrderModifier+=1; showMessage("守夜人加强巡逻，小镇失窃减少，声望+8，居民更愿意上门。",false); updateUI(); } },
+  { id:"doc_far_traveler", name:"远方旅人报恩", type:"positive", weight:4, effect:()=>{ magicCrystal++; addRandomCommonHerbs(3); showMessage("远方旅人寄来谢礼：魔力结晶×1，普通草药×3。",false); updateUI(); } }
+);
+
+EVENT_POOL_NEGATIVE.push(
+  { id:"doc_thief_revenge", name:"贼人报复", type:"negative", weight:5, effect:()=>{ let loss=20+Math.floor(Math.random()*61); gold=Math.max(0,gold-loss); addExpense(loss); reputation=Math.max(-500,reputation-6); showMessage(`你曾出售麻痹药激怒贼人，夜里遭到小额骚扰，损失${loss}金币，声望-6。`,true); updateUI(); } },
+  { id:"doc_public_doubt", name:"居民非议", type:"negative", weight:6, effect:()=>{ reputation=Math.max(-500,reputation-12); residentOrderModifier-=1; showMessage("小镇开始议论你滥用危险药剂，声望-12，今日居民订单-1。",true); generateDailyResidents(); updateUI(); } },
+  { id:"doc_water_panic", name:"水井污染恐慌", type:"negative", weight:6, effect:()=>{ addDemandTag("holy"); residentOrderModifier+=1; potionQualityModifier*=0.95; showMessage("水井污染造成恐慌，净化类需求上升，居民订单+1，但今日药剂报酬略降。",true); generateDailyResidents(); updateUI(); } },
+  { id:"doc_mosquito_plague", name:"毒蚊灾潮", type:"negative", weight:7, effect:()=>{ addDemandTag("sleep"); residentOrderModifier+=2; showMessage("虹光季毒蚊成灾，安眠与麻痹类居民求购增加，居民订单+2。",true); generateDailyResidents(); updateUI(); } },
+  { id:"doc_crow_omen", name:"乌鸦不祥预兆", type:"negative", weight:4, effect:()=>{ addDemandTag("curse"); if(Math.random()<0.5) poisonMushroom++; reputation=Math.max(-500,reputation-4); showMessage("乌鸦盘旋在田地上空，诅咒类需求上升，声望-4。",true); updateUI(); } },
+  { id:"doc_competitor_rumor", name:"竞争店铺散布流言", type:"negative", weight:5, effect:()=>{ reputation=Math.max(-500,reputation-15); deliveryBonus*=0.9; showMessage("竞争店铺散布药剂副作用流言，声望-15，今日交付收益-10%。",true); updateUI(); } }
+);
+
+EVENT_POOL_CHOICE.push(
+  { id:"doc_chicken_thief", name:"深夜偷鸡贼", type:"choice", weight:9, description:"深夜村民慌张拍门，说鸡舍里有黑影偷鸡。你可以亲自帮忙，也可以借机卖出危险药剂。", options:[
+    { text:"放下活计帮忙抓贼", effect:()=>{ reputation=Math.min(500,reputation+10); addRandomCommonHerbs(3); residentOrderModifier+=1; showMessage("你帮村民抓住偷鸡贼，声望+10，获得普通草药×3，居民订单+1。",false); generateDailyResidents(); updateUI(); } },
+    { text:"出售麻痹药给村民", effect:()=>{ gold+=40; addIncome(40); reputation=Math.max(-500,reputation-8); addDemandTag("control"); showMessage("你卖出麻痹药获得40金币，但声望-8，麻痹类需求上升。",true); updateUI(); } },
+    { text:"关门不管", effect:()=>{ reputation=Math.max(-500,reputation-3); showMessage("你没有插手，村民有些失望，声望-3。",true); updateUI(); } }
+  ]},
+  { id:"doc_lost_cat", name:"老奶奶走失爱猫", type:"choice", weight:9, description:"独居老奶奶的橘猫一夜未归，她颤巍巍地来到店里，请你帮她找找。", options:[
+    { text:"关店进山寻猫", effect:()=>{ holyFlower++; reputation=Math.min(500,reputation+5); addRandomCommonHerbs(2); showMessage("你找回橘猫，获得圣露花×1、草药×2，声望+5。",false); updateUI(); } },
+    { text:"给她一杯安神茶", effect:()=>{ if(sleepPotion>0){ sleepPotion--; reputation=Math.min(500,reputation+8); showMessage("你送出安眠茶安抚老人，声望+8。",false); } else showMessage("你没有安眠茶，老人失望地离开。",true); updateUI(); } },
+    { text:"店铺繁忙婉拒", effect:()=>{ reputation=Math.max(-500,reputation-5); residentOrderModifier-=1; showMessage("你婉拒了请求，声望-5，今日居民订单-1。",true); generateDailyResidents(); updateUI(); } }
+  ]},
+  { id:"doc_child_poison", name:"孩童误食毒草", type:"choice", weight:8, description:"农户家的孩子误食毒草，上吐下泻。家长抱着孩子冲进店里，几乎说不出完整的话。", options:[
+    { text:"免费提供净化药剂", effect:()=>{ let use=blessPotion>0?"祝福药水":(awakePotion>0?"清醒露":null); if(use){ consumePotionAmount(use,1); reputation=Math.min(500,reputation+22); addRandomCommonHerbs(5); showMessage(`你用${use}救下孩子，声望+22，农户赠送草药×5。`,false); } else showMessage("你没有合适药剂，只能让他们去教堂求助。",true); updateUI(); } },
+    { text:"正常售价售卖", effect:()=>{ let use=blessPotion>0?"祝福药水":(awakePotion>0?"清醒露":null); if(use){ consumePotionAmount(use,1); gold+=30; addIncome(30); reputation=Math.min(500,reputation+5); showMessage(`卖出${use}，获得30金币，声望+5。`,false); } else showMessage("没有合适药剂。",true); updateUI(); } },
+    { text:"药剂紧缺婉拒", effect:()=>{ reputation=Math.max(-500,reputation-18); showMessage("孩子家长绝望离开，声望-18。",true); updateUI(); } }
+  ]},
+  { id:"doc_tavern_brawl", name:"酒馆深夜闹事", type:"choice", weight:7, description:"酒馆掌柜匆匆上门，醉汉聚众斗殴，杯盘飞得到处都是。", options:[
+    { text:"提供安眠茶温和平息", effect:()=>{ if(sleepPotion>0){ sleepPotion--; reputation=Math.min(500,reputation+18); deliveryBonus*=1.05; showMessage("酒馆恢复安静，声望+18，今日订单收益+5%。",false); } else showMessage("没有安眠茶。",true); updateUI(); } },
+    { text:"提供勇气药安抚", effect:()=>{ if(couragePotion>0){ couragePotion--; reputation=Math.min(500,reputation+12); showMessage("醉汉清醒后惭愧道歉，声望+12。",false); } else showMessage("没有勇气药水。",true); updateUI(); } },
+    { text:"提供麻痹剂强力制服", effect:()=>{ let use=lightParalysis>0?"轻微麻痹致幻剂":(strongParalysis>0?"强力麻痹致幻剂":null); if(use){ consumePotionAmount(use,1); gold+=45; addIncome(45); reputation=Math.max(-500,reputation-10); showMessage(`使用${use}制服闹事者，获得45金币，声望-10。`,true); } else showMessage("没有麻痹类药剂。",true); updateUI(); } }
+  ]},
+  { id:"doc_tax_officer", name:"税务官检查", type:"choice", weight:6, description:"王都税务官推门进来，仔细翻看你的账本。他的羽毛笔停在租金支出一栏。", options:[
+    { text:"老实配合检查", effect:()=>{ if(reputation>=100){ reputation=Math.min(500,reputation+6); showMessage("税务官认可你的口碑，声望+6。",false); } else { spendGoldAmount(40); showMessage("你补交了40金币的小额税款。",true); } updateUI(); } },
+    { text:"请他喝茶并暗示好处", effect:()=>{ if(gold>=60){ spendGoldAmount(60); reputation=Math.max(-500,reputation-8); showMessage("你花60金币摆平检查，但声望-8。",true); } else showMessage("金币不足，税务官记下了你的名字。",true); updateUI(); } },
+    { text:"公开账本争取信任", effect:()=>{ reputation=Math.min(500,reputation+12); deliveryBonus*=0.95; showMessage("你公开账本，声望+12，但今日议价空间下降，收益-5%。",false); updateUI(); } }
+  ]},
+  { id:"doc_royal_purchase", name:"王都采购团", type:"choice", weight:4, description:"王都采购团来到小镇，想大量采购药水。他们开价公道，但要求优先供货。", options:[
+    { text:"优先供应王都", effect:()=>{ extraQueueSize+=3; deliveryBonus*=1.15; addDemandTag("royal"); generateDailyQueue(); showMessage("今日冒险者订单+3，交付收益+15%，皇家需求上升。",false); updateUI(); } },
+    { text:"兼顾本地居民", effect:()=>{ residentOrderModifier+=2; extraQueueSize+=1; generateDailyResidents(); generateDailyQueue(); reputation=Math.min(500,reputation+10); showMessage("你兼顾双方，居民订单+2，冒险者订单+1，声望+10。",false); updateUI(); } },
+    { text:"抬价出售", effect:()=>{ deliveryBonus*=1.35; reputation=Math.max(-500,reputation-15); showMessage("今日交付收益+35%，但声望-15。",true); updateUI(); } }
+  ]},
+  { id:"doc_dragon_omen", name:"龙灾前兆", type:"choice", weight:2, description:"北方山脉传来震动，牧民说看见巨大的黑影掠过云层。冒险者们开始囤积补给。", options:[
+    { text:"资助讨伐队", effect:()=>{ if(gold>=300){ spendGoldAmount(300); reputation=Math.min(500,reputation+35); addDemandTag("war"); extraQueueSize+=2; generateDailyQueue(); showMessage("你资助讨伐队，声望+35，冒险者订单+2，战争类需求上升。",false); } else showMessage("金币不足，无法资助。",true); updateUI(); } },
+    { text:"囤积并公开售药", effect:()=>{ deliveryBonus*=1.25; addDemandTag("healing"); reputation=Math.min(500,reputation+8); showMessage("你公开供应补给，今日收益+25%，声望+8，恢复需求上升。",false); updateUI(); } },
+    { text:"趁乱涨价", effect:()=>{ deliveryBonus*=1.6; reputation=Math.max(-500,reputation-35); addDemandTag("war"); showMessage("你趁乱涨价，收益+60%，声望-35。",true); updateUI(); } }
+  ]},
+  { id:"doc_plague_spread", name:"黑死病蔓延", type:"choice", weight:2, description:"持夜季的寒风里出现了奇怪疫病，教堂门口排起长队。大家都看向你的炼金店。", options:[
+    { text:"免费发药", effect:()=>{ reputation=Math.min(500,reputation+80); let loss=Math.min(potion,3); potion-=loss; addDemandTag("holy"); showMessage(`你免费发放药剂，声望+80，消耗小红药水×${loss}，祝福需求上升。`,false); updateUI(); } },
+    { text:"成本价供应", effect:()=>{ gold+=150; addIncome(150); reputation=Math.min(500,reputation+20); addDemandTag("holy"); showMessage("你成本价供应药剂，获得150金币，声望+20。",false); updateUI(); } },
+    { text:"高价出售救命药", effect:()=>{ gold+=400; addIncome(400); reputation=Math.max(-500,reputation-60); addDemandTag("blackmarket"); showMessage("你高价出售救命药，获得400金币，声望-60。",true); updateUI(); } }
+  ]}
+);
+
+// 突发事件出现概率提升，增强每日变化感
+const EVENT_DOC_DAILY_EVENT_CHANCE = 0.70;
 function triggerDailyEvent() {
-  if(Math.random() > 0.40) return;
+  if(Math.random() > (typeof EVENT_DOC_DAILY_EVENT_CHANCE==='number' ? EVENT_DOC_DAILY_EVENT_CHANCE : 0.70)) return;
   let pool = [];
   const pushWeighted=(event, groupMul)=>{
     let w=event.weight*groupMul;
@@ -724,6 +847,20 @@ const reputationEvents=[
   { id:9, weight:5, title:"赎罪的恶徒", description:"曾经抢劫商队的强盗想用祝福药水弥补过错。", good:{ text:"免费给他祝福", effect:()=>{ if(blessPotion>=1){blessPotion--; reputation=Math.min(500,reputation+35); showMessage("声望+35，他发誓守护你的店。",false); } else showMessage("没有祝福药水。",true); } }, evil:{ text:"收钱给假希望", effect:()=>{ gold+=80; addIncome(80); reputation=Math.max(-500,reputation-45); showMessage("获得80金币，声望-45。",true); } } },
   { id:10, weight:5, title:"时光沙漏", description:"时光法师愿用沙漏换取你一周经营权。拒绝可得到指导，接受则会改变店铺命运。", good:{ text:"拒绝交易，请他指点", effect:()=>{ reputation=Math.min(500,reputation+10); let locked=recipes.filter(r=>!r.unlocked); if(locked.length>0){ locked[Math.floor(Math.random()*locked.length)].unlocked=true; showMessage("声望+10，随机解锁一个配方。",false); } else showMessage("声望+10。",false); } }, evil:{ text:"接受交易", effect:()=>{ gold=Math.floor(gold*0.8)+180; reputation=Math.floor(reputation*0.75); if(shopLevel>1 && Math.random()<0.5) shopLevel--; showMessage("获得180金币，但声望被扭曲，店铺可能降级。",true); } } }
 ];
+
+// =================== 事件文档扩展：声望抉择 V2 ===================
+reputationEvents.push(
+  { id:101, weight:8, title:"教堂修女募捐", description:"教堂修女上门募捐，想为孤寡老人和流浪孩童准备过冬补给。", good:{ text:"捐赠50金币", effect:()=>{ if(gold>=50){ spendGoldAmount(50); reputation=Math.min(500,reputation+25); addDemandTag("holy"); showMessage("捐赠50金币，声望+25，祝福类需求上升。",false); } else showMessage("金币不足。",true); } }, evil:{ text:"拒绝并推销药水", effect:()=>{ gold+=35; addIncome(35); reputation=Math.max(-500,reputation-8); showMessage("你借机推销药水，获得35金币，声望-8。",true); } } },
+  { id:102, weight:7, title:"富商垄断药材", description:"富商想低价买断你的普通草药库存，再高价转卖给冒险者。", good:{ text:"拒绝垄断", effect:()=>{ reputation=Math.min(500,reputation+16); residentOrderModifier+=1; showMessage("你拒绝垄断，声望+16，居民订单+1。",false); generateDailyResidents(); } }, evil:{ text:"高价卖给富商", effect:()=>{ let sell=Math.min(herb,6); mintLeaf=Math.max(0,mintLeaf-2); chamomile=Math.max(0,chamomile-2); rosemary=Math.max(0,rosemary-1); lavender=Math.max(0,lavender-1); gold+=180; addIncome(180); reputation=Math.max(-500,reputation-18); showMessage("你把一批草药卖给富商，获得180金币，声望-18。",true); } } },
+  { id:103, weight:7, title:"被诬陷的采药人", description:"采药人被指控偷了别人的稀有草药。他说那是自己冒险采来的，请你作证。", good:{ text:"为他作证", effect:()=>{ reputation=Math.min(500,reputation+14); addRandomCommonHerbs(3); showMessage("采药人洗清冤屈，声望+14，并送来草药×3。",false); } }, evil:{ text:"索要封口费", effect:()=>{ gold+=70; addIncome(70); reputation=Math.max(-500,reputation-16); poisonMushroom++; showMessage("你收了封口费，获得70金币和毒腺菇×1，声望-16。",true); } } },
+  { id:104, weight:6, title:"王都采购回扣", description:"王都采购官暗示，只要给他一点回扣，就会优先采购你的药剂。", good:{ text:"拒绝回扣，凭品质交易", effect:()=>{ reputation=Math.min(500,reputation+18); deliveryBonus*=1.05; showMessage("你拒绝回扣，声望+18，今日收益+5%。",false); } }, evil:{ text:"支付回扣换大单", effect:()=>{ if(gold>=80){ spendGoldAmount(80); extraQueueSize+=3; deliveryBonus*=1.25; reputation=Math.max(-500,reputation-12); generateDailyQueue(); showMessage("支付80金币回扣，冒险者订单+3，收益+25%，声望-12。",true); } else showMessage("金币不足，无法支付回扣。",true); } } },
+  { id:105, weight:6, title:"黑市禁药试用", description:"黑市客人要求你提供一瓶麻痹药试用，若效果好，未来会介绍更多客户。", good:{ text:"拒绝危险交易", effect:()=>{ reputation=Math.min(500,reputation+20); addDemandTag("holy"); showMessage("你拒绝危险交易，声望+20，圣洁类需求上升。",false); } }, evil:{ text:"提供试用品", effect:()=>{ let use=lightParalysis>0?"轻微麻痹致幻剂":(strongParalysis>0?"强力麻痹致幻剂":null); if(use){ consumePotionAmount(use,1); gold+=120; addIncome(120); reputation=Math.max(-500,reputation-30); addDemandTag("blackmarket"); showMessage(`交出${use}，获得120金币，声望-30，禁忌订单上升。`,true); } else showMessage("没有麻痹类药剂。",true); } } },
+  { id:106, weight:8, title:"孤儿偷药", description:"一个孤儿偷走药水，说是为了救病倒的妹妹。围观居民都在等你表态。", good:{ text:"原谅并补送一瓶", effect:()=>{ if(potion>0){ potion--; reputation=Math.min(500,reputation+28); showMessage("你原谅了孩子并送出药水，声望+28。",false); } else showMessage("你没有小红药水可送。",true); } }, evil:{ text:"追回药水并罚款", effect:()=>{ gold+=20; addIncome(20); reputation=Math.max(-500,reputation-20); showMessage("你追回药水并收下20金币罚款，声望-20。",true); } } },
+  { id:107, weight:5, title:"圣殿试炼邀请", description:"圣殿牧师邀请你参加一次公开义诊，这会耽误一天生意，但能让全镇看见你的善意。", good:{ text:"参加公开义诊", effect:()=>{ reputation=Math.min(500,reputation+50); deliveryBonus*=0.85; residentOrderModifier+=2; showMessage("公开义诊让声望+50，居民订单+2，但今日收益-15%。",false); generateDailyResidents(); } }, evil:{ text:"借义诊宣传高价药", effect:()=>{ gold+=160; addIncome(160); reputation=Math.max(-500,reputation-22); showMessage("你借义诊宣传高价药，获得160金币，声望-22。",true); } } },
+  { id:108, weight:5, title:"冒险者遗物", description:"一位冒险者没能归来，他的同伴把遗物交给你，希望你转交家人。里面有一颗魔力结晶。", good:{ text:"完整转交家人", effect:()=>{ reputation=Math.min(500,reputation+24); addRandomRareMaterial(1); showMessage("你完整转交遗物，家属赠送稀有材料×1，声望+24。",false); } }, evil:{ text:"留下魔力结晶", effect:()=>{ magicCrystal++; reputation=Math.max(-500,reputation-28); showMessage("你私下留下魔力结晶×1，声望-28。",true); } } },
+  { id:109, weight:6, title:"竞争店铺求和", description:"竞争炼金店老板提出合作，双方互不压价；但他要求你减少给居民的免费援助。", good:{ text:"拒绝牺牲居民", effect:()=>{ reputation=Math.min(500,reputation+18); residentOrderModifier+=1; showMessage("你拒绝牺牲居民，声望+18，居民订单+1。",false); generateDailyResidents(); } }, evil:{ text:"达成价格同盟", effect:()=>{ deliveryBonus*=1.25; reputation=Math.max(-500,reputation-15); showMessage("你达成价格同盟，今日收益+25%，声望-15。",true); } } },
+  { id:110, weight:4, title:"龙灾避难名单", description:"若龙灾真的到来，镇长要求你优先供应避难队伍。黑市则愿意高价买断补给。", good:{ text:"登记避难补给", effect:()=>{ reputation=Math.min(500,reputation+35); addDemandTag("war"); extraQueueSize+=1; generateDailyQueue(); showMessage("你登记避难补给，声望+35，战争类订单上升。",false); } }, evil:{ text:"卖给黑市囤货商", effect:()=>{ gold+=260; addIncome(260); reputation=Math.max(-500,reputation-45); addDemandTag("blackmarket"); showMessage("你把补给卖给黑市囤货商，获得260金币，声望-45。",true); } } }
+);
 function showRandomReputationEvent(){
   if(reputationEventUsedToday) { showMessage("今日已抉择过，明天再来吧！",true); return; }
   let ev=weightedChoice(reputationEvents.map(e=>({value:e,weight:e.weight||1})));

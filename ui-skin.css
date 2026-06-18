@@ -467,7 +467,7 @@ body{
   width:96px!important;
   height:96px!important;
   margin:0!important;
-  background:url("Assets/按钮button/主页面按钮/右侧栏/归仓季.png") center/contain no-repeat!important;
+  background:var(--season-icon-url, url("Assets/按钮button/主页面按钮/右侧栏/归仓季.png")) center/contain no-repeat!important;
 }
 
 #seasonDisplay{
@@ -3213,4 +3213,15 @@ body.settings-open #message.message:not(:empty){
 
 #globalMessagePopup:empty{
   display:none!important;
+}
+
+
+/* =========================================================
+   季节图标切换修复：允许 JS 写入 --season-icon-url 覆盖默认归仓季图标
+   ========================================================= */
+.season-icon{
+  background-image:var(--season-icon-url, url("Assets/按钮button/主页面按钮/右侧栏/归仓季.png"))!important;
+  background-size:contain!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
 }
